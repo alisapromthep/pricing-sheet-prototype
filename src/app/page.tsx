@@ -1,5 +1,6 @@
 // app/page.tsx
 import { google } from "googleapis";
+import Form from "./components/Form/Form";
 
 async function getGoogleSheetData() {
   const auth = await google.auth.getClient({
@@ -18,12 +19,12 @@ async function getGoogleSheetData() {
 }
 
 export default async function Home() {
-  const data = await getGoogleSheetData();
-  console.log(data);
+  const data: string[][] = await getGoogleSheetData();
 
   return (
-    <div>
+    <div className="">
       <h1>Home Page</h1>
+      <Form data={data} />
     </div>
   );
 }
