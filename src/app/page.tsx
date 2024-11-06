@@ -17,11 +17,7 @@ async function getGoogleSheetData() {
   return response.data.values || [];
 }
 
-export default async function Home({
-  searchParams,
-}: {
-  searchParams: { id: string };
-}) {
+export default async function Home() {
   const data = await getGoogleSheetData();
   console.log(data);
 
