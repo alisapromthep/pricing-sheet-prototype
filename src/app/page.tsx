@@ -1,27 +1,33 @@
-'use client'
-import { useEffect, useState } from "react";
+// app/page.tsx
+import { google } from "googleapis";
 
-export default function Home() {
-  
-  const [data, setData] = useState<any[]>([]);
-  
-  useEffect(()=>{
+async function getGoogleSheetData() {
+  const auth = await google.auth.getClient({
+    scopes: ["https://www.googleapis.com/auth/spreadsheets.readonly"],
+  });
+  const sheets = google.sheets({ version: "v4", auth });
 
-    const fetchData = async()=>{
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}`);
-      const jsonData = await res.json();
+  const range = `Sheet1`;
 
-      setData(jsonData)
-    }
+  const response = await sheets.spreadsheets.values.get({
+    spreadsheetId: process.env.SHEET_ID!,
+    range,
+  });
 
-    fetchData();
+  return response.data.values || [];
+}
 
-  },[])
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: { id: string };
+}) {
+  const data = await getGoogleSheetData();
+  console.log(data);
 
-  console.log(data)
   return (
     <div>
-      <h1>hello</h1>
+      <h1>Home Page</h1>
     </div>
   );
 }
