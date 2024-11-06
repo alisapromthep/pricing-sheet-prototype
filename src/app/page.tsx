@@ -8,7 +8,7 @@ export default function Home() {
   useEffect(()=>{
 
     const fetchData = async()=>{
-      const res = await fetch('https://script.google.com/macros/s/AKfycbwEXFMUruzutqeOQDwfM1sJen7uAm3VTE6iYSedruZOjGLPlq6lAOggl4s1HBCEIvvt/exec');
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}`);
       const jsonData = await res.json();
 
       setData(jsonData)
