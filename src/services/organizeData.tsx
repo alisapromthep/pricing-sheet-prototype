@@ -9,4 +9,8 @@ export function fetchProductTypes(data: string[][]) {
   return productTypes;
 }
 
-export function fetchProductInfo(productName: string, data: string[][]) {}
+export function fetchProductListInfo(productName: string, data: string[][]) {
+  const productInfoList = data.filter((product) => product[0] === productName);
+
+  return productInfoList;
+}
