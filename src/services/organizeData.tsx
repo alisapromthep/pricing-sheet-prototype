@@ -9,10 +9,11 @@ export function fetchProductTypes(data: string[][]) {
   return productTypes;
 }
 
-export function fetchProductListInfo(productName: string, data: string[][]) {
-  const productInfoList = data.filter((product) => product[0] === productName);
-
-  return productInfoList;
+export function fetchProductListInfo(
+  selectedType: string,
+  productsByCategory: {}
+) {
+  return productsByCategory[selectedType];
 }
 
 export function fetchProductIndexes(dataHeaders: []) {

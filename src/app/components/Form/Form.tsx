@@ -11,47 +11,49 @@ type FormProps = {
   data: string[][];
 };
 
+interface PricesType {
+  [key: string]: number;
+}
+
+interface ProductItemsType {
+  category: string;
+  model: string;
+  familyPlanEligible: boolean;
+  prices: PricesType;
+}
+
 const Form: React.FC<FormProps> = ({ data }) => {
-  const products = useProductState(data);
-  console.log("products", products);
+  const { productIndexes, productListByCategory } = useProductState(data);
+  const productCategories = fetchProductTypes(data);
 
-  const productTypes = fetchProductTypes(data);
-
-  const [selectedType, setSelectedType] = useState<string>(productTypes[0]);
-  const [productList, setProductList] = useState<string[][]>([]);
+  const [selectedType, setSelectedType] = useState<string>(
+    productCategories[0]
+  );
+  const [productList, setProductList] = useState<ProductItemsType[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<string>("");
   const [selectedProductInfo, setSelectedProductInfo] = useState<string[]>([]);
 
   useEffect(() => {
     // Fetch the product list for the initially selected type
-    const initialProductList = fetchProductListInfo(selectedType, data);
+    const initialProductList = productListByCategory[selectedType];
+    console.log(productListByCategory[selectedType]);
     setProductList(initialProductList);
+  }, [selectedType, productListByCategory]);
 
-    // Automatically select the first product from the fetched list, if available
-    if (initialProductList.length > 0) {
-      setSelectedProduct(initialProductList[0][1]);
-      setSelectedProductInfo(initialProductList[0]);
-    }
-  }, [selectedType, data]);
+  // useEffect(() => {
+  //   const productList = fetchProductListInfo(selectedType, data);
+  //   setProductList(productList);
+  // }, [selectedType]);
 
-  useEffect(() => {
-    const productList = fetchProductListInfo(selectedType, data);
-    setProductList(productList);
-  }, [selectedType]);
-
-  useEffect(() => {
-    const productInfo = productList.find(
-      (product) => product[1] === selectedProduct
-    );
-    setSelectedProductInfo(productInfo || []);
-  }, [selectedProduct]);
+  // useEffect(() => {
+  //   const productInfo = productList.find(
+  //     (product) => product[1] === selectedProduct
+  //   );
+  //   setSelectedProductInfo(productInfo || []);
+  // }, [selectedProduct]);
 
   const handleSelectType = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedType(e.target.value);
-  };
-
-  const handleSelectProduct = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedProduct(e.target.value);
   };
 
   return (
@@ -59,26 +61,37 @@ const Form: React.FC<FormProps> = ({ data }) => {
       <label>
         Select Product Category
         <select onChange={handleSelectType}>
-          {productTypes.map((type, i) => (
-            <option key={i} value={type}>
-              {type}
+          {productCategories.map((category, i) => (
+            <option key={i} value={category}>
+              {category}
             </option>
           ))}
         </select>
       </label>
       <label>
         Select Product
-        <select onChange={handleSelectProduct}>
-          {productList.map((product, i) => (
-            <option key={i} value={product[1]}>
-              {product[1]}
+        <select>
+          {productList &&
+            productList.map((product, i) => (
+              <option key={i} value={product.model}>
+                {product.model}
+              </option>
+            ))}
+        </select>
+      </label>
+      <label>
+        Select Index
+        <select>
+          {productIndexes.map((type, i) => (
+            <option key={i} value={type}>
+              {type}
             </option>
           ))}
         </select>
       </label>
       <div className="flex">
         <p>Base Price</p>
-        <p>{selectedProductInfo[2]}</p>
+        <p></p>
       </div>
     </form>
   );

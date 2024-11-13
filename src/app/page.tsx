@@ -20,7 +20,6 @@ async function getGoogleSheetData() {
 
 export default async function Home() {
   const data: string[][] = await getGoogleSheetData();
-  console.log(data);
   return (
     <div className="">
       <h1>Home Page</h1>
