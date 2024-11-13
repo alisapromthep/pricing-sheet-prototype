@@ -14,3 +14,11 @@ export function fetchProductListInfo(productName: string, data: string[][]) {
 
   return productInfoList;
 }
+
+export function fetchProductIndexes(dataHeaders: []) {
+  const productIndexes = [];
+  for (let i = 3; i < dataHeaders.length; i++) {
+    productIndexes.push(dataHeaders[i]);
+  }
+  return productIndexes;
+}

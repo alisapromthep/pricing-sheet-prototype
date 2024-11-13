@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useProductState } from "@/lib/useProductState";
 import {
   fetchProductTypes,
   fetchProductListInfo,
@@ -11,6 +12,9 @@ type FormProps = {
 };
 
 const Form: React.FC<FormProps> = ({ data }) => {
+  const products = useProductState(data);
+  console.log("products", products);
+
   const productTypes = fetchProductTypes(data);
 
   const [selectedType, setSelectedType] = useState<string>(productTypes[0]);
@@ -53,7 +57,7 @@ const Form: React.FC<FormProps> = ({ data }) => {
   return (
     <form className="text-black flex flex-col">
       <label>
-        Select Product Type
+        Select Product Category
         <select onChange={handleSelectType}>
           {productTypes.map((type, i) => (
             <option key={i} value={type}>

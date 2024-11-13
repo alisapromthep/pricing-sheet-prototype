@@ -8,7 +8,7 @@ async function getGoogleSheetData() {
   });
   const sheets = google.sheets({ version: "v4", auth });
 
-  const range = `Sheet1`;
+  const range = `frame!A3:Z`;
 
   const response = await sheets.spreadsheets.values.get({
     spreadsheetId: process.env.SHEET_ID!,
@@ -20,7 +20,7 @@ async function getGoogleSheetData() {
 
 export default async function Home() {
   const data: string[][] = await getGoogleSheetData();
-
+  console.log(data);
   return (
     <div className="">
       <h1>Home Page</h1>
