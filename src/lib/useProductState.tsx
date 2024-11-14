@@ -23,17 +23,19 @@ export const useProductState = function (data) {
         return acc;
       }, {});
 
-    for (let i = 1; i < length; i++) {
-      const [category, model, familyPlanEligible] = data[i]; // Destructure data array elements
-      const newProduct = new ProductItem({
-        category,
-        model,
-        familyPlanEligible,
-      });
-      const pricesArray = data[i].slice(3).map((price) => Number(price));
+    if (indexes) {
+      for (let i = 1; i < length; i++) {
+        const [category, model, familyPlanEligible] = data[i]; // Destructure data array elements
+        const newProduct = new ProductItem({
+          category,
+          model,
+          familyPlanEligible,
+        });
+        const pricesArray = data[i].slice(3).map((price) => Number(price));
 
-      newProduct.addPrices(productIndexes, pricesArray);
-      listByCategory[category].push(newProduct);
+        newProduct.addPrices(indexes, pricesArray);
+        listByCategory[category].push(newProduct);
+      }
     }
 
     setProductListByCategory(listByCategory);

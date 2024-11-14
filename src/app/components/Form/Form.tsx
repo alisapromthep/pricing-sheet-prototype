@@ -5,6 +5,8 @@ import { useProductState } from "@/lib/useProductState";
 import {
   fetchProductTypes,
   fetchProductListInfo,
+  fetchSelectedProductInfo,
+  calculateBasePrice,
 } from "@/services/organizeData";
 
 type FormProps = {
@@ -12,7 +14,7 @@ type FormProps = {
 };
 
 interface PricesType {
-  [key: string]: number;
+  [key: string]: number | string;
 }
 
 interface ProductItemsType {
@@ -26,41 +28,69 @@ const Form: React.FC<FormProps> = ({ data }) => {
   const { productIndexes, productListByCategory } = useProductState(data);
   const productCategories = fetchProductTypes(data);
 
-  const [selectedType, setSelectedType] = useState<string>(
+  const [selectedCategory, setSelectedCategory] = useState<string>(
     productCategories[0]
   );
   const [productList, setProductList] = useState<ProductItemsType[]>([]);
-  const [selectedProduct, setSelectedProduct] = useState<string>("");
-  const [selectedProductInfo, setSelectedProductInfo] = useState<string[]>([]);
+  const [selectedModel, setSelectedModel] = useState<string>("");
+  const [selectedIndex, setSelectedIndex] = useState<string>("");
+  const [selectedProductInfo, setSelectedProductInfo] =
+    useState<ProductItemsType>({
+      category: "",
+      model: "",
+      familyPlanEligible: false,
+      prices: {} as PricesType,
+    });
+  const [basePrice, setBasePrice] = useState<Number>(0);
 
   useEffect(() => {
     // Fetch the product list for the initially selected type
-    const initialProductList = productListByCategory[selectedType];
-    console.log(productListByCategory[selectedType]);
+    const initialProductList = productListByCategory[selectedCategory];
     setProductList(initialProductList);
-  }, [selectedType, productListByCategory]);
+
+    if (initialProductList) {
+      setSelectedModel(initialProductList[0].model);
+      setSelectedIndex(productIndexes[0]);
+    }
+  }, [selectedCategory, productListByCategory]);
 
   // useEffect(() => {
   //   const productList = fetchProductListInfo(selectedType, data);
   //   setProductList(productList);
   // }, [selectedType]);
 
-  // useEffect(() => {
-  //   const productInfo = productList.find(
-  //     (product) => product[1] === selectedProduct
-  //   );
-  //   setSelectedProductInfo(productInfo || []);
-  // }, [selectedProduct]);
+  useEffect(() => {
+    const productInfo = fetchSelectedProductInfo(productList, selectedModel);
+    setSelectedProductInfo(productInfo);
+  }, [selectedModel]);
 
-  const handleSelectType = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedType(e.target.value);
+  useEffect(() => {
+    const selectedProduct = productList.find(
+      (product, i) => product.model === selectedModel
+    );
+    const basePrices = selectedProduct?.prices[selectedIndex];
+    setBasePrice(basePrice);
+
+    console.log(calculateBasePrice(selectedProductInfo, selectedIndex));
+  }, [selectedModel, selectedIndex]);
+
+  const handleSelectedCategory = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedCategory(e.target.value);
+  };
+
+  const handleSelectedModel = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedModel(e.target.value);
+  };
+
+  const handleSelectedIndex = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedIndex(e.target.value);
   };
 
   return (
     <form className="text-black flex flex-col">
       <label>
         Select Product Category
-        <select onChange={handleSelectType}>
+        <select onChange={handleSelectedCategory}>
           {productCategories.map((category, i) => (
             <option key={i} value={category}>
               {category}
@@ -70,7 +100,7 @@ const Form: React.FC<FormProps> = ({ data }) => {
       </label>
       <label>
         Select Product
-        <select>
+        <select onChange={handleSelectedModel}>
           {productList &&
             productList.map((product, i) => (
               <option key={i} value={product.model}>
@@ -81,7 +111,7 @@ const Form: React.FC<FormProps> = ({ data }) => {
       </label>
       <label>
         Select Index
-        <select>
+        <select onChange={handleSelectedIndex}>
           {productIndexes.map((type, i) => (
             <option key={i} value={type}>
               {type}
@@ -91,7 +121,7 @@ const Form: React.FC<FormProps> = ({ data }) => {
       </label>
       <div className="flex">
         <p>Base Price</p>
-        <p></p>
+        <p>${basePrice}</p>
       </div>
     </form>
   );
