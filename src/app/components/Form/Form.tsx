@@ -41,7 +41,7 @@ const Form: React.FC<FormProps> = ({ data }) => {
       familyPlanEligible: false,
       prices: {} as PricesType,
     });
-  const [basePrice, setBasePrice] = useState<Number>(0);
+  const [basePrice, setBasePrice] = useState<string>("");
 
   useEffect(() => {
     // Fetch the product list for the initially selected type
@@ -49,6 +49,7 @@ const Form: React.FC<FormProps> = ({ data }) => {
     setProductList(initialProductList);
 
     if (initialProductList) {
+      setSelectedProductInfo(initialProductList[0]);
       setSelectedModel(initialProductList[0].model);
       setSelectedIndex(productIndexes[0]);
     }
@@ -65,13 +66,8 @@ const Form: React.FC<FormProps> = ({ data }) => {
   }, [selectedModel]);
 
   useEffect(() => {
-    const selectedProduct = productList.find(
-      (product, i) => product.model === selectedModel
-    );
-    const basePrices = selectedProduct?.prices[selectedIndex];
-    setBasePrice(basePrice);
-
-    console.log(calculateBasePrice(selectedProductInfo, selectedIndex));
+    const bPrice = calculateBasePrice(selectedProductInfo, selectedIndex);
+    setBasePrice(bPrice?.toString());
   }, [selectedModel, selectedIndex]);
 
   const handleSelectedCategory = (e: React.ChangeEvent<HTMLSelectElement>) => {

@@ -28,11 +28,10 @@ export function fetchSelectedProductInfo(productList, selectedModel: string) {
   const productInfo = productList.find(
     (product) => product.model === selectedModel
   );
-  console.log(productInfo);
+
   return productInfo;
 }
 
 export function calculateBasePrice(productInfo, selectedIndex: string) {
-  console.log("productInfo", productInfo);
   return productInfo?.prices[selectedIndex];
 }
