@@ -19,11 +19,11 @@ async function getGoogleSheetData() {
 }
 
 export default async function Home() {
-  const data: string[][] = await getGoogleSheetData();
+  const frameData: string[][] = await getGoogleSheetData();
   return (
     <div className="">
       <h1>Home Page</h1>
-      <Form data={data} />
+      <Form frameData={frameData} />
     </div>
   );
 }

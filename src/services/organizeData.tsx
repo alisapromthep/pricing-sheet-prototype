@@ -35,3 +35,11 @@ export function fetchSelectedProductInfo(productList, selectedModel: string) {
 export function calculateBasePrice(productInfo, selectedIndex: string) {
   return productInfo?.prices[selectedIndex];
 }
+
+export function organizeOptionsData(data: string[][]) {
+  return data.map((option) => ({
+    option: option[0],
+    price: option[1],
+    family: option[2],
+  }));
+}
