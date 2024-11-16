@@ -8,7 +8,7 @@ async function getGoogleSheetData() {
   });
   const sheets = google.sheets({ version: "v4", auth });
 
-  const range = `frame!A3:Z`;
+  const range = `lens!A3:Z`;
 
   const response = await sheets.spreadsheets.values.get({
     spreadsheetId: process.env.SHEET_ID!,

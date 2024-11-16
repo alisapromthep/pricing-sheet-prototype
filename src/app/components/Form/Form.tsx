@@ -27,10 +27,24 @@ const mockOptions2 = [
 ];
 const Form: React.FC<FormProps> = ({ frameData }) => {
   return (
-    <div>
+    <div className="flex flex-col">
+      <label htmlFor="framePrice">
+        Frame Price
+        <input type="number" name="framePrice" />
+      </label>
       <FrameForm frameData={frameData} />
       <OptionsForm optionsData={mockOptions} labelsArray={mockLabels} />
       <OptionsForm optionsData={mockOptions2} labelsArray={mockLabels2} />
+      <div>
+        <label className="flex">
+          Lens Subtotal
+          <p>$$$</p>
+        </label>
+        <label className="flex">
+          Frame & Lens Subtotal
+          <p>$$$</p>
+        </label>
+      </div>
     </div>
   );
 };
