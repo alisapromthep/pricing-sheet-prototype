@@ -1,11 +1,9 @@
 "use client";
 
-import FrameForm from "../FrameForm/FrameForm";
+import LensForm from "../LensForm/LensForm";
 import OptionsForm from "../OptionsForm/OptionsForm";
+import DiscountForm from "../DiscountForm/DiscountForm";
 
-type FormProps = {
-  frameData: string[][];
-};
 const mockOptions = [
   ["anti-glare", "15", "Y"],
   ["blue light filter", "20", "Y"],
@@ -25,25 +23,65 @@ const mockOptions2 = [
   ["gradient tint", "30", "Y"],
   ["photochromic lenses", "40", "N"],
 ];
-const Form: React.FC<FormProps> = ({ frameData }) => {
+
+const bogo = [
+  "Apply BOGO?",
+  "All sets purchased within 30 days?",
+  "discount will be applied to",
+  "discount amount",
+];
+
+const family = [
+  "Apply Family Plan?",
+  "Are there at least two family members in this order?",
+  "Lens discount will be applied to",
+  "discount amount",
+];
+const Form: React.FC = () => {
   return (
-    <div className="flex flex-col">
-      <label htmlFor="framePrice">
-        Frame Price
-        <input type="number" name="framePrice" />
-      </label>
-      <FrameForm frameData={frameData} />
-      <OptionsForm optionsData={mockOptions} labelsArray={mockLabels} />
-      <OptionsForm optionsData={mockOptions2} labelsArray={mockLabels2} />
+    <div>
+      <form className="flex flex-col">
+        <label htmlFor="framePrice">
+          Frame Price
+          <input type="number" name="framePrice" />
+        </label>
+        <LensForm />
+        <OptionsForm optionsData={mockOptions} labelsArray={mockLabels} />
+        <OptionsForm optionsData={mockOptions2} labelsArray={mockLabels2} />
+        <div>
+          <label className="flex">
+            Lens Subtotal
+            <p>$$$</p>
+          </label>
+          <label className="flex">
+            Frame & Lens Subtotal
+            <p>$$$</p>
+          </label>
+        </div>
+        <div>
+          <h4>order subtotal</h4>
+          <div>
+            <label>
+              total frame price
+              <p>$$$</p>
+            </label>
+            <label>
+              total lenses
+              <p>$$$</p>
+            </label>
+            <label>
+              order subtotal
+              <p>$$$</p>
+            </label>
+          </div>
+        </div>
+      </form>
       <div>
-        <label className="flex">
-          Lens Subtotal
-          <p>$$$</p>
-        </label>
-        <label className="flex">
-          Frame & Lens Subtotal
-          <p>$$$</p>
-        </label>
+        <h3>Discounts</h3>
+        <p>BOGO</p>
+        <DiscountForm labelsArray={bogo} />
+        <p>Family Plan</p>
+        <DiscountForm labelsArray={family} />
       </div>
     </div>
   );

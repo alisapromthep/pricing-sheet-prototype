@@ -1,7 +1,6 @@
 "use client";
 
 import { organizeOptionsData } from "@/services/organizeData";
-import { mock } from "node:test";
 
 type FormProps = {
   optionsData: string[][];
@@ -10,9 +9,9 @@ type FormProps = {
 
 const OptionsForm: React.FC<FormProps> = ({ optionsData, labelsArray }) => {
   const optionObject = organizeOptionsData(optionsData);
-  console.log(optionObject);
+
   return (
-    <form className="flex flex-col">
+    <div className="flex flex-col">
       {labelsArray.map((label, i) => {
         return (
           <label key={i}>
@@ -25,7 +24,7 @@ const OptionsForm: React.FC<FormProps> = ({ optionsData, labelsArray }) => {
           </label>
         );
       })}
-    </form>
+    </div>
   );
 };
 

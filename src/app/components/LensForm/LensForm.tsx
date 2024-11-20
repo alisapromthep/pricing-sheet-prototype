@@ -8,10 +8,7 @@ import {
   fetchSelectedProductInfo,
   calculateBasePrice,
 } from "@/services/organizeData";
-
-type FormProps = {
-  frameData: string[][];
-};
+import { useGoogleSheetsContext } from "@/lib/context/GoogleSheetsContext";
 
 interface PricesType {
   [key: string]: number | string;
@@ -24,9 +21,26 @@ interface ProductItemsType {
   prices: PricesType;
 }
 
-const FrameForm: React.FC<FormProps> = ({ frameData }) => {
-  const { productIndexes, productListByCategory } = useProductState(frameData);
-  const productCategories = fetchProductTypes(frameData);
+const LensForm: React.FC = () => {
+  const data = useGoogleSheetsContext();
+
+  if (!data) {
+    return <p>loading...</p>;
+  }
+  const { sheetsData, loading, error } = data;
+
+  if (loading) {
+    return <p>loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error</p>;
+  }
+
+  const { productIndexes, productListByCategory } = useProductState(
+    sheetsData.lens
+  );
+  const productCategories = fetchProductTypes(sheetsData.lens);
 
   const [selectedCategory, setSelectedCategory] = useState<string>(
     productCategories[0]
@@ -78,7 +92,7 @@ const FrameForm: React.FC<FormProps> = ({ frameData }) => {
   };
 
   return (
-    <form className="text-black flex flex-col">
+    <div className="text-black flex flex-col">
       <label>
         Select Product Category
         <select onChange={handleSelectedCategory}>
@@ -118,8 +132,8 @@ const FrameForm: React.FC<FormProps> = ({ frameData }) => {
         <p>Family Plan Eligible</p>
         <p>{selectedProductInfo?.familyPlanEligible ? "Y" : "N"}</p>
       </div>
-    </form>
+    </div>
   );
 };
 
-export default FrameForm;
+export default LensForm;
