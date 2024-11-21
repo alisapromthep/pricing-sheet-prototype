@@ -3,26 +3,8 @@
 import LensForm from "../LensForm/LensForm";
 import OptionsForm from "../OptionsForm/OptionsForm";
 import DiscountForm from "../DiscountForm/DiscountForm";
-
-const mockOptions = [
-  ["anti-glare", "15", "Y"],
-  ["blue light filter", "20", "Y"],
-  ["UV protection", "10", "Y"],
-  ["scratch resistant", "12", "Y"],
-  ["none", "0", "N"],
-];
-
-const mockLabels = ["lens treatment", "price", "family plan eligible"];
-
-const mockLabels2 = ["add on", "price", "family plan eligible"];
-
-const mockOptions2 = [
-  ["polarized coating", "25", "Y"],
-  ["hydrophobic coating", "18", "Y"],
-  ["anti-fog", "22", "Y"],
-  ["gradient tint", "30", "Y"],
-  ["photochromic lenses", "40", "N"],
-];
+import { useGoogleSheetsContext } from "@/lib/context/GoogleSheetsContext";
+import { fetchLabels, fetchOptions } from "@/services/organizeData";
 
 const bogo = [
   "Apply BOGO?",
@@ -38,6 +20,16 @@ const family = [
   "discount amount",
 ];
 const Form: React.FC = () => {
+  const data = useGoogleSheetsContext();
+  console.log("data", data);
+  if (!data) {
+    return <p>loading...</p>;
+  }
+
+  const { sheetsData, loading, error } = data;
+  const { addOn, lens, lensTreatment, mcssAddon, packages, superflexAddon } =
+    sheetsData;
+
   return (
     <div>
       <form className="flex flex-col">
@@ -46,8 +38,14 @@ const Form: React.FC = () => {
           <input type="number" name="framePrice" />
         </label>
         <LensForm />
-        <OptionsForm optionsData={mockOptions} labelsArray={mockLabels} />
-        <OptionsForm optionsData={mockOptions2} labelsArray={mockLabels2} />
+        <OptionsForm
+          optionsData={fetchOptions(lensTreatment)}
+          labelsArray={fetchLabels(lensTreatment)}
+        />
+        <OptionsForm
+          optionsData={fetchOptions(addOn)}
+          labelsArray={fetchLabels(addOn)}
+        />
         <div>
           <label className="flex">
             Lens Subtotal

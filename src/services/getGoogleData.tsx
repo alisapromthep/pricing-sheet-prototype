@@ -10,11 +10,11 @@ export async function getGoogleSheetData() {
 
   const ranges = [
     "lens!A2:Z",
-    "lensTreatment!A2:Z",
-    "addOn!A2:Z",
+    "lensTreatment!A1:Z",
+    "addOn!A1:Z",
     "packages!A2:Z",
-    "superflexAddon!A2:Z",
-    "mcssAddon!A2:Z",
+    "superflexAddon!A1:Z",
+    "mcssAddon!A1:Z",
   ];
 
   const response = await sheets.spreadsheets.values.batchGet({

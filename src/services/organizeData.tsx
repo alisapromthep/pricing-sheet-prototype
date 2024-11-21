@@ -43,3 +43,11 @@ export function organizeOptionsData(data: string[][]) {
     family: option[2],
   }));
 }
+
+export function fetchLabels(sheetData) {
+  return sheetData[0];
+}
+
+export function fetchOptions(sheetData) {
+  return sheetData.slice(1);
+}
