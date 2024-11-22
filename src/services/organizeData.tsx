@@ -45,9 +45,15 @@ export function organizeOptionsData(data: string[][]) {
 }
 
 export function fetchLabels(sheetData) {
+  if (!sheetData) {
+    return;
+  }
   return sheetData[0];
 }
 
 export function fetchOptions(sheetData) {
+  if (!sheetData) {
+    return;
+  }
   return sheetData.slice(1);
 }

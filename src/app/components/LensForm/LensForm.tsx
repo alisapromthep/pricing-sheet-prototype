@@ -9,21 +9,14 @@ import {
   calculateBasePrice,
 } from "@/services/organizeData";
 import { useGoogleSheetsContext } from "@/lib/context/GoogleSheetsContext";
-
-interface PricesType {
-  [key: string]: number | string;
-}
-
-interface ProductItemsType {
-  category: string;
-  model: string;
-  familyPlanEligible: boolean;
-  prices: PricesType;
-}
+import { PricesType, ProductItemsType } from "@/app/_types/ProductTypes";
+import { usePricingContext } from "@/lib/context/PricingContext";
 
 const LensForm: React.FC = () => {
   const data = useGoogleSheetsContext();
 
+  const pricingTool = usePricingContext();
+  console.log("pricing tool", pricingTool);
   if (!data) {
     return <p>loading...</p>;
   }
