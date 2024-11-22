@@ -8,7 +8,7 @@ export class ProductItem {
   familyPlanEligible: boolean;
   prices: PricesType;
 
-  constructor({ category, model, familyPlanEligible }) {
+  constructor({ category = "", model = "", familyPlanEligible = false } = {}) {
     this.category = category;
     this.model = model;
     this.familyPlanEligible = familyPlanEligible;

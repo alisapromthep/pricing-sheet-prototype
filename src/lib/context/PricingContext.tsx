@@ -9,7 +9,7 @@ import React, {
 } from "react";
 
 import { PricesType, ProductItemsType } from "@/app/_types/ProductTypes";
-
+import { ProductItem } from "../ProductItem";
 interface selectedProductType {
   id: string;
   framePrice: number;
@@ -17,12 +17,14 @@ interface selectedProductType {
   selectedIndex: { [key: string]: string };
   lensTreatment: { [key: string]: string };
   addOn: { [key: string]: string };
-  total: "";
+  total: number;
 }
 
 interface PricingContextType {
-  selectedProduct: selectedProductType;
-  setSelectedProducts: React.Dispatch<React.SetStateAction>;
+  selectedProducts: selectedProductType[];
+  setSelectedProducts: React.Dispatch<
+    React.SetStateAction<selectedProductType[]>
+  >;
   totalPrice: number;
   setTotalPrice: React.Dispatch<React.SetStateAction<number>>;
 }
@@ -32,10 +34,10 @@ const PricingContext = createContext<PricingContextType | undefined>(undefined);
 export const PricingProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const initialSelectedProduct = {
+  const initialSelectedProduct: selectedProductType = {
     id: "",
     framePrice: 0,
-    selectedProductItem: {},
+    selectedProductItem: new ProductItem({}),
     selectedIndex: {},
     lensTreatment: {},
     addOn: {},
@@ -44,7 +46,7 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
 
   const [selectedProducts, setSelectedProducts] = useState<
     selectedProductType[]
-  >([]);
+  >([initialSelectedProduct]);
   const [totalPrice, setTotalPrice] = useState<number>(0);
 
   return (
