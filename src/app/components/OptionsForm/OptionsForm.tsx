@@ -10,6 +10,10 @@ type FormProps = {
 const OptionsForm: React.FC<FormProps> = ({ optionsData, labelsArray }) => {
   const optionObject = organizeOptionsData(optionsData);
 
+  if (!optionsData || !labelsArray) {
+    return <p>loading...</p>;
+  }
+
   return (
     <div className="flex flex-col">
       {labelsArray.map((label, i) => {

@@ -21,7 +21,7 @@ const family = [
 ];
 const Form: React.FC = () => {
   const data = useGoogleSheetsContext();
-  console.log("data", data);
+  //console.log("data", data);
   if (!data) {
     return <p>loading...</p>;
   }

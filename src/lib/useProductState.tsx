@@ -1,27 +1,47 @@
 import { ProductItem } from "./ProductItem";
-import { fetchProductIndexes } from "@/services/organizeData";
+import {
+  fetchProductTypes,
+  fetchProductIndexes,
+} from "@/services/organizeData";
 import { useState, useEffect } from "react";
+import { useGoogleSheetsContext } from "./context/GoogleSheetsContext";
 
 type CategoryMap = { [category: string]: string[] };
 
-export const useProductState = function (data) {
+export const useProductState = function () {
+  const data = useGoogleSheetsContext();
+  const { sheetsData, loading, error } = data || {};
+
   const [productIndexes, setProductIndexes] = useState([]);
   const [productListByCategory, setProductListByCategory] = useState({});
-
+  const [lensCategories, setLensCategories] = useState<string[]>([]);
+  //console.log(sheetsData);
+  //setProductCategories(data.lens[0]);
   useEffect(() => {
-    const indexes = fetchProductIndexes(data[0]);
-    setProductIndexes(indexes);
-    const length = data.length;
+    if (loading || error) {
+      return;
+    }
 
-    const listByCategory = data
-      .slice(1)
-      .reduce((acc: CategoryMap, [category]) => {
-        if (!acc[category]) {
-          acc[category] = [];
-        }
+    console.log("inside useEffect?", sheetsData);
+    const productCategories = fetchProductTypes(sheetsData?.lens);
+    console.log("lens??", productCategories);
 
-        return acc;
-      }, {});
+    const indexes = fetchProductIndexes(sheetsData?.lens[0]);
+    if (indexes) {
+      setProductIndexes(indexes);
+      const length = sheetsData?.lens.length;
+
+      const listByCategory = sheetsData?.lens.slice(1).reduce(
+        (acc: CategoryMap, [category]) => {
+          if (!acc[category]) {
+            acc[category] = [];
+          }
+
+          return acc;
+        },
+        { sheetsData }
+      );
+    }
 
     if (indexes) {
       for (let i = 1; i < length; i++) {
@@ -41,5 +61,5 @@ export const useProductState = function (data) {
     setProductListByCategory(listByCategory);
   }, []);
 
-  return { productIndexes, productListByCategory };
+  return { lensCategories, productIndexes, productListByCategory };
 };

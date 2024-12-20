@@ -7,37 +7,30 @@ import {
   fetchProductListInfo,
   fetchSelectedProductInfo,
   calculateBasePrice,
+  fetchProductIndexes,
+  fetchCategoriesList,
+  fillInProductCategories,
 } from "@/services/organizeData";
 import { useGoogleSheetsContext } from "@/lib/context/GoogleSheetsContext";
 import { PricesType, ProductItemsType } from "@/app/_types/ProductTypes";
 import { usePricingContext } from "@/lib/context/PricingContext";
 
+type CategoryMap = { [category: string]: string[] };
+
 const LensForm: React.FC = () => {
   const data = useGoogleSheetsContext();
 
   const pricingTool = usePricingContext();
-  console.log("pricing tool", pricingTool);
-  if (!data) {
-    return <p>loading...</p>;
-  }
-  const { sheetsData, loading, error } = data;
+  //console.log("pricing tool", pricingTool);
 
-  if (loading) {
-    return <p>loading...</p>;
-  }
+  const { sheetsData, loading, error } = data || {};
+  const { lens } = sheetsData;
+  //console.log("lens", lens);
 
-  if (error) {
-    return <p>Error</p>;
-  }
-
-  const { productIndexes, productListByCategory } = useProductState(
-    sheetsData.lens
-  );
-  const productCategories = fetchProductTypes(sheetsData.lens);
-
-  const [selectedCategory, setSelectedCategory] = useState<string>(
-    productCategories[0]
-  );
+  const [lensCategories, setLensCategories] = useState<string[]>([]);
+  const [productIndexes, setProductIndexes] = useState([]);
+  const [productListByCategory, setProductListByCategory] = useState({});
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [productList, setProductList] = useState<ProductItemsType[]>([]);
   const [selectedModel, setSelectedModel] = useState<string>("");
   const [selectedIndex, setSelectedIndex] = useState<string>("");
@@ -51,11 +44,33 @@ const LensForm: React.FC = () => {
   const [basePrice, setBasePrice] = useState<number>(0);
 
   useEffect(() => {
-    // Fetch the product list for the initially selected type
-    const initialProductList = productListByCategory[selectedCategory];
-    setProductList(initialProductList);
+    //getting all the lens products from sheetData
+    //then getting the indexes and productlist
+    if (sheetsData) {
+      const lensType = fetchProductTypes(lens);
+      if (lensType && lensType.length > 0) {
+        setSelectedCategory(lensType[0]);
+        const indexes = fetchProductIndexes(lens[0]);
+        //console.log("indexes", indexes);
+        setProductIndexes(indexes);
+        //get the list of product by categories
+        const listByCategory = fetchCategoriesList(lens);
 
+        //fill each categories with the products
+        fillInProductCategories(lens, listByCategory, indexes);
+        setProductListByCategory(listByCategory);
+      }
+    }
+  }, [sheetsData]);
+
+  useEffect(() => {
+    // Fetch the product list for the initially selected type
+    //console.log("second useEffect, selectedCategory", selectedCategory);
+    console.log(productListByCategory);
+    const initialProductList = productListByCategory[selectedCategory];
+    console.log("initial", initialProductList);
     if (initialProductList) {
+      setProductList(initialProductList);
       setSelectedProductInfo(initialProductList[0]);
       setSelectedModel(initialProductList[0].model);
       setSelectedIndex(productIndexes[0]);
@@ -84,16 +99,31 @@ const LensForm: React.FC = () => {
     setSelectedIndex(e.target.value);
   };
 
+  if (loading) {
+    return <p>loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error</p>;
+  }
+  if (!sheetsData) {
+    return <p>loading...</p>;
+  }
+
   return (
     <div className="text-black flex flex-col">
       <label>
-        Select Product Category
+        Select Lens Category
         <select onChange={handleSelectedCategory}>
-          {productCategories.map((category, i) => (
+          {/* {productList.map((category, i) => (
             <option key={i} value={category}>
               {category}
             </option>
-          ))}
+          ))} */}
+          {productList.map((product, i) => {
+            console.log(product);
+            return <p>i</p>;
+          })}
         </select>
       </label>
       <label>

@@ -1,4 +1,9 @@
-export function fetchProductTypes(data: string[][]) {
+import { ProductItem } from "@/lib/ProductItem";
+
+export function fetchProductTypes(data: string[]) {
+  if (!data) {
+    return;
+  }
   let productTypes: string[] = [];
 
   for (let i = 1; i < data.length; i++) {
@@ -17,6 +22,9 @@ export function fetchProductListInfo(
 }
 
 export function fetchProductIndexes(dataHeaders: []) {
+  if (!dataHeaders) {
+    return;
+  }
   const productIndexes = [];
   for (let i = 3; i < dataHeaders.length; i++) {
     productIndexes.push(dataHeaders[i]);
@@ -37,6 +45,9 @@ export function calculateBasePrice(productInfo, selectedIndex: string) {
 }
 
 export function organizeOptionsData(data: string[][]) {
+  if (!data) {
+    return;
+  }
   return data.map((option) => ({
     option: option[0],
     price: option[1],
@@ -56,4 +67,34 @@ export function fetchOptions(sheetData) {
     return;
   }
   return sheetData.slice(1);
+}
+
+//function that goes through the array of lens and pick out a list of lens categories
+export function fetchCategoriesList(data) {
+  const listByCategory = data.slice(1).reduce((acc, [category]) => {
+    if (!acc[category]) {
+      acc[category] = [];
+    }
+    return acc;
+  }, []);
+
+  return listByCategory;
+}
+
+//fill in the catogories with products
+
+export function fillInProductCategories(data, list, indexes) {
+  for (let i = 1; i < data.length; i++) {
+    const [category, model, familyPlanEligible] = data[i]; // Destructure data array elements
+
+    const newProduct = new ProductItem({
+      category,
+      model,
+      familyPlanEligible,
+    });
+    const pricesArray = data[i].slice(3).map((price) => Number(price));
+
+    newProduct.addPrices(indexes, pricesArray);
+    list[category].push(newProduct);
+  }
 }

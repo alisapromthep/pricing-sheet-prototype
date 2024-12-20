@@ -34,8 +34,8 @@ export const GoogleSheetsProvider: React.FC<{ children: ReactNode }> = ({
   useEffect(() => {
     const fetchSheetsData = async () => {
       try {
-        setLoading(true);
         const data = await getGoogleSheetData();
+        //console.log(data);
         setSheetsData(data);
       } catch (err: any) {
         setError(err.message || "Failed to fetch sheets data");
