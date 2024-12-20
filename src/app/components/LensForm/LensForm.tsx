@@ -49,9 +49,9 @@ const LensForm: React.FC = () => {
     if (sheetsData) {
       const lensType = fetchProductTypes(lens);
       if (lensType && lensType.length > 0) {
+        setLensCategories(lensType);
         setSelectedCategory(lensType[0]);
         const indexes = fetchProductIndexes(lens[0]);
-        //console.log("indexes", indexes);
         setProductIndexes(indexes);
         //get the list of product by categories
         const listByCategory = fetchCategoriesList(lens);
@@ -65,10 +65,7 @@ const LensForm: React.FC = () => {
 
   useEffect(() => {
     // Fetch the product list for the initially selected type
-    //console.log("second useEffect, selectedCategory", selectedCategory);
-    console.log(productListByCategory);
     const initialProductList = productListByCategory[selectedCategory];
-    console.log("initial", initialProductList);
     if (initialProductList) {
       setProductList(initialProductList);
       setSelectedProductInfo(initialProductList[0]);
@@ -115,15 +112,11 @@ const LensForm: React.FC = () => {
       <label>
         Select Lens Category
         <select onChange={handleSelectedCategory}>
-          {/* {productList.map((category, i) => (
+          {lensCategories.map((category, i) => (
             <option key={i} value={category}>
               {category}
             </option>
-          ))} */}
-          {productList.map((product, i) => {
-            console.log(product);
-            return <p>i</p>;
-          })}
+          ))}
         </select>
       </label>
       <label>
