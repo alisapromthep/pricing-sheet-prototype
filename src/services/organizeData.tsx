@@ -59,7 +59,7 @@ export function fetchLabels(sheetData) {
   if (!sheetData) {
     return;
   }
-  return sheetData[0];
+  return sheetData[0][0];
 }
 
 export function fetchOptions(sheetData) {

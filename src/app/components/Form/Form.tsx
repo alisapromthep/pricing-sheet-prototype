@@ -40,11 +40,11 @@ const Form: React.FC = () => {
         <LensForm />
         <OptionsForm
           optionsData={fetchOptions(lensTreatment)}
-          labelsArray={fetchLabels(lensTreatment)}
+          label={fetchLabels(lensTreatment)}
         />
         <OptionsForm
           optionsData={fetchOptions(addOn)}
-          labelsArray={fetchLabels(addOn)}
+          label={fetchLabels(addOn)}
         />
         <div>
           <label className="flex">

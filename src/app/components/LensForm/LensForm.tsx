@@ -21,11 +21,9 @@ const LensForm: React.FC = () => {
   const data = useGoogleSheetsContext();
 
   const pricingTool = usePricingContext();
-  //console.log("pricing tool", pricingTool);
 
   const { sheetsData, loading, error } = data || {};
   const { lens } = sheetsData;
-  //console.log("lens", lens);
 
   const [lensCategories, setLensCategories] = useState<string[]>([]);
   const [productIndexes, setProductIndexes] = useState([]);
@@ -96,14 +94,7 @@ const LensForm: React.FC = () => {
     setSelectedIndex(e.target.value);
   };
 
-  if (loading) {
-    return <p>loading...</p>;
-  }
-
-  if (error) {
-    return <p>Error</p>;
-  }
-  if (!sheetsData) {
+  if (loading || error || !sheetsData) {
     return <p>loading...</p>;
   }
 
