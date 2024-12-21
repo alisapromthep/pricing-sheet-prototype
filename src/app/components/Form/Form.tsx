@@ -5,6 +5,9 @@ import OptionsForm from "../OptionsForm/OptionsForm";
 import DiscountForm from "../DiscountForm/DiscountForm";
 import { useGoogleSheetsContext } from "@/lib/context/GoogleSheetsContext";
 import { fetchLabels, fetchOptions } from "@/services/organizeData";
+import { usePricingContext } from "@/lib/context/PricingContext";
+import ShortUniqueId from "short-unique-id";
+import { useState, useRef } from "react";
 
 const bogo = [
   "Apply BOGO?",
@@ -20,22 +23,62 @@ const family = [
   "discount amount",
 ];
 const Form: React.FC = () => {
+  const [inputFramePrice, setInputFramePrice] = useState<string>("");
+
+  const inputFramePriceRef = useRef(null);
+
   const data = useGoogleSheetsContext();
-  //console.log("data", data);
+  const pricingTool = usePricingContext();
+  const uid = new ShortUniqueId();
+  const { selectedProduct, setSelectedProduct } = pricingTool;
+
   if (!data) {
     return <p>loading...</p>;
   }
-
   const { sheetsData, loading, error } = data;
   const { addOn, lens, lensTreatment, mcssAddon, packages, superflexAddon } =
     sheetsData;
 
+  const updateProduct = () => {
+    if (inputFramePrice !== "") {
+      setSelectedProduct((prev) => ({
+        ...prev,
+        id: uid.rnd(),
+        framePrice: Number(inputFramePrice),
+      }));
+    }
+  };
+  // Handle key presses
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      updateProduct();
+    }
+  };
+  // Handle clicks outside the input (blur event)
+  const handleBlur = () => {
+    updateProduct();
+  };
+
+  console.log(selectedProduct);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  };
+
   return (
     <div>
-      <form className="flex flex-col">
+      <form className="flex flex-col" onSubmit={handleSubmit}>
         <label htmlFor="framePrice">
           Frame Price
-          <input type="number" name="framePrice" />
+          <input
+            ref={inputFramePriceRef}
+            type="number"
+            value={inputFramePrice}
+            onChange={(e) => setInputFramePrice((prev) => e.target.value)}
+            onKeyDown={handleKeyDown} // Detect Enter key
+            onBlur={handleBlur} // Detect focus loss
+            placeholder="Enter frame price"
+          />
         </label>
         <LensForm />
         <OptionsForm

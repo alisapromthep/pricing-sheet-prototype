@@ -15,7 +15,6 @@ const OptionsForm: React.FC<FormProps> = ({ optionsData, label }) => {
   const optionObject = organizeOptionsData(optionsData);
 
   const handleSelectOption = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    console.log(e.target.value);
     const selected = optionObject?.find(
       (object) => object.option === e.target.value
     );

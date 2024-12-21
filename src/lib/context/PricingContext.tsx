@@ -17,12 +17,15 @@ interface selectedProductType {
   selectedIndex: { [key: string]: string };
   lensTreatment: { [key: string]: string };
   addOn: { [key: string]: string };
+  lensSubTotal: number;
   total: number;
 }
 
 interface PricingContextType {
-  selectedProducts: selectedProductType[];
-  setSelectedProducts: React.Dispatch<
+  selectedProduct: selectedProductType;
+  setSelectedProduct: React.Dispatch<React.SetStateAction<selectedProductType>>;
+  selectedProductsArray: selectedProductType[];
+  setSelectedProductsArray: React.Dispatch<
     React.SetStateAction<selectedProductType[]>
   >;
   totalPrice: number;
@@ -41,19 +44,25 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
     selectedIndex: {},
     lensTreatment: {},
     addOn: {},
+    lensSubTotal: 0,
     total: 0,
   };
 
-  const [selectedProducts, setSelectedProducts] = useState<
+  const [selectedProduct, setSelectedProduct] = useState<selectedProductType>(
+    initialSelectedProduct
+  );
+  const [selectedProductsArray, setSelectedProductsArray] = useState<
     selectedProductType[]
-  >([initialSelectedProduct]);
+  >([]);
   const [totalPrice, setTotalPrice] = useState<number>(0);
 
   return (
     <PricingContext.Provider
       value={{
-        selectedProducts,
-        setSelectedProducts,
+        selectedProduct,
+        setSelectedProduct,
+        selectedProductsArray,
+        setSelectedProductsArray,
         totalPrice,
         setTotalPrice,
       }}
