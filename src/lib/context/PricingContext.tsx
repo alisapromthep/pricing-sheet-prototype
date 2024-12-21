@@ -14,8 +14,10 @@ interface selectedProductType {
   id: string;
   framePrice: number;
   selectedProductItem: ProductItemsType;
-  selectedIndex: { [key: string]: string };
-  lensTreatment: { [key: string]: string };
+  selectedIndex: string;
+  indexPrice: number;
+  lensTreatment: string;
+  lensTreatmentPrice: number;
   addOn: { [key: string]: string };
   lensSubTotal: number;
   total: number;
@@ -30,6 +32,10 @@ interface PricingContextType {
   >;
   totalPrice: number;
   setTotalPrice: React.Dispatch<React.SetStateAction<number>>;
+  updateProduct: (
+    name: keyof selectedProductType,
+    value: string | number
+  ) => void;
 }
 
 const PricingContext = createContext<PricingContextType | undefined>(undefined);
@@ -41,8 +47,10 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
     id: "",
     framePrice: 0,
     selectedProductItem: new ProductItem({}),
-    selectedIndex: {},
-    lensTreatment: {},
+    selectedIndex: "",
+    indexPrice: 0,
+    lensTreatment: "",
+    lensTreatmentPrice: 0,
     addOn: {},
     lensSubTotal: 0,
     total: 0,
@@ -56,6 +64,17 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
   >([]);
   const [totalPrice, setTotalPrice] = useState<number>(0);
 
+  //TODO: create product function, give it an ID and start with initialSelectedProduct
+
+  const updateProduct = (name: string, value: string | number) => {
+    setSelectedProduct((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  //TODO: Add Product to the selectedProductArray, for multiple products
+
   return (
     <PricingContext.Provider
       value={{
@@ -65,6 +84,7 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
         setSelectedProductsArray,
         totalPrice,
         setTotalPrice,
+        updateProduct,
       }}
     >
       {children}
