@@ -85,10 +85,31 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   const updateProduct = (name: string, value: string | number) => {
-    setCurrentProduct((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    //if prices gets update, the total and subtotal gets updated respectively
+    setCurrentProduct((prev) => {
+      let updatedLensSubTotal = prev.lensSubTotal;
+      let updatedTotal = prev.total;
+
+      // Update lensSubTotal for lens-related prices change
+      if (name === "lensTreatmentPrice" || name === "indexPrice") {
+        updatedLensSubTotal =
+          (name === "lensTreatmentPrice"
+            ? Number(value)
+            : prev.lensTreatmentPrice) +
+          (name === "indexPrice" ? Number(value) : prev.indexPrice);
+      }
+
+      //updating total if framePrice is updating
+      if (name === "framePrice") {
+        updatedTotal = Number(value) + updatedLensSubTotal;
+      }
+      return {
+        ...prev,
+        [name]: value,
+        lensSubTotal: updatedLensSubTotal,
+        total: updatedTotal,
+      };
+    });
   };
 
   //TODO: Add Product to the selectedProductArray, for multiple products

@@ -21,7 +21,7 @@ const LensForm: React.FC = () => {
   const data = useGoogleSheetsContext();
 
   const pricingTool = usePricingContext();
-  const { selectedProduct, setSelectedProduct } = pricingTool;
+  const { currentProduct, setCurrentProduct } = pricingTool;
 
   const { sheetsData, loading, error } = data || {};
   const { lens } = sheetsData;
