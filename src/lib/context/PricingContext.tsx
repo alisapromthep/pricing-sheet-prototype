@@ -7,7 +7,7 @@ import React, {
   useEffect,
   ReactNode,
 } from "react";
-
+import ShortUniqueId from "short-unique-id";
 import { PricesType, ProductItemsType } from "@/app/_types/ProductTypes";
 import { ProductItem } from "../ProductItem";
 interface selectedProductType {
@@ -24,8 +24,8 @@ interface selectedProductType {
 }
 
 interface PricingContextType {
-  selectedProduct: selectedProductType;
-  setSelectedProduct: React.Dispatch<React.SetStateAction<selectedProductType>>;
+  currentProduct: selectedProductType;
+  setCurrentProduct: React.Dispatch<React.SetStateAction<selectedProductType>>;
   selectedProductsArray: selectedProductType[];
   setSelectedProductsArray: React.Dispatch<
     React.SetStateAction<selectedProductType[]>
@@ -56,7 +56,8 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
     total: 0,
   };
 
-  const [selectedProduct, setSelectedProduct] = useState<selectedProductType>(
+  const uid = new ShortUniqueId();
+  const [currentProduct, setCurrentProduct] = useState<selectedProductType>(
     initialSelectedProduct
   );
   const [selectedProductsArray, setSelectedProductsArray] = useState<
@@ -64,10 +65,27 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
   >([]);
   const [totalPrice, setTotalPrice] = useState<number>(0);
 
-  //TODO: create product function, give it an ID and start with initialSelectedProduct
+  //create product function, give it an ID and return empty product info with an id.
+
+  const createProduct = () => {
+    const newProduct = {
+      id: uid.rnd(),
+      framePrice: 0,
+      selectedProductItem: new ProductItem({}),
+      selectedIndex: "",
+      indexPrice: 0,
+      lensTreatment: "",
+      lensTreatmentPrice: 0,
+      addOn: {},
+      lensSubTotal: 0,
+      total: 0,
+    };
+
+    return newProduct;
+  };
 
   const updateProduct = (name: string, value: string | number) => {
-    setSelectedProduct((prev) => ({
+    setCurrentProduct((prev) => ({
       ...prev,
       [name]: value,
     }));
@@ -78,8 +96,8 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
   return (
     <PricingContext.Provider
       value={{
-        selectedProduct,
-        setSelectedProduct,
+        currentProduct,
+        setCurrentProduct,
         selectedProductsArray,
         setSelectedProductsArray,
         totalPrice,
