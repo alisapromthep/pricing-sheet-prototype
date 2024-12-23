@@ -55,6 +55,8 @@ const Form: React.FC = () => {
     console.log(e);
   };
 
+  //TODO: Add styling
+
   return (
     <div>
       <form className="flex flex-col" onSubmit={handleSubmit}>

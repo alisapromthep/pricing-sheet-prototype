@@ -114,7 +114,11 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
     });
   };
 
+  //TODO: Add function to calculate the order subtotal
+  //TODO: Add discount calculations, BOGO and Family plans
+
   //TODO: Add Product to the selectedProductArray, for multiple products
+  //TODO: Add function to reset currentProduct when add another product is added
 
   return (
     <PricingContext.Provider
