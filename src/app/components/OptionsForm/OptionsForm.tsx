@@ -28,7 +28,6 @@ const OptionsForm: React.FC<FormProps> = ({ optionsData, label, name }) => {
         [name]: selected,
         [`${name}Price`]: Number(selected.price),
       };
-      console.log(`${name}Price`);
       updateProduct(updateInfo);
       setFamilyPlan(selected.family);
     } else {
