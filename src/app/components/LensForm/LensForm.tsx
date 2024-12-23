@@ -76,13 +76,13 @@ const LensForm: React.FC = () => {
   useEffect(() => {
     const productInfo = fetchSelectedProductInfo(productList, selectedModel);
     setSelectedProductInfo(productInfo);
-    updateProduct("selectedProductItem", productInfo);
+    updateProduct({ selectedProductItem: productInfo });
   }, [selectedModel]);
 
   useEffect(() => {
     const bPrice = calculateBasePrice(selectedProductInfo, selectedIndex);
     setBasePrice(bPrice);
-    updateProduct("indexPrice", bPrice);
+    updateProduct({ indexPrice: bPrice });
   }, [selectedModel, selectedIndex]);
 
   const handleSelectedCategory = (e: React.ChangeEvent<HTMLSelectElement>) => {

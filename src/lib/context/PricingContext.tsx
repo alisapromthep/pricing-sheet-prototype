@@ -33,6 +33,7 @@ interface PricingContextType {
   >;
   totalPrice: number;
   setTotalPrice: React.Dispatch<React.SetStateAction<number>>;
+  createProduct: () => void;
   updateProduct: (
     name: keyof selectedProductType,
     value: string | number
@@ -79,38 +80,34 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
       lensTreatment: "",
       lensTreatmentPrice: 0,
       addOn: {},
+      addOnPrice: 0,
       lensSubTotal: 0,
       total: 0,
     };
 
-    return newProduct;
+    setCurrentProduct(newProduct);
   };
 
-  const updateProduct = (name: string, value: string | number) => {
-    //if prices gets update, the total and subtotal gets updated respectively
+  const updateProduct = (updates: { [key: string]: string | number }) => {
     setCurrentProduct((prev) => {
-      let updatedLensSubTotal = prev.lensSubTotal;
-      let updatedTotal = prev.total;
+      let updatedLensSubTotal = 0;
+      let updatedTotal = 0;
 
-      // Update lensSubTotal for lens-related prices change
-      if (name === "lensTreatmentPrice" || name === "indexPrice") {
-        updatedLensSubTotal =
-          (name === "lensTreatmentPrice"
-            ? Number(value)
-            : prev.lensTreatmentPrice) +
-          (name === "indexPrice" ? Number(value) : prev.indexPrice);
+      // Apply updates to the state
+      const newState = { ...prev, ...updates };
 
-        updatedTotal = prev.framePrice + updatedLensSubTotal;
-      }
+      // Recalculate lensSubTotal
+      updatedLensSubTotal =
+        Number(updates.lensTreatmentPrice ?? newState.lensTreatmentPrice) +
+        Number(updates.indexPrice ?? newState.indexPrice) +
+        Number(updates.addOnPrice ?? (newState.addOnPrice || 0));
 
-      //updating total if framePrice is updating
-      if (name === "framePrice") {
-        updatedTotal = Number(value) + updatedLensSubTotal;
-      }
+      // Recalculate total
+      updatedTotal =
+        Number(updates.framePrice ?? newState.framePrice) + updatedLensSubTotal;
 
       return {
-        ...prev,
-        [name]: value,
+        ...newState,
         lensSubTotal: updatedLensSubTotal,
         total: updatedTotal,
       };
@@ -128,6 +125,7 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
         setSelectedProductsArray,
         totalPrice,
         setTotalPrice,
+        createProduct,
         updateProduct,
       }}
     >

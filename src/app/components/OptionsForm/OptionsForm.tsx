@@ -2,17 +2,21 @@
 
 import { organizeOptionsData } from "@/services/organizeData";
 import { useState } from "react";
+import { usePricingContext } from "@/lib/context/PricingContext";
 
 type FormProps = {
   optionsData: string[][];
   label: string;
 };
 
-const OptionsForm: React.FC<FormProps> = ({ optionsData, label }) => {
+const OptionsForm: React.FC<FormProps> = ({ optionsData, label, name }) => {
   const [optionPrice, setOptionPrice] = useState<number>(0);
   const [familyPlan, setFamilyPlan] = useState<string>("");
   const [error, setError] = useState<boolean>(false);
   const optionObject = organizeOptionsData(optionsData);
+
+  const pricingTool = usePricingContext();
+  const { currentProduct, setCurrentProduct, updateProduct } = pricingTool;
 
   const handleSelectOption = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selected = optionObject?.find(
@@ -20,6 +24,10 @@ const OptionsForm: React.FC<FormProps> = ({ optionsData, label }) => {
     );
     if (selected) {
       setOptionPrice(Number(selected.price));
+      const updateInfo = {
+        [name]: selected,
+        [`${name}Price`]: Number(selected.price),
+      };
       setFamilyPlan(selected.family);
     } else {
       setError(true);

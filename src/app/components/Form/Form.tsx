@@ -7,7 +7,7 @@ import { useGoogleSheetsContext } from "@/lib/context/GoogleSheetsContext";
 import { fetchLabels, fetchOptions } from "@/services/organizeData";
 import { usePricingContext } from "@/lib/context/PricingContext";
 
-import { useState, useRef } from "react";
+import { useState, useEffect } from "react";
 
 const bogo = [
   "Apply BOGO?",
@@ -25,12 +25,11 @@ const family = [
 const Form: React.FC = () => {
   const [inputFramePrice, setInputFramePrice] = useState<string>("");
 
-  const inputFramePriceRef = useRef(null);
-
   const data = useGoogleSheetsContext();
   const pricingTool = usePricingContext();
 
-  const { currentProduct, setCurrentProduct, updateProduct } = pricingTool;
+  const { currentProduct, setCurrentProduct, createProduct, updateProduct } =
+    pricingTool;
 
   if (!data) {
     return <p>loading...</p>;
@@ -39,23 +38,16 @@ const Form: React.FC = () => {
   const { addOn, lens, lensTreatment, mcssAddon, packages, superflexAddon } =
     sheetsData;
 
-  // // Handle key presses
-  // const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-  //   if (e.key === "Enter") {
-  //     //updateProduct();
-  //   }
-  // };
-  // // Handle clicks outside the input (blur event)
-  // const handleBlur = () => {
-  //   //updateProduct();
-  // };
-
   console.log(currentProduct);
+
+  useEffect(() => {
+    createProduct();
+  }, []);
 
   const handleInputFramePrice = (e: React.KeyboardEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setInputFramePrice((prev) => e.target.value);
-    updateProduct(name, value);
+    updateProduct({ [name]: value });
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -70,7 +62,6 @@ const Form: React.FC = () => {
           Frame Price
           <input
             name="framePrice"
-            ref={inputFramePriceRef}
             type="number"
             value={inputFramePrice}
             onChange={handleInputFramePrice}
@@ -81,10 +72,12 @@ const Form: React.FC = () => {
         <OptionsForm
           optionsData={fetchOptions(lensTreatment)}
           label={fetchLabels(lensTreatment)}
+          name="lensTreatment"
         />
         <OptionsForm
           optionsData={fetchOptions(addOn)}
           label={fetchLabels(addOn)}
+          name="addOn"
         />
       </form>
       <div>
