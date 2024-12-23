@@ -21,7 +21,7 @@ const LensForm: React.FC = () => {
   const data = useGoogleSheetsContext();
 
   const pricingTool = usePricingContext();
-  const { currentProduct, setCurrentProduct } = pricingTool;
+  const { currentProduct, setCurrentProduct, updateProduct } = pricingTool;
 
   const { sheetsData, loading, error } = data || {};
   const { lens } = sheetsData;
@@ -76,11 +76,13 @@ const LensForm: React.FC = () => {
   useEffect(() => {
     const productInfo = fetchSelectedProductInfo(productList, selectedModel);
     setSelectedProductInfo(productInfo);
+    updateProduct("selectedProductItem", productInfo);
   }, [selectedModel]);
 
   useEffect(() => {
     const bPrice = calculateBasePrice(selectedProductInfo, selectedIndex);
     setBasePrice(bPrice);
+    updateProduct("indexPrice", bPrice);
   }, [selectedModel, selectedIndex]);
 
   const handleSelectedCategory = (e: React.ChangeEvent<HTMLSelectElement>) => {

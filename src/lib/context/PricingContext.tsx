@@ -19,6 +19,7 @@ interface selectedProductType {
   lensTreatment: string;
   lensTreatmentPrice: number;
   addOn: { [key: string]: string };
+  addOnPrice: number;
   lensSubTotal: number;
   total: number;
 }
@@ -52,6 +53,7 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
     lensTreatment: "",
     lensTreatmentPrice: 0,
     addOn: {},
+    addOnPrice: 0,
     lensSubTotal: 0,
     total: 0,
   };
@@ -103,6 +105,7 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
       if (name === "framePrice") {
         updatedTotal = Number(value) + updatedLensSubTotal;
       }
+
       return {
         ...prev,
         [name]: value,
