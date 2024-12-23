@@ -99,6 +99,8 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
             ? Number(value)
             : prev.lensTreatmentPrice) +
           (name === "indexPrice" ? Number(value) : prev.indexPrice);
+
+        updatedTotal = prev.framePrice + updatedLensSubTotal;
       }
 
       //updating total if framePrice is updating
