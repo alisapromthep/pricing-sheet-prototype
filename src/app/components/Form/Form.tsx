@@ -38,7 +38,7 @@ const Form: React.FC = () => {
   const { addOn, lens, lensTreatment, mcssAddon, packages, superflexAddon } =
     sheetsData;
 
-  console.log(currentProduct);
+  //console.log(currentProduct);
 
   useEffect(() => {
     createProduct();
@@ -52,15 +52,16 @@ const Form: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(e);
+    //console.log(e);
   };
 
   //TODO: Add styling
 
   return (
-    <div>
+    <div className="m-4 p-4 border border-gray-200">
+      <h2 className="font-bold text-lg">Pair Number</h2>
       <form className="flex flex-col" onSubmit={handleSubmit}>
-        <label htmlFor="framePrice">
+        <label htmlFor="framePrice" className="flex justify-between">
           Frame Price
           <input
             name="framePrice"
@@ -71,6 +72,7 @@ const Form: React.FC = () => {
           />
         </label>
         <LensForm />
+        <h4 className="font-bold my-2">Lens Treatments & Add Ons</h4>
         <OptionsForm
           optionsData={fetchOptions(lensTreatment)}
           label={fetchLabels(lensTreatment)}
@@ -83,13 +85,13 @@ const Form: React.FC = () => {
         />
       </form>
       <div>
-        <label className="flex">
+        <label className="flex items-center justify-between">
           Lens Subtotal
-          <p>{currentProduct.lensSubTotal}</p>
+          <p className="mx-2 px-4 py-2 pr-8">{currentProduct.lensSubTotal}</p>
         </label>
-        <label className="flex">
+        <label className="flex items-center justify-between">
           Frame & Lens Subtotal
-          <p>{currentProduct.total}</p>
+          <p className="mx-2 px-4 py-2 pr-8">{currentProduct.total}</p>
         </label>
       </div>
       {/* <div>

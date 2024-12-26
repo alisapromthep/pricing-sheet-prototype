@@ -41,9 +41,13 @@ const OptionsForm: React.FC<FormProps> = ({ optionsData, label, name }) => {
 
   return (
     <div className="flex flex-col">
-      <label>
+      <label className="flex items-center justify-between">
         {label}
-        <select onChange={handleSelectOption}>
+        <select
+          onChange={handleSelectOption}
+          className="mx-2 px-4 py-2 pr-8 bg-gray-100 border border-gray-400 hover:border-gray-500  rounded shadow leading-tight focus:outline-none focus:shadow-outline
+          "
+        >
           {optionObject?.map((optionObject, i) => {
             return (
               <option key={i} value={optionObject.option}>
@@ -53,13 +57,17 @@ const OptionsForm: React.FC<FormProps> = ({ optionsData, label, name }) => {
           })}
         </select>
       </label>
-      <div className="flex">
+      <div className="flex items-center justify-between">
         <p>Price</p>
-        <p>{error ? "unavailable" : `$${optionPrice}`}</p>
+        <p className="mx-2 px-4 py-2 pr-8">
+          {error ? "unavailable" : `$${optionPrice}`}
+        </p>
       </div>
-      <div className="flex">
+      <div className="flex items-center justify-between">
         <p>Family Plan Eligible?</p>
-        <p>{error ? "unavailable" : `${familyPlan}`}</p>
+        <p className="mx-2 px-4 py-2 pr-8">
+          {error ? "unavailable" : `${familyPlan}`}
+        </p>
       </div>
     </div>
   );

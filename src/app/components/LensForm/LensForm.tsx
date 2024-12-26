@@ -103,9 +103,13 @@ const LensForm: React.FC = () => {
 
   return (
     <div className="text-black flex flex-col">
-      <label>
+      <label className="flex justify-between">
         Select Lens Category
-        <select onChange={handleSelectedCategory}>
+        <select
+          onChange={handleSelectedCategory}
+          className="mx-2 px-4 py-2 pr-8 bg-gray-100 border border-gray-400 hover:border-gray-500  rounded shadow leading-tight focus:outline-none focus:shadow-outline
+          "
+        >
           {lensCategories.map((category, i) => (
             <option key={i} value={category}>
               {category}
@@ -113,9 +117,13 @@ const LensForm: React.FC = () => {
           ))}
         </select>
       </label>
-      <label>
+      <label className="flex justify-between">
         Select Product
-        <select onChange={handleSelectedModel}>
+        <select
+          onChange={handleSelectedModel}
+          className="mx-2 px-4 py-2 pr-8 bg-gray-100 border border-gray-400 hover:border-gray-500  rounded shadow leading-tight focus:outline-none focus:shadow-outline
+          "
+        >
           {productList &&
             productList.map((product, i) => (
               <option key={i} value={product.model}>
@@ -124,9 +132,13 @@ const LensForm: React.FC = () => {
             ))}
         </select>
       </label>
-      <label>
+      <label className="flex justify-between">
         Select Index
-        <select onChange={handleSelectedIndex}>
+        <select
+          onChange={handleSelectedIndex}
+          className="mx-2 px-4 py-2 pr-8 bg-gray-100 border border-gray-400 hover:border-gray-500  rounded shadow leading-tight focus:outline-none focus:shadow-outline
+          "
+        >
           {productIndexes.map((type, i) => (
             <option key={i} value={type}>
               {type}
@@ -134,13 +146,17 @@ const LensForm: React.FC = () => {
           ))}
         </select>
       </label>
-      <div className="flex">
+      <div className="flex items-center justify-between">
         <p>Base Price</p>
-        <p>{isNaN(basePrice) ? "unavailable" : `$${basePrice}`}</p>
+        <p className="mx-2 px-4 py-2 pr-8">
+          {isNaN(basePrice) ? "unavailable" : `$${basePrice}`}
+        </p>
       </div>
-      <div className="flex">
+      <div className="flex items-center justify-between">
         <p>Family Plan Eligible</p>
-        <p>{selectedProductInfo?.familyPlanEligible ? "Y" : "N"}</p>
+        <p className="mx-2 px-4 py-2 pr-8">
+          {selectedProductInfo?.familyPlanEligible ? "Y" : "N"}
+        </p>
       </div>
     </div>
   );
