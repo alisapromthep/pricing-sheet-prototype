@@ -103,7 +103,7 @@ const LensForm: React.FC = () => {
 
   return (
     <div className="text-black flex flex-col">
-      <label className="flex justify-between">
+      <label className="my-1 flex justify-between">
         Select Lens Category
         <select
           onChange={handleSelectedCategory}
@@ -117,7 +117,7 @@ const LensForm: React.FC = () => {
           ))}
         </select>
       </label>
-      <label className="flex justify-between">
+      <label className="my-1 flex justify-between">
         Select Product
         <select
           onChange={handleSelectedModel}
@@ -132,7 +132,7 @@ const LensForm: React.FC = () => {
             ))}
         </select>
       </label>
-      <label className="flex justify-between">
+      <label className="my-1 flex justify-between">
         Select Index
         <select
           onChange={handleSelectedIndex}
@@ -146,13 +146,13 @@ const LensForm: React.FC = () => {
           ))}
         </select>
       </label>
-      <div className="flex items-center justify-between">
+      <div className="my-1 flex items-center justify-between">
         <p>Base Price</p>
         <p className="mx-2 px-4 py-2 pr-8">
           {isNaN(basePrice) ? "unavailable" : `$${basePrice}`}
         </p>
       </div>
-      <div className="flex items-center justify-between">
+      <div className="my-1 flex items-center justify-between">
         <p>Family Plan Eligible</p>
         <p className="mx-2 px-4 py-2 pr-8">
           {selectedProductInfo?.familyPlanEligible ? "Y" : "N"}

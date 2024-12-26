@@ -61,7 +61,7 @@ const Form: React.FC = () => {
     <div className="m-4 p-4 border border-gray-200">
       <h2 className="font-bold text-lg">Pair Number</h2>
       <form className="flex flex-col" onSubmit={handleSubmit}>
-        <label htmlFor="framePrice" className="flex justify-between">
+        <label htmlFor="framePrice" className="my-1 flex justify-between">
           Frame Price
           <input
             name="framePrice"

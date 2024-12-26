@@ -41,7 +41,7 @@ const OptionsForm: React.FC<FormProps> = ({ optionsData, label, name }) => {
 
   return (
     <div className="flex flex-col">
-      <label className="flex items-center justify-between">
+      <label className="my-1 flex items-center justify-between">
         {label}
         <select
           onChange={handleSelectOption}
@@ -57,13 +57,13 @@ const OptionsForm: React.FC<FormProps> = ({ optionsData, label, name }) => {
           })}
         </select>
       </label>
-      <div className="flex items-center justify-between">
+      <div className="my-1 flex items-center justify-between">
         <p>Price</p>
         <p className="mx-2 px-4 py-2 pr-8">
           {error ? "unavailable" : `$${optionPrice}`}
         </p>
       </div>
-      <div className="flex items-center justify-between">
+      <div className="my-1 flex items-center justify-between">
         <p>Family Plan Eligible?</p>
         <p className="mx-2 px-4 py-2 pr-8">
           {error ? "unavailable" : `${familyPlan}`}
