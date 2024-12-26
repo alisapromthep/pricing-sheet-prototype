@@ -6,7 +6,6 @@ import DiscountForm from "../DiscountForm/DiscountForm";
 import { useGoogleSheetsContext } from "@/lib/context/GoogleSheetsContext";
 import { fetchLabels, fetchOptions } from "@/services/organizeData";
 import { usePricingContext } from "@/lib/context/PricingContext";
-
 import { useState, useEffect } from "react";
 
 const bogo = [
@@ -22,7 +21,12 @@ const family = [
   "Lens discount will be applied to",
   "discount amount",
 ];
-const Form: React.FC = () => {
+
+interface FormProps {
+  index: number;
+}
+
+const Form: React.FC<FormProps> = ({ index }) => {
   const [inputFramePrice, setInputFramePrice] = useState<string>("");
 
   const data = useGoogleSheetsContext();
@@ -59,7 +63,7 @@ const Form: React.FC = () => {
 
   return (
     <div className="m-4 p-4 border border-gray-200">
-      <h2 className="font-bold text-lg">Pair Number</h2>
+      <h2 className="font-bold text-lg">Pair {`${index + 1}`}</h2>
       <form className="flex flex-col" onSubmit={handleSubmit}>
         <label htmlFor="framePrice" className="my-1 flex justify-between">
           Frame Price

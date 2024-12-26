@@ -62,6 +62,14 @@ const LensForm: React.FC = () => {
     }
   }, [sheetsData]);
 
+  //TODO: move the setting of initial product information into context
+  /**
+   * createProduct should fill in these initial info
+   * And the new product is use to fill the form initially
+   * then these information is use for the rest, taking the states out of this file
+   * helps with clean up button as well
+   */
+
   useEffect(() => {
     // Fetch the product list for the initially selected type
     const initialProductList = productListByCategory[selectedCategory];

@@ -22,9 +22,7 @@ export const useProductState = function () {
       return;
     }
 
-    console.log("inside useEffect?", sheetsData);
     const productCategories = fetchProductTypes(sheetsData?.lens);
-    console.log("lens??", productCategories);
 
     const indexes = fetchProductIndexes(sheetsData?.lens[0]);
     if (indexes) {

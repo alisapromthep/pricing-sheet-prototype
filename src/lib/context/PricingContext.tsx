@@ -113,6 +113,7 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
       };
     });
   };
+  //TODO: Add Clear function, to reset all to initial state
 
   //TODO: Add function to calculate the order subtotal
   //TODO: Add discount calculations, BOGO and Family plans
