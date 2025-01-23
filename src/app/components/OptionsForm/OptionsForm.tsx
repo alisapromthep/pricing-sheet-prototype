@@ -45,7 +45,7 @@ const OptionsForm: React.FC<FormProps> = ({ optionsData, label, name }) => {
         {label}
         <select
           onChange={handleSelectOption}
-          className="mx-2 px-4 py-2 pr-8 bg-gray-100 border border-gray-400 hover:border-gray-500  rounded shadow leading-tight focus:outline-none focus:shadow-outline
+          className="block w-2/3 text-wrap mx-2 px-4 py-2 pr-8 bg-gray-100 border border-gray-400 hover:border-gray-500  rounded shadow leading-tight focus:outline-none focus:shadow-outline
           "
         >
           {optionObject?.map((optionObject, i) => {

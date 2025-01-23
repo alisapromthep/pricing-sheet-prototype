@@ -7,6 +7,7 @@ import { useGoogleSheetsContext } from "@/lib/context/GoogleSheetsContext";
 import { fetchLabels, fetchOptions } from "@/services/organizeData";
 import { usePricingContext } from "@/lib/context/PricingContext";
 import { useState, useEffect } from "react";
+import { IoMdCloseCircleOutline } from "react-icons/io";
 
 const bogo = [
   "Apply BOGO?",
@@ -24,9 +25,10 @@ const family = [
 
 interface FormProps {
   index: number;
+  handleDelete: () => {};
 }
 
-const Form: React.FC<FormProps> = ({ index }) => {
+const Form: React.FC<FormProps> = ({ index, handleDelete }) => {
   const [inputFramePrice, setInputFramePrice] = useState<string>("");
 
   const data = useGoogleSheetsContext();
@@ -61,9 +63,16 @@ const Form: React.FC<FormProps> = ({ index }) => {
 
   //TODO: Add styling
 
+  console.log("currentProduct", currentProduct);
+
   return (
     <div className="m-4 p-4 border border-gray-200">
-      <h2 className="font-bold text-lg">Pair {`${index + 1}`}</h2>
+      <div className=" flex justify-between">
+        <h2 className="font-bold text-lg">Pair {`${index + 1}`}</h2>
+        <button onClick={handleDelete}>
+          <IoMdCloseCircleOutline size={24} />
+        </button>
+      </div>
       <form className="flex flex-col" onSubmit={handleSubmit}>
         <label htmlFor="framePrice" className="my-1 flex justify-between">
           Frame Price
@@ -98,23 +107,7 @@ const Form: React.FC<FormProps> = ({ index }) => {
           <p className="mx-2 px-4 py-2 pr-8">{currentProduct.total}</p>
         </label>
       </div>
-      {/* <div>
-        <h4>order subtotal</h4>
-        <div>
-          <label>
-            total frame price
-            <p>$$$</p>
-          </label>
-          <label>
-            total lenses
-            <p>$$$</p>
-          </label>
-          <label>
-            order subtotal
-            <p>$$$</p>
-          </label>
-        </div>
-      </div>
+      {/* 
       <div>
         <h3>Discounts</h3>
         <p>BOGO</p>
