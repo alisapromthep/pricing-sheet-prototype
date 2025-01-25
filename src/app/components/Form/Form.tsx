@@ -6,6 +6,7 @@ import DiscountForm from "../DiscountForm/DiscountForm";
 import { useGoogleSheetsContext } from "@/lib/context/GoogleSheetsContext";
 import { fetchLabels, fetchOptions } from "@/services/organizeData";
 import { usePricingContext } from "@/lib/context/PricingContext";
+import { useAllProductsContext } from "@/lib/context/AllProductsContext";
 import { useState, useEffect } from "react";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 
@@ -25,17 +26,20 @@ const family = [
 
 interface FormProps {
   index: number;
-  handleDelete: () => {};
+  formID: string;
 }
 
-const Form: React.FC<FormProps> = ({ index, handleDelete }) => {
+const Form: React.FC<FormProps> = ({ index, formID }) => {
   const [inputFramePrice, setInputFramePrice] = useState<string>("");
 
   const data = useGoogleSheetsContext();
   const pricingTool = usePricingContext();
+  const allProducts = useAllProductsContext();
 
   const { currentProduct, setCurrentProduct, createProduct, updateProduct } =
     pricingTool;
+
+  const { deleteForm } = allProducts;
 
   if (!data) {
     return <p>loading...</p>;
@@ -69,7 +73,11 @@ const Form: React.FC<FormProps> = ({ index, handleDelete }) => {
     <div className="m-4 p-4 border border-gray-200">
       <div className=" flex justify-between">
         <h2 className="font-bold text-lg">Pair {`${index + 1}`}</h2>
-        <button onClick={handleDelete}>
+        <button
+          onClick={() => {
+            deleteForm(formID);
+          }}
+        >
           <IoMdCloseCircleOutline size={24} />
         </button>
       </div>

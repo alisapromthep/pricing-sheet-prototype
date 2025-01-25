@@ -8,12 +8,8 @@ import { usePricingContext } from "@/lib/context/PricingContext";
 import { useAllProductsContext } from "@/lib/context/AllProductsContext";
 
 export default function PricingSheet() {
-  //const [formsArray, setFormsArray] = useState<Array<Record<string, any>>>([]);
-
   const pricingTool = usePricingContext();
   const allProducts = useAllProductsContext();
-  console.log(pricingTool);
-  console.log("allProducts", allProducts);
 
   const { createProduct } = pricingTool;
   const { formsArray, setFormsArray } = allProducts;
@@ -29,11 +25,6 @@ export default function PricingSheet() {
 
   //TODO: currently deleting everything except 1
 
-  const deleteForm = (agru) => {
-    console.log("deleteForm");
-  };
-  console.log("formsArray", formsArray);
-
   return (
     <div>
       <button
@@ -44,9 +35,9 @@ export default function PricingSheet() {
         Add Another Pair
       </button>
       <div className="flex flex-wrap">
-        {formsArray.map((_, index) => (
-          <Form key={index} index={index} handleDelete={deleteForm} />
-        ))}
+        {formsArray.map((form, index) => {
+          return <Form key={form.id} index={index} formID={form.id} />;
+        })}
       </div>
       <SubTotal />
     </div>
