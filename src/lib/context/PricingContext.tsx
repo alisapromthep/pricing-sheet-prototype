@@ -29,6 +29,9 @@ interface PricingContextType {
     name: keyof selectedProductType,
     value: string | number
   ) => void;
+  formsArray: selectedProductType[];
+  setFormsArray: React.Dispatch<React.SetStateAction<selectedProductType[]>>;
+  deleteForm: (formID: string) => void;
 }
 
 const PricingContext = createContext<PricingContextType | undefined>(undefined);
@@ -54,9 +57,11 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
   const [currentProduct, setCurrentProduct] = useState<selectedProductType>(
     initialSelectedProduct
   );
+  const [formsArray, setFormsArray] = useState<selectedProductType[]>([]);
   // const [selectedProductsArray, setSelectedProductsArray] = useState<
   //   selectedProductType[]
   // >([]);
+
   const [totalPrice, setTotalPrice] = useState<number>(0);
 
   //create product function, give it an ID and return empty product info with an id.
@@ -105,6 +110,11 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
       };
     });
   };
+
+  const deleteForm = (formID: string) => {
+    setFormsArray((prev) => prev.filter((form) => form.id !== formID));
+  };
+
   //TODO: Add Clear function, to reset all to initial state
 
   //TODO: Add function to calculate the order subtotal
@@ -124,6 +134,9 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
         setTotalPrice,
         createProduct,
         updateProduct,
+        formsArray,
+        setFormsArray,
+        deleteForm,
       }}
     >
       {children}

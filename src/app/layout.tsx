@@ -29,15 +29,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <GoogleSheetsProvider>
-        <AllProductsProvider>
-          <PricingProvider>
-            <body
-              className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-            >
-              {children}
-            </body>
-          </PricingProvider>
-        </AllProductsProvider>
+        <PricingProvider>
+          <body
+            className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+          >
+            {children}
+          </body>
+        </PricingProvider>
       </GoogleSheetsProvider>
     </html>
   );

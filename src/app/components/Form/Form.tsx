@@ -6,7 +6,6 @@ import DiscountForm from "../DiscountForm/DiscountForm";
 import { useGoogleSheetsContext } from "@/lib/context/GoogleSheetsContext";
 import { fetchLabels, fetchOptions } from "@/services/organizeData";
 import { usePricingContext } from "@/lib/context/PricingContext";
-import { useAllProductsContext } from "@/lib/context/AllProductsContext";
 import { useState, useEffect } from "react";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 
@@ -34,12 +33,14 @@ const Form: React.FC<FormProps> = ({ index, formID }) => {
 
   const data = useGoogleSheetsContext();
   const pricingTool = usePricingContext();
-  const allProducts = useAllProductsContext();
 
-  const { currentProduct, setCurrentProduct, createProduct, updateProduct } =
-    pricingTool;
-
-  const { deleteForm } = allProducts;
+  const {
+    currentProduct,
+    setCurrentProduct,
+    createProduct,
+    updateProduct,
+    deleteForm,
+  } = pricingTool;
 
   if (!data) {
     return <p>loading...</p>;
