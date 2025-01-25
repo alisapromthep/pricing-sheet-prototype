@@ -8,21 +8,12 @@ import React, {
   ReactNode,
 } from "react";
 import ShortUniqueId from "short-unique-id";
-import { PricesType, ProductItemsType } from "@/app/_types/ProductTypes";
+import {
+  PricesType,
+  ProductItemsType,
+  selectedProductType,
+} from "@/app/_types/ProductTypes";
 import { ProductItem } from "../ProductItem";
-interface selectedProductType {
-  id: string;
-  framePrice: number;
-  selectedProductItem: ProductItemsType;
-  selectedIndex: string;
-  indexPrice: number;
-  lensTreatment: string;
-  lensTreatmentPrice: number;
-  addOn: { [key: string]: string };
-  addOnPrice: number;
-  lensSubTotal: number;
-  total: number;
-}
 
 interface PricingContextType {
   currentProduct: selectedProductType;
@@ -63,9 +54,9 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
   const [currentProduct, setCurrentProduct] = useState<selectedProductType>(
     initialSelectedProduct
   );
-  const [selectedProductsArray, setSelectedProductsArray] = useState<
-    selectedProductType[]
-  >([]);
+  // const [selectedProductsArray, setSelectedProductsArray] = useState<
+  //   selectedProductType[]
+  // >([]);
   const [totalPrice, setTotalPrice] = useState<number>(0);
 
   //create product function, give it an ID and return empty product info with an id.
@@ -86,6 +77,7 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
     };
 
     setCurrentProduct(newProduct);
+    return newProduct;
   };
 
   const updateProduct = (updates: { [key: string]: string | number }) => {
@@ -126,8 +118,8 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
       value={{
         currentProduct,
         setCurrentProduct,
-        selectedProductsArray,
-        setSelectedProductsArray,
+        // selectedProductsArray,
+        // setSelectedProductsArray,
         totalPrice,
         setTotalPrice,
         createProduct,

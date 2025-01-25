@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { GoogleSheetsProvider } from "@/lib/context/GoogleSheetsContext";
 import { PricingProvider } from "@/lib/context/PricingContext";
+import { AllProductsProvider } from "@/lib/context/AllProductsContext";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -28,13 +29,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <GoogleSheetsProvider>
-        <PricingProvider>
-          <body
-            className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-          >
-            {children}
-          </body>
-        </PricingProvider>
+        <AllProductsProvider>
+          <PricingProvider>
+            <body
+              className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+            >
+              {children}
+            </body>
+          </PricingProvider>
+        </AllProductsProvider>
       </GoogleSheetsProvider>
     </html>
   );

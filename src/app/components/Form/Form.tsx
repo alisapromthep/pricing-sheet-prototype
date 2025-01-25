@@ -63,7 +63,7 @@ const Form: React.FC<FormProps> = ({ index, handleDelete }) => {
 
   //TODO: Add styling
 
-  console.log("currentProduct", currentProduct);
+  //console.log("currentProduct", currentProduct);
 
   return (
     <div className="m-4 p-4 border border-gray-200">

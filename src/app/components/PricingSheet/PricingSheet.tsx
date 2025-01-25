@@ -1,25 +1,38 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import Form from "../Form/Form";
 import SubTotal from "../SubTotal/SubTotal";
+import { usePricingContext } from "@/lib/context/PricingContext";
+import { useAllProductsContext } from "@/lib/context/AllProductsContext";
+
 export default function PricingSheet() {
-  const [formsArray, setFormsArray] = useState<Array<Record<string, any>>>([
-    {},
-  ]);
+  //const [formsArray, setFormsArray] = useState<Array<Record<string, any>>>([]);
+
+  const pricingTool = usePricingContext();
+  const allProducts = useAllProductsContext();
+  console.log(pricingTool);
+  console.log("allProducts", allProducts);
+
+  const { createProduct } = pricingTool;
+  const { formsArray, setFormsArray } = allProducts;
 
   const addForm = () => {
-    setFormsArray((prev) => [...prev, {}]);
+    const newForm = createProduct();
+    setFormsArray((prev) => [...prev, newForm]);
   };
+
+  useEffect(() => {
+    addForm();
+  }, []);
 
   //TODO: currently deleting everything except 1
 
-  const deleteForm = (index) => {
-    formsArray.splice(index, 1);
-    setFormsArray((prev) => prev.splice(index, 1));
+  const deleteForm = (agru) => {
+    console.log("deleteForm");
   };
-  console.log(formsArray);
+  console.log("formsArray", formsArray);
 
   return (
     <div>

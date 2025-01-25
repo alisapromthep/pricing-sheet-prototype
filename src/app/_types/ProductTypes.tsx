@@ -8,3 +8,17 @@ export interface ProductItemsType {
   familyPlanEligible: boolean;
   prices: PricesType;
 }
+
+export interface selectedProductType {
+  id: string;
+  framePrice: number;
+  selectedProductItem: ProductItemsType;
+  selectedIndex: string;
+  indexPrice: number;
+  lensTreatment: string;
+  lensTreatmentPrice: number;
+  addOn: { [key: string]: string };
+  addOnPrice: number;
+  lensSubTotal: number;
+  total: number;
+}
