@@ -7,9 +7,16 @@ import { usePricingContext } from "@/lib/context/PricingContext";
 type FormProps = {
   optionsData: string[][];
   label: string;
+  name: string;
+  formID: string;
 };
 
-const OptionsForm: React.FC<FormProps> = ({ optionsData, label, name }) => {
+const OptionsForm: React.FC<FormProps> = ({
+  optionsData,
+  label,
+  name,
+  formID,
+}) => {
   const [optionPrice, setOptionPrice] = useState<number>(0);
   const [familyPlan, setFamilyPlan] = useState<string>("");
   const [error, setError] = useState<boolean>(false);
@@ -28,7 +35,7 @@ const OptionsForm: React.FC<FormProps> = ({ optionsData, label, name }) => {
         [name]: selected,
         [`${name}Price`]: Number(selected.price),
       };
-      updateProduct(updateInfo);
+      updateProduct(updateInfo, formID);
       setFamilyPlan(selected.family);
     } else {
       setError(true);

@@ -27,7 +27,8 @@ interface PricingContextType {
   createProduct: () => void;
   updateProduct: (
     name: keyof selectedProductType,
-    value: string | number
+    value: string | number,
+    formID: string
   ) => void;
   formsArray: selectedProductType[];
   setFormsArray: React.Dispatch<React.SetStateAction<selectedProductType[]>>;
@@ -85,29 +86,43 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
     return newProduct;
   };
 
-  const updateProduct = (updates: { [key: string]: string | number }) => {
-    setCurrentProduct((prev) => {
-      let updatedLensSubTotal = 0;
-      let updatedTotal = 0;
+  const updateProduct = (
+    updates: { [key: string]: string | number },
+    formID: string
+  ) => {
+    if (!formID) {
+      return console.log("missing FormID", updates);
+    }
+    setFormsArray((prevForms) => {
+      return prevForms.map((form) => {
+        if (form.id === formID) {
+          let updatedLensSubTotal = 0;
+          let updatedTotal = 0;
 
-      // Apply updates to the state
-      const newState = { ...prev, ...updates };
+          // Merge updates with the current form
+          const updatedForm = { ...form, ...updates };
 
-      // Recalculate lensSubTotal
-      updatedLensSubTotal =
-        Number(updates.lensTreatmentPrice ?? newState.lensTreatmentPrice) +
-        Number(updates.indexPrice ?? newState.indexPrice) +
-        Number(updates.addOnPrice ?? (newState.addOnPrice || 0));
+          // Recalculate lensSubTotal
+          updatedLensSubTotal =
+            Number(
+              updates.lensTreatmentPrice ?? updatedForm.lensTreatmentPrice
+            ) +
+            Number(updates.indexPrice ?? updatedForm.indexPrice) +
+            Number(updates.addOnPrice ?? (updatedForm.addOnPrice || 0));
 
-      // Recalculate total
-      updatedTotal =
-        Number(updates.framePrice ?? newState.framePrice) + updatedLensSubTotal;
+          // Recalculate total
+          updatedTotal =
+            Number(updates.framePrice ?? updatedForm.framePrice) +
+            updatedLensSubTotal;
 
-      return {
-        ...newState,
-        lensSubTotal: updatedLensSubTotal,
-        total: updatedTotal,
-      };
+          return {
+            ...updatedForm,
+            lensSubTotal: updatedLensSubTotal,
+            total: updatedTotal,
+          };
+        }
+        return form; // Return unchanged form if ID doesn't match
+      });
     });
   };
 
@@ -117,11 +132,10 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
 
   //TODO: Add Clear function, to reset all to initial state
 
+  const clearForm = (formID: string) => {};
+
   //TODO: Add function to calculate the order subtotal
   //TODO: Add discount calculations, BOGO and Family plans
-
-  //TODO: Add Product to the selectedProductArray, for multiple products
-  //TODO: Add function to reset currentProduct when add another product is added
 
   return (
     <PricingContext.Provider

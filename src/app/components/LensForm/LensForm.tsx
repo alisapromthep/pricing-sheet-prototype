@@ -17,7 +17,7 @@ import { usePricingContext } from "@/lib/context/PricingContext";
 
 type CategoryMap = { [category: string]: string[] };
 
-const LensForm: React.FC = () => {
+const LensForm: React.FC = (formID: string) => {
   const data = useGoogleSheetsContext();
 
   const pricingTool = usePricingContext();
@@ -84,13 +84,13 @@ const LensForm: React.FC = () => {
   useEffect(() => {
     const productInfo = fetchSelectedProductInfo(productList, selectedModel);
     setSelectedProductInfo(productInfo);
-    updateProduct({ selectedProductItem: productInfo });
+    updateProduct({ selectedProductItem: productInfo }, formID);
   }, [selectedModel]);
 
   useEffect(() => {
     const bPrice = calculateBasePrice(selectedProductInfo, selectedIndex);
     setBasePrice(bPrice);
-    updateProduct({ indexPrice: bPrice });
+    updateProduct({ indexPrice: bPrice }, formID);
   }, [selectedModel, selectedIndex]);
 
   const handleSelectedCategory = (e: React.ChangeEvent<HTMLSelectElement>) => {

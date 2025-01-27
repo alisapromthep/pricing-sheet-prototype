@@ -58,7 +58,7 @@ const Form: React.FC<FormProps> = ({ index, formID }) => {
   const handleInputFramePrice = (e: React.KeyboardEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setInputFramePrice((prev) => e.target.value);
-    updateProduct({ [name]: value });
+    updateProduct({ [name]: value }, formID);
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -93,17 +93,19 @@ const Form: React.FC<FormProps> = ({ index, formID }) => {
             placeholder="Enter frame price"
           />
         </label>
-        <LensForm />
+        <LensForm formID={formID} />
         <h4 className="font-bold my-2">Lens Treatments & Add Ons</h4>
         <OptionsForm
           optionsData={fetchOptions(lensTreatment)}
           label={fetchLabels(lensTreatment)}
           name="lensTreatment"
+          formID={formID}
         />
         <OptionsForm
           optionsData={fetchOptions(addOn)}
           label={fetchLabels(addOn)}
           name="addOn"
+          formID={formID}
         />
       </form>
       <div>
