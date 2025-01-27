@@ -17,7 +17,11 @@ import { usePricingContext } from "@/lib/context/PricingContext";
 
 type CategoryMap = { [category: string]: string[] };
 
-const LensForm: React.FC = (formID: string) => {
+interface LensFormProps {
+  formID: string;
+}
+
+const LensForm: React.FC<LensFormProps> = ({ formID }) => {
   const data = useGoogleSheetsContext();
 
   const pricingTool = usePricingContext();

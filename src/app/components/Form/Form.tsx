@@ -40,6 +40,7 @@ const Form: React.FC<FormProps> = ({ index, formID }) => {
     createProduct,
     updateProduct,
     deleteForm,
+    clearForm,
   } = pricingTool;
 
   if (!data) {
@@ -73,6 +74,14 @@ const Form: React.FC<FormProps> = ({ index, formID }) => {
   return (
     <div className="m-4 p-4 border border-gray-200">
       <div className=" flex justify-between">
+        <button
+          onClick={() => {
+            clearForm(formID);
+          }}
+          className="bg-red-300 font-bold p-2 rounded flex items-center justify-between"
+        >
+          Clear
+        </button>
         <h2 className="font-bold text-lg">Pair {`${index + 1}`}</h2>
         <button
           onClick={() => {

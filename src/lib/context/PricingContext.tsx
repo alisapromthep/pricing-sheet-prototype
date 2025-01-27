@@ -27,12 +27,12 @@ interface PricingContextType {
   createProduct: () => void;
   updateProduct: (
     name: keyof selectedProductType,
-    value: string | number,
-    formID: string
+    value: string | number
   ) => void;
   formsArray: selectedProductType[];
   setFormsArray: React.Dispatch<React.SetStateAction<selectedProductType[]>>;
   deleteForm: (formID: string) => void;
+  clearForm: (formID: string) => void;
 }
 
 const PricingContext = createContext<PricingContextType | undefined>(undefined);
@@ -40,7 +40,7 @@ const PricingContext = createContext<PricingContextType | undefined>(undefined);
 export const PricingProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const initialSelectedProduct: selectedProductType = {
+  const initialForm: selectedProductType = {
     id: "",
     framePrice: 0,
     selectedProductItem: new ProductItem({}),
@@ -55,14 +55,9 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   const uid = new ShortUniqueId();
-  const [currentProduct, setCurrentProduct] = useState<selectedProductType>(
-    initialSelectedProduct
-  );
+  const [currentProduct, setCurrentProduct] =
+    useState<selectedProductType>(initialForm);
   const [formsArray, setFormsArray] = useState<selectedProductType[]>([]);
-  // const [selectedProductsArray, setSelectedProductsArray] = useState<
-  //   selectedProductType[]
-  // >([]);
-
   const [totalPrice, setTotalPrice] = useState<number>(0);
 
   //create product function, give it an ID and return empty product info with an id.
@@ -90,9 +85,6 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
     updates: { [key: string]: string | number },
     formID: string
   ) => {
-    if (!formID) {
-      return console.log("missing FormID", updates);
-    }
     setFormsArray((prevForms) => {
       return prevForms.map((form) => {
         if (form.id === formID) {
@@ -132,7 +124,16 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
 
   //TODO: Add Clear function, to reset all to initial state
 
-  const clearForm = (formID: string) => {};
+  const clearForm = (formID: string) => {
+    setFormsArray((prev) => {
+      return formsArray.map((form, i) => {
+        if (form.id === formID) {
+          return initialForm;
+        }
+        return form;
+      });
+    });
+  };
 
   //TODO: Add function to calculate the order subtotal
   //TODO: Add discount calculations, BOGO and Family plans
@@ -142,8 +143,6 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
       value={{
         currentProduct,
         setCurrentProduct,
-        // selectedProductsArray,
-        // setSelectedProductsArray,
         totalPrice,
         setTotalPrice,
         createProduct,
@@ -151,6 +150,7 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
         formsArray,
         setFormsArray,
         deleteForm,
+        clearForm,
       }}
     >
       {children}

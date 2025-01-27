@@ -20,8 +20,6 @@ export default function PricingSheet() {
     addForm();
   }, []);
 
-  console.log(formsArray);
-
   return (
     <div>
       <button
