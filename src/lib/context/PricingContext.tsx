@@ -15,6 +15,12 @@ import {
 } from "@/app/_types/ProductTypes";
 import { ProductItem } from "../ProductItem";
 
+interface totalPriceType {
+  totalFramePrice: number;
+  totalLensPrice: number;
+  orderSubTotal: number;
+}
+
 interface PricingContextType {
   currentProduct: selectedProductType;
   setCurrentProduct: React.Dispatch<React.SetStateAction<selectedProductType>>;
@@ -22,7 +28,7 @@ interface PricingContextType {
   setSelectedProductsArray: React.Dispatch<
     React.SetStateAction<selectedProductType[]>
   >;
-  totalPrice: number;
+  totalPrice: totalPriceType;
   setTotalPrice: React.Dispatch<React.SetStateAction<number>>;
   createProduct: () => void;
   updateProduct: (
@@ -33,6 +39,7 @@ interface PricingContextType {
   setFormsArray: React.Dispatch<React.SetStateAction<selectedProductType[]>>;
   deleteForm: (formID: string) => void;
   clearForm: (formID: string) => void;
+  updateTotalPrice: () => void;
 }
 
 const PricingContext = createContext<PricingContextType | undefined>(undefined);
@@ -54,11 +61,18 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
     total: 0,
   };
 
+  const initialTotalPrice: totalPriceType = {
+    totalFramePrice: 0,
+    totalLensPrice: 0,
+    orderSubTotal: 0,
+  };
+
   const uid = new ShortUniqueId();
   const [currentProduct, setCurrentProduct] =
     useState<selectedProductType>(initialForm);
   const [formsArray, setFormsArray] = useState<selectedProductType[]>([]);
-  const [totalPrice, setTotalPrice] = useState<number>(0);
+  const [totalPrice, setTotalPrice] =
+    useState<totalPriceType>(initialTotalPrice);
 
   //create product function, give it an ID and return empty product info with an id.
 
@@ -79,6 +93,20 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
 
     setCurrentProduct(newProduct);
     return newProduct;
+  };
+
+  //TODO: Add function to calculate the order subtotal
+
+  const updateTotalPrice = () => {
+    const updatedTotalPrice = formsArray.reduce((accu, form) => {
+      return {
+        totalFramePrice: Number(accu.totalFramePrice + (form.framePrice || 0)),
+        totalLensPrice: Number(accu.totalLensPrice + (form.lensSubTotal || 0)),
+        orderSubTotal: Number(accu.orderSubTotal + (form.total || 0)),
+      };
+    }, initialTotalPrice);
+
+    setTotalPrice(updatedTotalPrice);
   };
 
   const updateProduct = (
@@ -122,7 +150,7 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
     setFormsArray((prev) => prev.filter((form) => form.id !== formID));
   };
 
-  //TODO: Add Clear function, to reset all to initial state
+  //Add Clear function, to reset all to initial state
 
   const clearForm = (formID: string) => {
     setFormsArray((prev) => {
@@ -135,7 +163,6 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
     });
   };
 
-  //TODO: Add function to calculate the order subtotal
   //TODO: Add discount calculations, BOGO and Family plans
 
   return (
@@ -151,6 +178,7 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
         setFormsArray,
         deleteForm,
         clearForm,
+        updateTotalPrice,
       }}
     >
       {children}

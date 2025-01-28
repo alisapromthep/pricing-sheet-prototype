@@ -49,17 +49,20 @@ const Form: React.FC<FormProps> = ({ index, formID }) => {
   const { sheetsData, loading, error } = data;
   const { addOn, lens, lensTreatment, mcssAddon, packages, superflexAddon } =
     sheetsData;
-
-  //console.log(currentProduct);
+  const { formsArray } = pricingTool;
+  const currentForm = formsArray.find((form) => form.id === formID);
 
   useEffect(() => {
     createProduct();
   }, []);
 
-  const handleInputFramePrice = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleInputFramePrice = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    formID
+  ) => {
     const { name, value } = e.target;
     setInputFramePrice((prev) => e.target.value);
-    updateProduct({ [name]: value }, formID);
+    updateProduct({ [name]: Number(value) }, formID);
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -98,7 +101,7 @@ const Form: React.FC<FormProps> = ({ index, formID }) => {
             name="framePrice"
             type="number"
             value={inputFramePrice}
-            onChange={handleInputFramePrice}
+            onChange={(e) => handleInputFramePrice(e, formID)}
             placeholder="Enter frame price"
           />
         </label>
@@ -120,11 +123,15 @@ const Form: React.FC<FormProps> = ({ index, formID }) => {
       <div>
         <label className="flex items-center justify-between">
           Lens Subtotal
-          <p className="mx-2 px-4 py-2 pr-8">{currentProduct.lensSubTotal}</p>
+          <p className="mx-2 px-4 py-2 pr-8">
+            {`$${currentForm.lensSubTotal || "0"}`}
+          </p>
         </label>
         <label className="flex items-center justify-between">
           Frame & Lens Subtotal
-          <p className="mx-2 px-4 py-2 pr-8">{currentProduct.total}</p>
+          <p className="mx-2 px-4 py-2 pr-8">{`$${
+            currentForm.total || "0"
+          }`}</p>
         </label>
       </div>
       {/* 
