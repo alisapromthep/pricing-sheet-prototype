@@ -4,6 +4,7 @@ import React from "react";
 import { usePricingContext } from "@/lib/context/PricingContext";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import SubTotal from "../SubTotal/SubTotal";
+import DiscountForm from "../DiscountForm/DiscountForm";
 
 function ToolBar() {
   const pricingTool = usePricingContext();
@@ -21,9 +22,7 @@ function ToolBar() {
       </button>
       <div>
         <p>Discounts</p>
-        <label>
-          <input type="checkbox" value="" />
-        </label>
+        <DiscountForm />
       </div>
       <SubTotal />
     </div>

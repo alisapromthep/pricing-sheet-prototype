@@ -45,6 +45,9 @@ interface PricingContextType {
   clearForm: (formID: string) => void;
   updateTotalPrice: () => void;
   addform: () => void;
+  availableDiscounts: discountInfoType[];
+  discountSelected: string[];
+  setDiscountSelected: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 const PricingContext = createContext<PricingContextType | undefined>(undefined);
@@ -83,6 +86,7 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
   const [availableDiscounts, setAvailableDiscounts] = useState<
     discountInfoType[]
   >([]);
+  const [discountSelected, setDiscountSelected] = useState<string[]>([]);
 
   if (!data) {
     return <p>loading...</p>;
@@ -193,6 +197,7 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
     });
   };
 
+  //TODO: Add a function to check if discount combination is allow, and check discount condition
   //TODO: Add discount calculations, BOGO and Family plans
 
   return (
@@ -210,6 +215,9 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
         clearForm,
         updateTotalPrice,
         addForm,
+        availableDiscounts,
+        discountSelected,
+        setDiscountSelected,
       }}
     >
       {children}
