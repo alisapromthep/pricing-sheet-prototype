@@ -1,10 +1,11 @@
 import PricingSheet from "./components/PricingSheet/PricingSheet";
+import ToolBar from "./components/ToolBar/ToolBar";
 
 export default function Home() {
   return (
-    <div className="">
-      <h1>Home Page</h1>
+    <div className="flex">
       <PricingSheet />
+      <ToolBar />
     </div>
   );
 }

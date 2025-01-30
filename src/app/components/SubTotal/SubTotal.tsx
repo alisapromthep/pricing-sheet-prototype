@@ -27,6 +27,11 @@ function SubTotal() {
           <p>{`$${totalPrice.orderSubTotal}`}</p>
         </label>
       </div>
+      <div>
+        <h5>Discounts</h5>
+        <p>Discount applied to:</p>
+        <p>Discount amount</p>
+      </div>
     </div>
   );
 }

@@ -12,8 +12,12 @@ import {
   PricesType,
   ProductItemsType,
   selectedProductType,
+  discountInfoType,
 } from "@/app/_types/ProductTypes";
+import { organizeDiscountInfo } from "@/services/organizeData";
+import { useGoogleSheetsContext } from "./GoogleSheetsContext";
 import { ProductItem } from "../ProductItem";
+import { sheets } from "googleapis/build/src/apis/sheets";
 
 interface totalPriceType {
   totalFramePrice: number;
@@ -40,6 +44,7 @@ interface PricingContextType {
   deleteForm: (formID: string) => void;
   clearForm: (formID: string) => void;
   updateTotalPrice: () => void;
+  addform: () => void;
 }
 
 const PricingContext = createContext<PricingContextType | undefined>(undefined);
@@ -47,6 +52,8 @@ const PricingContext = createContext<PricingContextType | undefined>(undefined);
 export const PricingProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
+  const data = useGoogleSheetsContext();
+
   const initialForm: selectedProductType = {
     id: "",
     framePrice: 0,
@@ -73,6 +80,22 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
   const [formsArray, setFormsArray] = useState<selectedProductType[]>([]);
   const [totalPrice, setTotalPrice] =
     useState<totalPriceType>(initialTotalPrice);
+  const [availableDiscounts, setAvailableDiscounts] = useState<
+    discountInfoType[]
+  >([]);
+
+  if (!data) {
+    return <p>loading...</p>;
+  }
+  const { sheetsData, loading, error } = data;
+
+  //get discount Information
+
+  useEffect(() => {
+    if (sheetsData.discounts) {
+      setAvailableDiscounts(organizeDiscountInfo(sheetsData.discounts));
+    }
+  }, [sheetsData]);
 
   //create product function, give it an ID and return empty product info with an id.
 
@@ -95,7 +118,14 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
     return newProduct;
   };
 
-  //TODO: Add function to calculate the order subtotal
+  //Add new form
+
+  const addForm = () => {
+    const newForm = createProduct();
+    setFormsArray((prev) => [...prev, newForm]);
+  };
+
+  //Add function to calculate the order subtotal
 
   const updateTotalPrice = () => {
     const updatedTotalPrice = formsArray.reduce((accu, form) => {
@@ -179,6 +209,7 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
         deleteForm,
         clearForm,
         updateTotalPrice,
+        addForm,
       }}
     >
       {children}

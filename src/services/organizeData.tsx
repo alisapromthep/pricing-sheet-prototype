@@ -98,3 +98,29 @@ export function fillInProductCategories(data, list, indexes) {
     list[category].push(newProduct);
   }
 }
+
+//isolate discount information and create discount objects
+
+export function organizeDiscountInfo(data) {
+  const discountsInfo = [];
+  const headers = data[0];
+
+  for (let i = 1; i < data.length; i++) {
+    const rowData = data[i];
+    const discountObject = {};
+
+    if (headers.length != rowData.length) {
+      return "Headers and row data must have the same length";
+    }
+
+    for (let j = 0; j < headers.length; j++) {
+      const header = headers[j];
+      const value = rowData[j];
+
+      discountObject[header] = value;
+    }
+    discountsInfo.push(discountObject);
+  }
+  console.log(discountsInfo);
+  return discountsInfo;
+}

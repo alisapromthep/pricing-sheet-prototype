@@ -22,3 +22,14 @@ export interface selectedProductType {
   lensSubTotal: number;
   total: number;
 }
+
+export interface discountInfoType {
+  name: string;
+  description: string;
+  conditions: string;
+  application_conditions: string;
+  appliesTo: string;
+  qualifyingQuantity: string;
+  discount: number;
+  typeOfDiscount: string;
+}

@@ -15,6 +15,7 @@ export async function getGoogleSheetData() {
     "packages!A2:Z",
     "superflexAddon!A1:Z",
     "mcssAddon!A1:Z",
+    "discounts!A2:Z",
   ];
 
   const response = await sheets.spreadsheets.values.batchGet({
