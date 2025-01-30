@@ -4,7 +4,8 @@ import { usePricingContext } from "@/lib/context/PricingContext";
 
 function SubTotal() {
   const pricingTool = usePricingContext();
-  const { totalPrice, formsArray, updateTotalPrice } = pricingTool;
+  const { totalPrice, formsArray, updateTotalPrice, discountSelected } =
+    pricingTool;
 
   useEffect(() => {
     updateTotalPrice();
@@ -27,11 +28,15 @@ function SubTotal() {
           <p>{`$${totalPrice.orderSubTotal}`}</p>
         </label>
       </div>
-      <div>
-        <h5>Discounts</h5>
-        <p>Discount applied to:</p>
-        <p>Discount amount</p>
-      </div>
+      {discountSelected.length > 0 ? (
+        <div>
+          <h5>Discounts</h5>
+          <p>Discount applied to:</p>
+          <p>Discount amount</p>
+        </div>
+      ) : (
+        ""
+      )}
     </div>
   );
 }
