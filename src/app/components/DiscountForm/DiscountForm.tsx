@@ -10,7 +10,7 @@ const DiscountForm: React.FC<discountFormProps> = () => {
   const { availableDiscounts, discountSelected, setDiscountSelected } =
     pricingTool;
 
-  const handleCheckBox = (e) => {
+  const handleCheckBox = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     if (discountSelected.includes(value)) {
       // If the discount is already selected, remove it
@@ -22,23 +22,33 @@ const DiscountForm: React.FC<discountFormProps> = () => {
       setDiscountSelected([...discountSelected, value]);
     }
   };
+
+  const handleApplyDiscounts = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log(e.target);
+  };
   return (
     <div className="flex flex-col">
-      <form>
+      <form onSubmit={handleApplyDiscounts}>
         {availableDiscounts.map((discount, i) => {
           //console.log(discount);
           const { name, conditions } = discount;
           return (
             <div key={i}>
               <label>
-                <input type="checkbox" value={name} onClick={handleCheckBox} />
+                <input
+                  type="checkbox"
+                  value={name}
+                  onChange={handleCheckBox}
+                  checked={discountSelected.includes(name)}
+                />
                 {name}
               </label>
               <div>
                 {discountSelected.includes(name) ? (
                   <div>
                     <label>
-                      <input type="checkbox" />
+                      <input type="checkbox" value={conditions} />
                       {conditions}
                     </label>
                   </div>
@@ -49,11 +59,11 @@ const DiscountForm: React.FC<discountFormProps> = () => {
             </div>
           );
         })}
+        <button type="submit" className="bg-lime-500 font-bold p-2 rounded">
+          {" "}
+          Apply Discount
+        </button>
       </form>
-      <div>
-        <p>Total cost (frames & lenses)</p>
-        <p>$$$</p>
-      </div>
     </div>
   );
 };

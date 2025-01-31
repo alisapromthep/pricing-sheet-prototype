@@ -17,7 +17,6 @@ import {
 import { organizeDiscountInfo } from "@/services/organizeData";
 import { useGoogleSheetsContext } from "./GoogleSheetsContext";
 import { ProductItem } from "../ProductItem";
-import { sheets } from "googleapis/build/src/apis/sheets";
 
 interface totalPriceType {
   totalFramePrice: number;
@@ -198,6 +197,7 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   //TODO: Add a function to check if discount combination is allow, and check discount condition
+
   //TODO: Add discount calculations, BOGO and Family plans
 
   return (
