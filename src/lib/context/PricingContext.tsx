@@ -14,6 +14,10 @@ import {
   selectedProductType,
   discountInfoType,
 } from "@/app/_types/ProductTypes";
+import {
+  DISCOUNT_CONDITIONS,
+  discountOptionType,
+} from "@/app/_types/DiscountTypes";
 import { organizeDiscountInfo } from "@/services/organizeData";
 import { useGoogleSheetsContext } from "./GoogleSheetsContext";
 import { ProductItem } from "../ProductItem";
