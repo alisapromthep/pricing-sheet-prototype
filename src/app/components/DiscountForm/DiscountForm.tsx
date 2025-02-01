@@ -32,7 +32,7 @@ const DiscountForm: React.FC<discountFormProps> = () => {
       <form onSubmit={handleApplyDiscounts}>
         {availableDiscounts.map((discount, i) => {
           //console.log(discount);
-          const { name, conditions } = discount;
+          const { name, conditionLabel } = discount;
           return (
             <div key={i}>
               <label>
@@ -48,8 +48,8 @@ const DiscountForm: React.FC<discountFormProps> = () => {
                 {discountSelected.includes(name) ? (
                   <div>
                     <label>
-                      <input type="checkbox" value={conditions} />
-                      {conditions}
+                      <input type="checkbox" />
+                      {conditionLabel}
                     </label>
                   </div>
                 ) : (

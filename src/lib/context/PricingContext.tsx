@@ -12,11 +12,11 @@ import {
   PricesType,
   ProductItemsType,
   selectedProductType,
-  discountInfoType,
 } from "@/app/_types/ProductTypes";
 import {
   DISCOUNT_CONDITIONS,
-  discountOptionType,
+  DiscountOptionType,
+  DiscountInfoType,
 } from "@/app/_types/DiscountTypes";
 import { organizeDiscountInfo } from "@/services/organizeData";
 import { useGoogleSheetsContext } from "./GoogleSheetsContext";
@@ -89,7 +89,9 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
   const [availableDiscounts, setAvailableDiscounts] = useState<
     discountInfoType[]
   >([]);
-  const [discountSelected, setDiscountSelected] = useState<string[]>([]);
+  const [discountSelected, setDiscountSelected] = useState<
+    DiscountOptionType[]
+  >([]);
 
   if (!data) {
     return <p>loading...</p>;

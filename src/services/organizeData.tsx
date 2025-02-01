@@ -1,4 +1,8 @@
 import { ProductItem } from "@/lib/ProductItem";
+import {
+  DISCOUNT_CONDITIONS,
+  DiscountOptionType,
+} from "@/app/_types/DiscountTypes";
 
 export function fetchProductTypes(data: string[]) {
   if (!data) {
@@ -100,16 +104,22 @@ export function fillInProductCategories(data, list, indexes) {
 }
 
 //isolate discount information and create discount objects
+export function organizeDiscountInfo(
+  data: string[]
+): DiscountOptionType[] | string {
+  if (!Array.isArray(data) || data.length === 0) {
+    return "Invalid input: Data must be a non-empty array.";
+  }
 
-export function organizeDiscountInfo(data) {
-  const discountsInfo = [];
   const headers = data[0];
+  const discountsInfo: any[] = [];
 
   for (let i = 1; i < data.length; i++) {
     const rowData = data[i];
-    const discountObject = {};
+    const discountObject: any = { conditions: [] };
+    console.log(data);
 
-    if (headers.length != rowData.length) {
+    if (headers.length !== rowData.length) {
       return "Headers and row data must have the same length";
     }
 
@@ -117,10 +127,20 @@ export function organizeDiscountInfo(data) {
       const header = headers[j];
       const value = rowData[j];
 
-      discountObject[header] = value;
+      if (header in DISCOUNT_CONDITIONS && value !== "FALSE") {
+        discountObject.conditions.push({
+          [header]: {
+            condition: value,
+          },
+        });
+      } else {
+        discountObject[header] = value;
+      }
     }
+
     discountsInfo.push(discountObject);
   }
   console.log(discountsInfo);
+
   return discountsInfo;
 }
