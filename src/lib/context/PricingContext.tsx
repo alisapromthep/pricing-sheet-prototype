@@ -87,7 +87,7 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
   const [totalPrice, setTotalPrice] =
     useState<totalPriceType>(initialTotalPrice);
   const [availableDiscounts, setAvailableDiscounts] = useState<
-    discountInfoType[]
+    DiscountInfoType[]
   >([]);
   const [discountSelected, setDiscountSelected] = useState<
     DiscountOptionType[]

@@ -18,6 +18,7 @@ export const DISCOUNT_CONDITIONS = {
 
 interface DiscountConditionType {
   condition: string | number;
+  conditionMET?: boolean;
   errorMessage?: string; // Optional error message
 }
 

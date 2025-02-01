@@ -10,17 +10,31 @@ const DiscountForm: React.FC<discountFormProps> = () => {
   const { availableDiscounts, discountSelected, setDiscountSelected } =
     pricingTool;
 
+  console.log(discountSelected);
   const handleCheckBox = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    if (discountSelected.includes(value)) {
-      // If the discount is already selected, remove it
-      setDiscountSelected(
-        discountSelected.filter((discountName) => discountName !== value)
-      );
-    } else {
-      // If the discount is not selected, add it
-      setDiscountSelected([...discountSelected, value]);
-    }
+    /** discount = {
+    * name:'BOGO',
+    * conditionMET: FALSE,
+    * errorMessage: '',
+   } */
+    // Find the corresponding discount object in discountSelected
+    const existingDiscountIndex = discountSelected.findIndex(
+      (discount) => discount.name === value
+    );
+
+    // Update discountSelected based on checkbox selection
+    setDiscountSelected((prevDiscountSelected) => {
+      if (existingDiscountIndex !== -1) {
+        // Discount already selected, remove it
+        return prevDiscountSelected.filter(
+          (discount) => discount.name !== value
+        );
+      } else {
+        // Discount not selected, add it with initial conditions
+        return [...prevDiscountSelected, { name: value, conditionMet: false }];
+      }
+    });
   };
 
   const handleApplyDiscounts = (e: React.FormEvent<HTMLFormElement>) => {
@@ -36,24 +50,19 @@ const DiscountForm: React.FC<discountFormProps> = () => {
           return (
             <div key={i}>
               <label>
-                <input
-                  type="checkbox"
-                  value={name}
-                  onChange={handleCheckBox}
-                  checked={discountSelected.includes(name)}
-                />
+                <input type="checkbox" value={name} onChange={handleCheckBox} />
                 {name}
               </label>
               <div>
-                {discountSelected.includes(name) ? (
+                {discountSelected.findIndex(
+                  (discount) => discount.name === name
+                ) !== -1 && (
                   <div>
                     <label>
                       <input type="checkbox" />
                       {conditionLabel}
                     </label>
                   </div>
-                ) : (
-                  ""
                 )}
               </div>
             </div>

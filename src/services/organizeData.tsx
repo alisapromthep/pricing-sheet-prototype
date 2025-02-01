@@ -117,7 +117,6 @@ export function organizeDiscountInfo(
   for (let i = 1; i < data.length; i++) {
     const rowData = data[i];
     const discountObject: any = { conditions: [] };
-    console.log(data);
 
     if (headers.length !== rowData.length) {
       return "Headers and row data must have the same length";
