@@ -6,6 +6,7 @@ export interface DiscountInfoType {
   applyToProduct: string;
   applyOn: string;
   conditionLabel: string;
+  conditionName: string;
   condition: DiscountConditionType[];
 }
 
@@ -18,7 +19,7 @@ export const DISCOUNT_CONDITIONS = {
 
 interface DiscountConditionType {
   condition: string | number;
-  conditionMET?: boolean;
+  conditionMet?: boolean;
   errorMessage?: string; // Optional error message
 }
 
@@ -28,3 +29,10 @@ export interface DiscountOptionType {
     [key in keyof typeof DISCOUNT_CONDITIONS]?: DiscountConditionType;
   };
 }
+
+//discount object inside discountSelected state
+/** discount = {
+    * name:'BOGO',
+    * conditionMET: FALSE,
+    * errorMessage: '',
+   } */

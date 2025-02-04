@@ -13,11 +13,7 @@ const DiscountForm: React.FC<discountFormProps> = () => {
   console.log(discountSelected);
   const handleCheckBox = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    /** discount = {
-    * name:'BOGO',
-    * conditionMET: FALSE,
-    * errorMessage: '',
-   } */
+
     // Find the corresponding discount object in discountSelected
     const existingDiscountIndex = discountSelected.findIndex(
       (discount) => discount.name === value
@@ -32,21 +28,57 @@ const DiscountForm: React.FC<discountFormProps> = () => {
         );
       } else {
         // Discount not selected, add it with initial conditions
-        return [...prevDiscountSelected, { name: value, conditionMet: false }];
+        const selectedDiscount = availableDiscounts.find(
+          (discount) => discount.name === value
+        );
+        const discountConditions = selectedDiscount.conditions;
+        return [...prevDiscountSelected, { name: value, discountConditions }];
       }
+    });
+  };
+
+  const handleConditionCheckBox = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    discountName: string
+  ) => {
+    const { checked, value: conditionName } = e.target;
+
+    setDiscountSelected((prevDiscountSelected) => {
+      return prevDiscountSelected.map((discount) => {
+        if (discount.name === discountName) {
+          return {
+            ...discount,
+            discountConditions: discount.discountConditions.map((cond) => {
+              if (cond[conditionName]) {
+                return {
+                  ...cond,
+                  [conditionName]: {
+                    ...cond[conditionName],
+                    conditionMet: checked,
+                  },
+                };
+              }
+              return cond;
+            }),
+          };
+        }
+        return discount;
+      });
     });
   };
 
   const handleApplyDiscounts = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(e.target);
   };
+  console.log(discountSelected);
+
   return (
     <div className="flex flex-col">
       <form onSubmit={handleApplyDiscounts}>
         {availableDiscounts.map((discount, i) => {
           //console.log(discount);
-          const { name, conditionLabel } = discount;
+          const { name, conditionLabel, conditionName } = discount;
+
           return (
             <div key={i}>
               <label>
@@ -59,7 +91,15 @@ const DiscountForm: React.FC<discountFormProps> = () => {
                 ) !== -1 && (
                   <div>
                     <label>
-                      <input type="checkbox" />
+                      <input
+                        type="checkbox"
+                        name="discountCondition"
+                        value={conditionName}
+                        onChange={(e) => {
+                          handleConditionCheckBox(e, name);
+                        }}
+                        //checked should be checking if condition is met within discount object in discountSelected (? maybe?)
+                      />
                       {conditionLabel}
                     </label>
                   </div>

@@ -129,7 +129,8 @@ export function organizeDiscountInfo(
       if (header in DISCOUNT_CONDITIONS && value !== "FALSE") {
         discountObject.conditions.push({
           [header]: {
-            condition: value,
+            condition: value !== "TRUE" ? value : null,
+            conditionMet: false,
           },
         });
       } else {
@@ -139,7 +140,6 @@ export function organizeDiscountInfo(
 
     discountsInfo.push(discountObject);
   }
-  console.log(discountsInfo);
 
   return discountsInfo;
 }
