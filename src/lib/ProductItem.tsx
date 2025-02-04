@@ -3,12 +3,19 @@ type PricesType = {
 };
 
 export class ProductItem {
+  id: string;
   category: string;
   model: string;
   familyPlanEligible: boolean;
   prices: PricesType;
 
-  constructor({ category = "", model = "", familyPlanEligible = false } = {}) {
+  constructor({
+    id = "",
+    category = "",
+    model = "",
+    familyPlanEligible = false,
+  } = {}) {
+    this.id = id;
     this.category = category;
     this.model = model;
     this.familyPlanEligible = familyPlanEligible;

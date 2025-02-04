@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useProductState } from "@/lib/useProductState";
 import {
   fetchProductTypes,
   fetchProductListInfo,
@@ -25,7 +24,7 @@ const LensForm: React.FC<LensFormProps> = ({ formID }) => {
   const data = useGoogleSheetsContext();
 
   const pricingTool = usePricingContext();
-  const { currentProduct, setCurrentProduct, updateProduct } = pricingTool;
+  const { updateProduct } = pricingTool;
 
   const { sheetsData, loading, error } = data || {};
   const { lens } = sheetsData;
@@ -39,6 +38,7 @@ const LensForm: React.FC<LensFormProps> = ({ formID }) => {
   const [selectedIndex, setSelectedIndex] = useState<string>("");
   const [selectedProductInfo, setSelectedProductInfo] =
     useState<ProductItemsType>({
+      id: "",
       category: "",
       model: "",
       familyPlanEligible: false,
@@ -51,10 +51,12 @@ const LensForm: React.FC<LensFormProps> = ({ formID }) => {
     //then getting the indexes and productlist
     if (sheetsData) {
       const lensType = fetchProductTypes(lens);
+
       if (lensType && lensType.length > 0) {
         setLensCategories(lensType);
         setSelectedCategory(lensType[0]);
         const indexes = fetchProductIndexes(lens[0]);
+
         setProductIndexes(indexes);
         //get the list of product by categories
         const listByCategory = fetchCategoriesList(lens);

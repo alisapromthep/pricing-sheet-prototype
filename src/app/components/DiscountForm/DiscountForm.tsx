@@ -10,7 +10,7 @@ const DiscountForm: React.FC<discountFormProps> = () => {
   const { availableDiscounts, discountSelected, setDiscountSelected } =
     pricingTool;
 
-  console.log(discountSelected);
+  //console.log(discountSelected);
   const handleCheckBox = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
 
@@ -70,7 +70,7 @@ const DiscountForm: React.FC<discountFormProps> = () => {
   const handleApplyDiscounts = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
-  console.log(discountSelected);
+  //console.log(discountSelected);
 
   return (
     <div className="flex flex-col">
@@ -98,7 +98,6 @@ const DiscountForm: React.FC<discountFormProps> = () => {
                         onChange={(e) => {
                           handleConditionCheckBox(e, name);
                         }}
-                        //checked should be checking if condition is met within discount object in discountSelected (? maybe?)
                       />
                       {conditionLabel}
                     </label>
@@ -109,7 +108,6 @@ const DiscountForm: React.FC<discountFormProps> = () => {
           );
         })}
         <button type="submit" className="bg-lime-500 font-bold p-2 rounded">
-          {" "}
           Apply Discount
         </button>
       </form>

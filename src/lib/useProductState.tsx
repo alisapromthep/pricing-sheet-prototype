@@ -43,8 +43,10 @@ export const useProductState = function () {
 
     if (indexes) {
       for (let i = 1; i < length; i++) {
-        const [category, model, familyPlanEligible] = data[i]; // Destructure data array elements
+        console.log("data", data);
+        const [id, category, model, familyPlanEligible] = data[i]; // Destructure data array elements
         const newProduct = new ProductItem({
+          id,
           category,
           model,
           familyPlanEligible,

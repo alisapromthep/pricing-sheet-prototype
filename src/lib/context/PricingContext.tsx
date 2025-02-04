@@ -28,6 +28,12 @@ interface totalPriceType {
   orderSubTotal: number;
 }
 
+interface discountedPriceType {
+  discountNames: string[];
+  discountAppliedTo: string[];
+  discountAmount: number;
+}
+
 interface PricingContextType {
   currentProduct: selectedProductType;
   setCurrentProduct: React.Dispatch<React.SetStateAction<selectedProductType>>;
@@ -48,7 +54,7 @@ interface PricingContextType {
   clearForm: (formID: string) => void;
   updateTotalPrice: () => void;
   addform: () => void;
-  availableDiscounts: discountInfoType[];
+  availableDiscounts: DiscountInfoType[];
   discountSelected: string[];
   setDiscountSelected: React.Dispatch<React.SetStateAction<string[]>>;
 }
@@ -80,6 +86,12 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
     orderSubTotal: 0,
   };
 
+  const initialDiscountedPrice: discountedPriceType = {
+    discountNames: [],
+    discountAppliedTo: [],
+    discountAmount: 0,
+  };
+
   const uid = new ShortUniqueId();
   const [currentProduct, setCurrentProduct] =
     useState<selectedProductType>(initialForm);
@@ -92,6 +104,9 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
   const [discountSelected, setDiscountSelected] = useState<
     DiscountOptionType[]
   >([]);
+  const [discountedPrice, setDiscountedPrice] = useState<discountedPriceType[]>(
+    []
+  );
 
   if (!data) {
     return <p>loading...</p>;
@@ -202,8 +217,7 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
     });
   };
 
-  //TODO: Add a function to check if discount combination is allow, and check discount condition
-
+  //Discount condition checks function in discountConditionChecks file
   //TODO: Add discount calculations, BOGO and Family plans
 
   return (

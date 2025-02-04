@@ -3,6 +3,7 @@ export interface PricesType {
 }
 
 export interface ProductItemsType {
+  id: string;
   category: string;
   model: string;
   familyPlanEligible: boolean;

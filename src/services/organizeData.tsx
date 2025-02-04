@@ -11,10 +11,11 @@ export function fetchProductTypes(data: string[]) {
   let productTypes: string[] = [];
 
   for (let i = 1; i < data.length; i++) {
-    if (productTypes.includes(data[i][0]) === false) {
-      productTypes.push(data[i][0]);
+    if (productTypes.includes(data[i][1]) === false) {
+      productTypes.push(data[i][1]);
     }
   }
+
   return productTypes;
 }
 
@@ -30,7 +31,7 @@ export function fetchProductIndexes(dataHeaders: []) {
     return;
   }
   const productIndexes = [];
-  for (let i = 3; i < dataHeaders.length; i++) {
+  for (let i = 4; i < dataHeaders.length; i++) {
     productIndexes.push(dataHeaders[i]);
   }
   return productIndexes;
@@ -75,7 +76,7 @@ export function fetchOptions(sheetData) {
 
 //function that goes through the array of lens and pick out a list of lens categories
 export function fetchCategoriesList(data) {
-  const listByCategory = data.slice(1).reduce((acc, [category]) => {
+  const listByCategory = data.slice(1).reduce((acc, [_id, category]) => {
     if (!acc[category]) {
       acc[category] = [];
     }
@@ -85,13 +86,14 @@ export function fetchCategoriesList(data) {
   return listByCategory;
 }
 
-//fill in the catogories with products
+//fill in the categories with products
 
 export function fillInProductCategories(data, list, indexes) {
   for (let i = 1; i < data.length; i++) {
-    const [category, model, familyPlanEligible] = data[i]; // Destructure data array elements
+    const [id, category, model, familyPlanEligible] = data[i]; // Destructure data array elements
 
     const newProduct = new ProductItem({
+      id,
       category,
       model,
       familyPlanEligible,
@@ -99,6 +101,7 @@ export function fillInProductCategories(data, list, indexes) {
     const pricesArray = data[i].slice(3).map((price) => Number(price));
 
     newProduct.addPrices(indexes, pricesArray);
+
     list[category].push(newProduct);
   }
 }
