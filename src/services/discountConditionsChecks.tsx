@@ -1,10 +1,15 @@
-import { selectedProductType } from "@/app/_types/ProductTypes";
+import {
+  ProductItemsType,
+  selectedProductType,
+} from "@/app/_types/ProductTypes";
 
 export const isMinPurchasedMet = (
-  formsArray: selectedProductType[],
+  cart: selectedProductType[],
   minRequirement: number
 ) => {
-  return formsArray.length - 1 > minRequirement;
+  return cart.length - 1 > minRequirement;
 };
 
-export const isProductFamilyPlanEligible = productId;
+export const isFamilyPlanEligibility = (productItem: ProductItemsType) => {
+  return productItem.familyPlanEligible;
+};

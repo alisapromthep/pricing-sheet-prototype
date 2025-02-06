@@ -7,6 +7,7 @@ export interface DiscountInfoType {
   applyOn: string;
   conditionLabel: string;
   conditionName: string;
+  canCombine: boolean;
   condition: DiscountConditionType[];
 }
 
@@ -36,3 +37,9 @@ export interface DiscountOptionType {
     * conditionMET: FALSE,
     * errorMessage: '',
    } */
+
+interface DiscountedPriceType {
+  discountNames: string;
+  discountAppliedTo: string[];
+  discountAmount: number;
+}

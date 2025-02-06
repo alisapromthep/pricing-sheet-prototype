@@ -7,8 +7,12 @@ type discountFormProps = {
 const DiscountForm: React.FC<discountFormProps> = () => {
   const pricingTool = usePricingContext();
 
-  const { availableDiscounts, discountSelected, setDiscountSelected } =
-    pricingTool;
+  const {
+    availableDiscounts,
+    discountSelected,
+    setDiscountSelected,
+    isDiscountApplicable,
+  } = pricingTool;
 
   //console.log(discountSelected);
   const handleCheckBox = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -69,8 +73,11 @@ const DiscountForm: React.FC<discountFormProps> = () => {
 
   const handleApplyDiscounts = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log("handleApplyDiscounts");
+    isDiscountApplicable(discountSelected);
+    console.log(discountSelected);
+    console.log(availableDiscounts);
   };
-  //console.log(discountSelected);
 
   return (
     <div className="flex flex-col">

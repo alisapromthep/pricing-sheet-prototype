@@ -132,7 +132,7 @@ export function organizeDiscountInfo(
       if (header in DISCOUNT_CONDITIONS && value !== "FALSE") {
         discountObject.conditions.push({
           [header]: {
-            condition: value !== "TRUE" ? value : null,
+            condition: value,
             conditionMet: false,
           },
         });

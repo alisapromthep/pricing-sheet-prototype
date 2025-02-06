@@ -7,7 +7,7 @@ import { usePricingContext } from "@/lib/context/PricingContext";
 export default function PricingSheet() {
   const pricingTool = usePricingContext();
 
-  const { formsArray, setFormsArray, addForm } = pricingTool;
+  const { cart, setCart, addForm } = pricingTool;
 
   useEffect(() => {
     addForm();
@@ -16,7 +16,7 @@ export default function PricingSheet() {
   return (
     <div>
       <div className="flex flex-wrap">
-        {formsArray.map((form, index) => {
+        {cart.map((form, index) => {
           return <Form key={form.id} index={index} formID={form.id} />;
         })}
       </div>

@@ -34,14 +34,7 @@ const Form: React.FC<FormProps> = ({ index, formID }) => {
   const data = useGoogleSheetsContext();
   const pricingTool = usePricingContext();
 
-  const {
-    currentProduct,
-    setCurrentProduct,
-    createProduct,
-    updateProduct,
-    deleteForm,
-    clearForm,
-  } = pricingTool;
+  const { createProduct, updateProduct, deleteForm, clearForm } = pricingTool;
 
   if (!data) {
     return <p>loading...</p>;
@@ -49,8 +42,8 @@ const Form: React.FC<FormProps> = ({ index, formID }) => {
   const { sheetsData, loading, error } = data;
   const { addOn, lens, lensTreatment, mcssAddon, packages, superflexAddon } =
     sheetsData;
-  const { formsArray } = pricingTool;
-  const currentForm = formsArray.find((form) => form.id === formID);
+  const { cart } = pricingTool;
+  const currentForm = cart.find((form) => form.id === formID);
 
   useEffect(() => {
     createProduct();

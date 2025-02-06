@@ -17,6 +17,7 @@ import {
   DISCOUNT_CONDITIONS,
   DiscountOptionType,
   DiscountInfoType,
+  DiscountedPriceType,
 } from "@/app/_types/DiscountTypes";
 import { organizeDiscountInfo } from "@/services/organizeData";
 import { useGoogleSheetsContext } from "./GoogleSheetsContext";
@@ -26,12 +27,6 @@ interface totalPriceType {
   totalFramePrice: number;
   totalLensPrice: number;
   orderSubTotal: number;
-}
-
-interface discountedPriceType {
-  discountNames: string[];
-  discountAppliedTo: string[];
-  discountAmount: number;
 }
 
 interface PricingContextType {
@@ -48,8 +43,8 @@ interface PricingContextType {
     name: keyof selectedProductType,
     value: string | number
   ) => void;
-  formsArray: selectedProductType[];
-  setFormsArray: React.Dispatch<React.SetStateAction<selectedProductType[]>>;
+  cart: selectedProductType[];
+  setCart: React.Dispatch<React.SetStateAction<selectedProductType[]>>;
   deleteForm: (formID: string) => void;
   clearForm: (formID: string) => void;
   updateTotalPrice: () => void;
@@ -86,8 +81,8 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
     orderSubTotal: 0,
   };
 
-  const initialDiscountedPrice: discountedPriceType = {
-    discountNames: [],
+  const initialDiscountedPrice: DiscountedPriceType = {
+    discountNames: "",
     discountAppliedTo: [],
     discountAmount: 0,
   };
@@ -95,7 +90,7 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
   const uid = new ShortUniqueId();
   const [currentProduct, setCurrentProduct] =
     useState<selectedProductType>(initialForm);
-  const [formsArray, setFormsArray] = useState<selectedProductType[]>([]);
+  const [cart, setCart] = useState<selectedProductType[]>([]);
   const [totalPrice, setTotalPrice] =
     useState<totalPriceType>(initialTotalPrice);
   const [availableDiscounts, setAvailableDiscounts] = useState<
@@ -107,6 +102,8 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
   const [discountedPrice, setDiscountedPrice] = useState<discountedPriceType[]>(
     []
   );
+
+  const [discountErrors, setDiscountErrors] = useState<string[]>([]);
 
   if (!data) {
     return <p>loading...</p>;
@@ -146,13 +143,13 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
 
   const addForm = () => {
     const newForm = createProduct();
-    setFormsArray((prev) => [...prev, newForm]);
+    setCart((prev) => [...prev, newForm]);
   };
 
   //Add function to calculate the order subtotal
 
   const updateTotalPrice = () => {
-    const updatedTotalPrice = formsArray.reduce((accu, form) => {
+    const updatedTotalPrice = cart.reduce((accu, form) => {
       return {
         totalFramePrice: Number(accu.totalFramePrice + (form.framePrice || 0)),
         totalLensPrice: Number(accu.totalLensPrice + (form.lensSubTotal || 0)),
@@ -167,7 +164,7 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
     updates: { [key: string]: string | number },
     formID: string
   ) => {
-    setFormsArray((prevForms) => {
+    setCart((prevForms) => {
       return prevForms.map((form) => {
         if (form.id === formID) {
           let updatedLensSubTotal = 0;
@@ -201,14 +198,14 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   const deleteForm = (formID: string) => {
-    setFormsArray((prev) => prev.filter((form) => form.id !== formID));
+    setCart((prev) => prev.filter((form) => form.id !== formID));
   };
 
   //Add Clear function, to reset all to initial state
 
   const clearForm = (formID: string) => {
-    setFormsArray((prev) => {
-      return formsArray.map((form, i) => {
+    setCart((prev) => {
+      return cart.map((form, i) => {
         if (form.id === formID) {
           return initialForm;
         }
@@ -217,8 +214,20 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
     });
   };
 
-  //Discount condition checks function in discountConditionChecks file
+  //Individual discount condition checks function in discountConditionChecks file
+  //
+  const isDiscountApplicable = (discountSelected: DiscountOptionType[]) => {
+    //no discount selected
+    if (!discountSelected || discountSelected.length === 0) {
+      console.log("no discount selected");
+      return setDiscountErrors((prev) => [...prev, "no discount selected"]);
+    }
+    //check if discounts are being combine, if not combinable
+    if (discountSelected.length > 1) {
+    }
+  };
   //TODO: Add discount calculations, BOGO and Family plans
+  const applyDiscount = () => {};
 
   return (
     <PricingContext.Provider
@@ -229,8 +238,8 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
         setTotalPrice,
         createProduct,
         updateProduct,
-        formsArray,
-        setFormsArray,
+        cart,
+        setCart,
         deleteForm,
         clearForm,
         updateTotalPrice,
@@ -238,6 +247,7 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
         availableDiscounts,
         discountSelected,
         setDiscountSelected,
+        isDiscountApplicable,
       }}
     >
       {children}

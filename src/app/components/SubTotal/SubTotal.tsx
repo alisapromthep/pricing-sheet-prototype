@@ -4,12 +4,11 @@ import { usePricingContext } from "@/lib/context/PricingContext";
 
 function SubTotal() {
   const pricingTool = usePricingContext();
-  const { totalPrice, formsArray, updateTotalPrice, discountSelected } =
-    pricingTool;
+  const { totalPrice, cart, updateTotalPrice, discountSelected } = pricingTool;
 
   useEffect(() => {
     updateTotalPrice();
-  }, [formsArray]);
+  }, [cart]);
 
   return (
     <div>
