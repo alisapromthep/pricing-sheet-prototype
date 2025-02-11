@@ -26,7 +26,7 @@ export class DiscountItem {
     discountValue = 0,
     applyToProduct = [],
     applyOn = "",
-    canCombine = false,
+    canCombine = "FALSE",
     checkboxConditions = [],
     internalConditions = [],
   } = {}) {
@@ -42,7 +42,7 @@ export class DiscountItem {
       (this.internalConditions = internalConditions);
   }
 
-  checkInternalConditions(product: ProductItem, cart: selectedProductType[]) {
+  checkInternalConditions(cart: selectedProductType[]) {
     let allConditionsMet = true;
 
     this.internalConditions = this.internalConditions.map((cond) => {
@@ -51,9 +51,18 @@ export class DiscountItem {
 
       switch (cond.condition) {
         case DISCOUNT_CONDITIONS.FAMILY_PLAN_PRODUCT_ELIGIBILITY:
-          if (!product.familyPlanEligible) {
-            errorMessage =
-              "This product is not eligible for a family plan discount.";
+          let allFamilyEligible = true;
+          let notEligibleProduct: string = "";
+
+          cart.forEach((product) => {
+            const { selectedProductItem: item } = product;
+            if (!item.familyPlanEligible) {
+              notEligibleProduct += item.id;
+              allFamilyEligible = false;
+            }
+          });
+          if (!allFamilyEligible) {
+            errorMessage = `${notEligibleProduct} is not eligible for family plan discount`;
           } else {
             conditionMet = true;
           }

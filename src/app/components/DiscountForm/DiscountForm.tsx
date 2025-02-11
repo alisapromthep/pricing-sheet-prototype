@@ -17,11 +17,24 @@ const DiscountForm: React.FC<discountFormProps> = () => {
     isDiscountApplicable,
     isCombinable,
     discountErrors,
+    setDiscountErrors,
   } = pricingTool;
 
-  //console.log("available discount", availableDiscounts);
+  useEffect(() => {
+    isCombinable(discountSelected);
 
-  //console.log(discountSelected);
+    isDiscountApplicable(discountSelected);
+    console.log("discountSelected", discountSelected);
+    if (discountSelected.length > 1) {
+      discountSelected.forEach((discount) => {
+        const { internalConditions } = discount;
+        internalConditions.forEach((cond) => {
+          setDiscountErrors((prev) => [...prev, cond.errorMessage]);
+        });
+      });
+    }
+  }, [discountSelected]);
+
   const handleCheckBox = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
 
@@ -43,7 +56,6 @@ const DiscountForm: React.FC<discountFormProps> = () => {
         return [...prevDiscountSelected, selectedDiscount];
       }
     });
-    isCombinable(discountSelected);
   };
 
   const handleConditionCheckBox = (
@@ -75,10 +87,7 @@ const DiscountForm: React.FC<discountFormProps> = () => {
 
   const handleApplyDiscounts = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("handleApplyDiscounts");
-    isDiscountApplicable(discountSelected);
   };
-  console.log(discountErrors);
   return (
     <div className="flex flex-col">
       <form onSubmit={handleApplyDiscounts}>

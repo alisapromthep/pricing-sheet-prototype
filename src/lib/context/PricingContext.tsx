@@ -248,11 +248,14 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
   const isDiscountApplicable = (discountSelected: DiscountOptionType[]) => {
     //no discount selected
     if (!discountSelected || discountSelected.length === 0) {
-      console.log("no discount selected");
-      return setDiscountErrors((prev) => [...prev, "no discount selected"]);
+      return;
     }
 
     const errorMessages: string[] = [];
+
+    discountSelected.forEach((discount) => {
+      console.log(discount.checkInternalConditions(cart));
+    });
   };
   //TODO: Add discount calculations, BOGO and Family plans
   const applyDiscount = () => {};
@@ -277,6 +280,8 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
         setDiscountSelected,
         isDiscountApplicable,
         isCombinable,
+        discountErrors,
+        setDiscountErrors,
       }}
     >
       {children}
