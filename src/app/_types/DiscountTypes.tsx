@@ -24,13 +24,6 @@ interface DiscountConditionType {
   errorMessage?: string; // Optional error message
 }
 
-export interface DiscountOptionType {
-  name: string;
-  conditions: {
-    [key in keyof typeof DISCOUNT_CONDITIONS]?: DiscountConditionType;
-  };
-}
-
 //discount object inside discountSelected state
 /** discount = {
     * name:'BOGO',

@@ -42,33 +42,29 @@ const DiscountForm: React.FC<discountFormProps> = () => {
 
   const handleConditionCheckBox = (
     e: React.ChangeEvent<HTMLInputElement>,
-    discountName: string
+    discountID: string
   ) => {
-    console.log("handleCheckbx");
-    // const { checked, value: conditionName } = e.target;
+    const { checked, value: conditionID } = e.target;
 
-    // setDiscountSelected((prevDiscountSelected) => {
-    //   return prevDiscountSelected.map((discount) => {
-    //     if (discount.name === discountName) {
-    //       return {
-    //         ...discount,
-    //         discountConditions: discount.discountConditions.map((cond) => {
-    //           if (cond[conditionName]) {
-    //             return {
-    //               ...cond,
-    //               [conditionName]: {
-    //                 ...cond[conditionName],
-    //                 conditionMet: checked,
-    //               },
-    //             };
-    //           }
-    //           return cond;
-    //         }),
-    //       };
-    //     }
-    //     return discount;
-    //   });
-    // });
+    setDiscountSelected((prevDiscountSelected) => {
+      return prevDiscountSelected.map((discount) => {
+        if (discount.id === discountID) {
+          const { checkboxConditions } = discount;
+          return {
+            ...discount,
+            checkboxConditions: checkboxConditions.map((cond) => {
+              if (cond.id === conditionID) {
+                return { ...cond, conditionMet: checked };
+              } else {
+                return cond;
+              }
+            }),
+          };
+        } else {
+          return discount;
+        }
+      });
+    });
   };
 
   const handleApplyDiscounts = (e: React.FormEvent<HTMLFormElement>) => {
@@ -77,11 +73,12 @@ const DiscountForm: React.FC<discountFormProps> = () => {
     //isDiscountApplicable(discountSelected);
   };
 
+  console.log(discountSelected);
+
   return (
     <div className="flex flex-col">
       <form onSubmit={handleApplyDiscounts}>
         {availableDiscounts.map((discount, i) => {
-          console.log(discount);
           const { id, name, checkboxConditions } = discount;
 
           return (
@@ -92,7 +89,7 @@ const DiscountForm: React.FC<discountFormProps> = () => {
               </label>
               <div>
                 {discountSelected.findIndex(
-                  (discount) => discount.name === name
+                  (discount) => discount.id === id
                 ) !== -1 && (
                   <div key={id}>
                     {checkboxConditions
@@ -102,8 +99,8 @@ const DiscountForm: React.FC<discountFormProps> = () => {
                               <input
                                 type="checkbox"
                                 name="checkboxCondition"
-                                value={cond.label}
-                                onChange={() => {}}
+                                value={cond.id}
+                                onChange={(e) => handleConditionCheckBox(e, id)}
                               />
                               {cond.label}
                             </label>

@@ -5,6 +5,9 @@ import {
   DiscountOptionType,
 } from "@/app/_types/DiscountTypes";
 import { DiscountItem } from "@/lib/DiscountItem";
+import ShortUniqueId from "short-unique-id";
+
+const uid = new ShortUniqueId();
 
 export function fetchProductTypes(data: string[]) {
   if (!data) {
@@ -132,12 +135,13 @@ export function organizeDiscountInfo(
       const value = rowData[j];
       if (header === "checkboxConditions" && value) {
         discountObject[header] = value.split(",").map((cond) => {
-          return { label: cond.trim(), conditionMet: false };
+          return { id: uid.rnd(), label: cond.trim(), conditionMet: false };
         });
       } else if (header in DISCOUNT_CONDITIONS && value !== "FALSE") {
         discountObject["internalConditions"] =
           discountObject["internalConditions"] || []; // Ensure array exists
         discountObject["internalConditions"].push({
+          id: uid.rnd(),
           condition: header, // Use the header as the condition name
           requiredValue: value,
           conditionMet: false,

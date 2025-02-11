@@ -40,13 +40,5 @@ export class DiscountItem {
       (this.internalConditions = internalConditions);
   }
 
-  addCheckboxConditions(data) {
-    console.log("add checkbox condition", data);
-  }
-
-  addinternalConditions(data) {
-    console.log("add internal condition", data);
-  }
-
   isMinPurchasedMet = (cart) => {};
 }
