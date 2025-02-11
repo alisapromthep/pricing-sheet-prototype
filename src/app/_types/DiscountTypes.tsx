@@ -3,12 +3,12 @@ export interface DiscountInfoType {
   description: string;
   discountType: string;
   discountValue: number;
-  applyToProduct: string;
+  applyToProduct: string[];
   applyOn: string;
   conditionLabel: string;
   conditionName: string;
   canCombine: boolean;
-  condition: DiscountConditionType[];
+  [key: string]: string | number | boolean | string[];
 }
 
 export const DISCOUNT_CONDITIONS = {

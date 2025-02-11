@@ -1,8 +1,10 @@
 import { ProductItem } from "@/lib/ProductItem";
 import {
   DISCOUNT_CONDITIONS,
+  DiscountInfoType,
   DiscountOptionType,
 } from "@/app/_types/DiscountTypes";
+import { DiscountItem } from "@/lib/DiscountItem";
 
 export function fetchProductTypes(data: string[]) {
   if (!data) {
@@ -106,7 +108,7 @@ export function fillInProductCategories(data, list, indexes) {
   }
 }
 
-//isolate discount information and create discount objects
+//isolate and organize discount information into object
 export function organizeDiscountInfo(
   data: string[]
 ): DiscountOptionType[] | string {
@@ -119,25 +121,29 @@ export function organizeDiscountInfo(
 
   for (let i = 1; i < data.length; i++) {
     const rowData = data[i];
-    const discountObject: any = { conditions: [] };
+    const discountObject: any = {};
 
     if (headers.length !== rowData.length) {
       return "Headers and row data must have the same length";
     }
 
     for (let j = 0; j < headers.length; j++) {
-      const header = headers[j];
+      const header = headers[j].trim();
       const value = rowData[j];
-
-      if (header in DISCOUNT_CONDITIONS && value !== "FALSE") {
-        discountObject.conditions.push({
-          [header]: {
-            condition: value,
-            conditionMet: false,
-          },
+      if (header === "checkboxConditions" && value) {
+        discountObject[header] = value.split(",").map((cond) => {
+          return { label: cond.trim(), conditionMet: false };
+        });
+      } else if (header in DISCOUNT_CONDITIONS && value !== "FALSE") {
+        discountObject["internalConditions"] =
+          discountObject["internalConditions"] || []; // Ensure array exists
+        discountObject["internalConditions"].push({
+          condition: header, // Use the header as the condition name
+          requiredValue: value,
+          conditionMet: false,
         });
       } else {
-        discountObject[header] = value;
+        discountObject[header] = value.trim();
       }
     }
 
@@ -145,4 +151,12 @@ export function organizeDiscountInfo(
   }
 
   return discountsInfo;
+}
+
+//create discountItem
+
+export function createDiscountItem(discountData: DiscountInfoType[]) {
+  return discountData.map((discount) => {
+    return new DiscountItem(discount);
+  });
 }

@@ -19,7 +19,10 @@ import {
   DiscountInfoType,
   DiscountedPriceType,
 } from "@/app/_types/DiscountTypes";
-import { organizeDiscountInfo } from "@/services/organizeData";
+import {
+  organizeDiscountInfo,
+  createDiscountItem,
+} from "@/services/organizeData";
 import { useGoogleSheetsContext } from "./GoogleSheetsContext";
 import { ProductItem } from "../ProductItem";
 
@@ -99,7 +102,7 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
   const [discountSelected, setDiscountSelected] = useState<
     DiscountOptionType[]
   >([]);
-  const [discountedPrice, setDiscountedPrice] = useState<discountedPriceType[]>(
+  const [discountedPrice, setDiscountedPrice] = useState<DiscountedPriceType[]>(
     []
   );
 
@@ -114,7 +117,11 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
 
   useEffect(() => {
     if (sheetsData.discounts) {
-      setAvailableDiscounts(organizeDiscountInfo(sheetsData.discounts));
+      const structuredDiscounts = organizeDiscountInfo(sheetsData.discounts);
+      const discountItems = createDiscountItem(structuredDiscounts);
+      console.log(discountItems);
+
+      setAvailableDiscounts(discountItems);
     }
   }, [sheetsData]);
 

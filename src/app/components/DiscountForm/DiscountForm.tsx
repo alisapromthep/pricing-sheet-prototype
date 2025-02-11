@@ -14,6 +14,8 @@ const DiscountForm: React.FC<discountFormProps> = () => {
     isDiscountApplicable,
   } = pricingTool;
 
+  //console.log("available discount", availableDiscounts);
+
   //console.log(discountSelected);
   const handleCheckBox = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -45,30 +47,31 @@ const DiscountForm: React.FC<discountFormProps> = () => {
     e: React.ChangeEvent<HTMLInputElement>,
     discountName: string
   ) => {
-    const { checked, value: conditionName } = e.target;
+    console.log("handleCheckbx");
+    // const { checked, value: conditionName } = e.target;
 
-    setDiscountSelected((prevDiscountSelected) => {
-      return prevDiscountSelected.map((discount) => {
-        if (discount.name === discountName) {
-          return {
-            ...discount,
-            discountConditions: discount.discountConditions.map((cond) => {
-              if (cond[conditionName]) {
-                return {
-                  ...cond,
-                  [conditionName]: {
-                    ...cond[conditionName],
-                    conditionMet: checked,
-                  },
-                };
-              }
-              return cond;
-            }),
-          };
-        }
-        return discount;
-      });
-    });
+    // setDiscountSelected((prevDiscountSelected) => {
+    //   return prevDiscountSelected.map((discount) => {
+    //     if (discount.name === discountName) {
+    //       return {
+    //         ...discount,
+    //         discountConditions: discount.discountConditions.map((cond) => {
+    //           if (cond[conditionName]) {
+    //             return {
+    //               ...cond,
+    //               [conditionName]: {
+    //                 ...cond[conditionName],
+    //                 conditionMet: checked,
+    //               },
+    //             };
+    //           }
+    //           return cond;
+    //         }),
+    //       };
+    //     }
+    //     return discount;
+    //   });
+    // });
   };
 
   const handleApplyDiscounts = (e: React.FormEvent<HTMLFormElement>) => {
@@ -76,7 +79,6 @@ const DiscountForm: React.FC<discountFormProps> = () => {
     console.log("handleApplyDiscounts");
     isDiscountApplicable(discountSelected);
     console.log(discountSelected);
-    console.log(availableDiscounts);
   };
 
   return (
