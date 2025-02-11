@@ -25,6 +25,7 @@ import {
 } from "@/services/organizeData";
 import { useGoogleSheetsContext } from "./GoogleSheetsContext";
 import { ProductItem } from "../ProductItem";
+import { DiscountItem } from "../DiscountItem";
 
 interface totalPriceType {
   totalFramePrice: number;
@@ -99,9 +100,7 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
   const [availableDiscounts, setAvailableDiscounts] = useState<
     DiscountInfoType[]
   >([]);
-  const [discountSelected, setDiscountSelected] = useState<
-    DiscountOptionType[]
-  >([]);
+  const [discountSelected, setDiscountSelected] = useState<DiscountItem[]>([]);
   const [discountedPrice, setDiscountedPrice] = useState<DiscountedPriceType[]>(
     []
   );

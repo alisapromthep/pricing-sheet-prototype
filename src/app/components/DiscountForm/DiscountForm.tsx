@@ -22,23 +22,20 @@ const DiscountForm: React.FC<discountFormProps> = () => {
 
     // Find the corresponding discount object in discountSelected
     const existingDiscountIndex = discountSelected.findIndex(
-      (discount) => discount.name === value
+      (discount) => discount.id === value
     );
 
     // Update discountSelected based on checkbox selection
     setDiscountSelected((prevDiscountSelected) => {
       if (existingDiscountIndex !== -1) {
         // Discount already selected, remove it
-        return prevDiscountSelected.filter(
-          (discount) => discount.name !== value
-        );
+        return prevDiscountSelected.filter((discount) => discount.id !== value);
       } else {
         // Discount not selected, add it with initial conditions
         const selectedDiscount = availableDiscounts.find(
-          (discount) => discount.name === value
+          (discount) => discount.id === value
         );
-        const discountConditions = selectedDiscount.conditions;
-        return [...prevDiscountSelected, { name: value, discountConditions }];
+        return [...prevDiscountSelected, selectedDiscount];
       }
     });
   };
@@ -77,39 +74,42 @@ const DiscountForm: React.FC<discountFormProps> = () => {
   const handleApplyDiscounts = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("handleApplyDiscounts");
-    isDiscountApplicable(discountSelected);
-    console.log(discountSelected);
+    //isDiscountApplicable(discountSelected);
   };
 
   return (
     <div className="flex flex-col">
       <form onSubmit={handleApplyDiscounts}>
         {availableDiscounts.map((discount, i) => {
-          //console.log(discount);
-          const { name, conditionLabel, conditionName } = discount;
+          console.log(discount);
+          const { id, name, checkboxConditions } = discount;
 
           return (
-            <div key={i}>
+            <div key={id}>
               <label>
-                <input type="checkbox" value={name} onChange={handleCheckBox} />
+                <input type="checkbox" value={id} onChange={handleCheckBox} />
                 {name}
               </label>
               <div>
                 {discountSelected.findIndex(
                   (discount) => discount.name === name
                 ) !== -1 && (
-                  <div>
-                    <label>
-                      <input
-                        type="checkbox"
-                        name="discountCondition"
-                        value={conditionName}
-                        onChange={(e) => {
-                          handleConditionCheckBox(e, name);
-                        }}
-                      />
-                      {conditionLabel}
-                    </label>
+                  <div key={id}>
+                    {checkboxConditions
+                      ? checkboxConditions.map((cond) => {
+                          return (
+                            <label>
+                              <input
+                                type="checkbox"
+                                name="checkboxCondition"
+                                value={cond.label}
+                                onChange={() => {}}
+                              />
+                              {cond.label}
+                            </label>
+                          );
+                        })
+                      : null}
                   </div>
                 )}
               </div>
