@@ -1,4 +1,7 @@
+"use client";
+
 import { usePricingContext } from "@/lib/context/PricingContext";
+import { useEffect } from "react";
 
 type discountFormProps = {
   labelsArray: string[];
@@ -12,6 +15,8 @@ const DiscountForm: React.FC<discountFormProps> = () => {
     discountSelected,
     setDiscountSelected,
     isDiscountApplicable,
+    isCombinable,
+    discountErrors,
   } = pricingTool;
 
   //console.log("available discount", availableDiscounts);
@@ -38,6 +43,7 @@ const DiscountForm: React.FC<discountFormProps> = () => {
         return [...prevDiscountSelected, selectedDiscount];
       }
     });
+    isCombinable(discountSelected);
   };
 
   const handleConditionCheckBox = (
@@ -70,11 +76,9 @@ const DiscountForm: React.FC<discountFormProps> = () => {
   const handleApplyDiscounts = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("handleApplyDiscounts");
-    //isDiscountApplicable(discountSelected);
+    isDiscountApplicable(discountSelected);
   };
-
-  console.log(discountSelected);
-
+  console.log(discountErrors);
   return (
     <div className="flex flex-col">
       <form onSubmit={handleApplyDiscounts}>
@@ -113,6 +117,13 @@ const DiscountForm: React.FC<discountFormProps> = () => {
             </div>
           );
         })}
+        {discountErrors ? (
+          <div>
+            {discountErrors.map((msg) => (
+              <p> {msg}</p>
+            ))}
+          </div>
+        ) : null}
         <button type="submit" className="bg-lime-500 font-bold p-2 rounded">
           Apply Discount
         </button>

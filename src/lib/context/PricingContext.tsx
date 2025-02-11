@@ -56,6 +56,9 @@ interface PricingContextType {
   availableDiscounts: DiscountInfoType[];
   discountSelected: string[];
   setDiscountSelected: React.Dispatch<React.SetStateAction<string[]>>;
+  isCombinable: (discountSelected) => void;
+  discountErrors: string[];
+  setDiscountErrors: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 const PricingContext = createContext<PricingContextType | undefined>(undefined);
@@ -220,6 +223,26 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
     });
   };
 
+  //checking if discount can be combine
+
+  const isCombinable = (discountSelected: DiscountOptionType[]) => {
+    //discount combining
+    //canCombine needs to be true for all discount selected,
+    // if one is false, throws an error that discount cannot be combine
+    const numberSelected = discountSelected.length;
+
+    if (numberSelected > 1) {
+      for (let i = 0; i < numberSelected - 1; i++) {
+        if (discountSelected[i].canCombine === "FALSE") {
+          setDiscountErrors((prev) => [...prev, "Discounts cannot be combine"]);
+          return false;
+        }
+      }
+    }
+
+    return true;
+  };
+
   //Individual discount condition checks function in discountConditionChecks file
   //
   const isDiscountApplicable = (discountSelected: DiscountOptionType[]) => {
@@ -228,9 +251,8 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
       console.log("no discount selected");
       return setDiscountErrors((prev) => [...prev, "no discount selected"]);
     }
-    //check if discounts are being combine, if not combinable
-    if (discountSelected.length > 1) {
-    }
+
+    const errorMessages: string[] = [];
   };
   //TODO: Add discount calculations, BOGO and Family plans
   const applyDiscount = () => {};
@@ -254,6 +276,7 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
         discountSelected,
         setDiscountSelected,
         isDiscountApplicable,
+        isCombinable,
       }}
     >
       {children}

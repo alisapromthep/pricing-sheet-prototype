@@ -1,5 +1,6 @@
-import { DiscountOptionType } from "@/app/_types/DiscountTypes";
-
+import { ProductItem } from "@/lib/ProductItem";
+import { selectedProductType } from "@/app/_types/ProductTypes";
+import { DISCOUNT_CONDITIONS } from "@/app/_types/DiscountTypes";
 export class DiscountItem {
   id: string;
   name: string;
@@ -8,12 +9,13 @@ export class DiscountItem {
   discountValue: number;
   applyToProduct: string[];
   applyOn: string;
-  canCombine: boolean;
-  checkboxConditions: { key: string; label: string; conditionMet: boolean }[];
+  canCombine: string;
+  checkboxConditions: { id: string; label: string; conditionMet: boolean }[];
   internalConditions: {
     condition: string;
     requiredValue?: any;
     conditionMet: boolean;
+    errorMessage?: string;
   }[];
 
   constructor({
@@ -40,5 +42,43 @@ export class DiscountItem {
       (this.internalConditions = internalConditions);
   }
 
-  isMinPurchasedMet = (cart) => {};
+  checkInternalConditions(product: ProductItem, cart: selectedProductType[]) {
+    let allConditionsMet = true;
+
+    this.internalConditions = this.internalConditions.map((cond) => {
+      let conditionMet = false;
+      let errorMessage = "";
+
+      switch (cond.condition) {
+        case DISCOUNT_CONDITIONS.FAMILY_PLAN_PRODUCT_ELIGIBILITY:
+          if (!product.familyPlanEligible) {
+            errorMessage =
+              "This product is not eligible for a family plan discount.";
+          } else {
+            conditionMet = true;
+          }
+          break;
+
+        case DISCOUNT_CONDITIONS.MIN_PURCHASE:
+          if (cart.length < (cond.requiredValue || 0)) {
+            errorMessage = `Minimum purchase required: ${cond.requiredValue} items.`;
+          } else {
+            conditionMet = true;
+          }
+          break;
+
+        default:
+          errorMessage = "Unknown discount condition.";
+      }
+
+      // If any condition fails, mark allConditionsMet as false
+      if (!conditionMet) {
+        allConditionsMet = false;
+      }
+
+      return { ...cond, conditionMet, errorMessage };
+    });
+
+    return allConditionsMet;
+  }
 }
