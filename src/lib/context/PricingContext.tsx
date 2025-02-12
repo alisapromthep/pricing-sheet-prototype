@@ -250,11 +250,8 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
     if (!discountSelected || discountSelected.length === 0) {
       return;
     }
-
-    const errorMessages: string[] = [];
-
     discountSelected.forEach((discount) => {
-      console.log(discount.checkInternalConditions(cart));
+      discount.checkInternalConditions(cart);
     });
   };
   //TODO: Add discount calculations, BOGO and Family plans

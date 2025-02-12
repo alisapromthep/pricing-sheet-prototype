@@ -2,6 +2,7 @@
 
 import { usePricingContext } from "@/lib/context/PricingContext";
 import { useEffect } from "react";
+import internal from "stream";
 
 type discountFormProps = {
   labelsArray: string[];
@@ -11,6 +12,7 @@ const DiscountForm: React.FC<discountFormProps> = () => {
   const pricingTool = usePricingContext();
 
   const {
+    cart,
     availableDiscounts,
     discountSelected,
     setDiscountSelected,
@@ -25,15 +27,15 @@ const DiscountForm: React.FC<discountFormProps> = () => {
 
     isDiscountApplicable(discountSelected);
     console.log("discountSelected", discountSelected);
-    if (discountSelected.length > 1) {
-      discountSelected.forEach((discount) => {
-        const { internalConditions } = discount;
-        internalConditions.forEach((cond) => {
-          setDiscountErrors((prev) => [...prev, cond.errorMessage]);
-        });
-      });
-    }
-  }, [discountSelected]);
+    // if (discountSelected.length > 1) {
+    //   discountSelected.forEach((discount) => {
+    //     const { internalConditions } = discount;
+    //     internalConditions.forEach((cond) => {
+    //       setDiscountErrors((prev) => [...prev, cond.errorMessage]);
+    //     });
+    //   });
+    // }
+  }, [discountSelected, cart]);
 
   const handleCheckBox = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -88,12 +90,12 @@ const DiscountForm: React.FC<discountFormProps> = () => {
   const handleApplyDiscounts = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
+  console.log(discountErrors);
   return (
     <div className="flex flex-col">
       <form onSubmit={handleApplyDiscounts}>
         {availableDiscounts.map((discount, i) => {
-          const { id, name, checkboxConditions } = discount;
-
+          const { id, name, checkboxConditions, internalConditions } = discount;
           return (
             <div key={id}>
               <label>
@@ -123,16 +125,22 @@ const DiscountForm: React.FC<discountFormProps> = () => {
                   </div>
                 )}
               </div>
+              {/* error msg condition specific*/}
+              <div>
+                {internalConditions
+                  ? internalConditions.map((cond) => (
+                      <p className="text-red-500">{cond.errorMessage}</p>
+                    ))
+                  : null}
+              </div>
             </div>
           );
         })}
-        {discountErrors ? (
-          <div>
-            {discountErrors.map((msg) => (
-              <p> {msg}</p>
-            ))}
-          </div>
-        ) : null}
+        <div>
+          {discountErrors
+            ? discountErrors.map((msg) => <p className="text-red-500">{msg}</p>)
+            : null}
+        </div>
         <button type="submit" className="bg-lime-500 font-bold p-2 rounded">
           Apply Discount
         </button>

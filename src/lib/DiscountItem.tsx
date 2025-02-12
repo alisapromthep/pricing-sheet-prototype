@@ -56,6 +56,8 @@ export class DiscountItem {
 
           cart.forEach((product) => {
             const { selectedProductItem: item } = product;
+            console.log(product);
+            //TODO: when adding new product to cart, item.familyPlan becomes undefined
             if (!item.familyPlanEligible) {
               notEligibleProduct += item.id;
               allFamilyEligible = false;
