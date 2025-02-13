@@ -224,13 +224,16 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
 
   //Individual discount condition checks function in discountConditionChecks file
   //
-  const isDiscountApplicable = (discountSelected: DiscountOptionType[]) => {
+  const isDiscountApplicable = (
+    cart: selectedProductType[],
+    discountSelected: DiscountOptionType[]
+  ) => {
     //no discount selected
     if (!discountSelected || discountSelected.length === 0) {
       return;
     }
     discountSelected.forEach((discount) => {
-      discount.checkInternalConditions(cart);
+      discount.checkInternalConditions(cart, discountSelected);
     });
   };
   //TODO: Add discount calculations, BOGO and Family plans

@@ -23,16 +23,7 @@ const DiscountForm: React.FC<discountFormProps> = () => {
   } = pricingTool;
 
   useEffect(() => {
-    isDiscountApplicable(discountSelected);
-    //console.log("discountSelected", discountSelected);
-    // if (discountSelected.length > 1) {
-    //   discountSelected.forEach((discount) => {
-    //     const { internalConditions } = discount;
-    //     internalConditions.forEach((cond) => {
-    //       setDiscountErrors((prev) => [...prev, cond.errorMessage]);
-    //     });
-    //   });
-    // }
+    isDiscountApplicable(cart, discountSelected);
   }, [discountSelected, cart]);
 
   const handleCheckBox = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -108,7 +99,7 @@ const DiscountForm: React.FC<discountFormProps> = () => {
                     {checkboxConditions
                       ? checkboxConditions.map((cond) => {
                           return (
-                            <label>
+                            <label key={cond.id}>
                               <input
                                 type="checkbox"
                                 name="checkboxCondition"
@@ -127,9 +118,11 @@ const DiscountForm: React.FC<discountFormProps> = () => {
               <div>
                 {internalConditions
                   ? internalConditions.map((cond) => {
-                      //console.log("internalConditions, error?", cond);
+                      console.log("internalConditions, error?", cond);
                       return (
-                        <p className="text-red-500">{cond.errorMessage}</p>
+                        <p key={cond.id} className="text-red-500">
+                          {cond.errorMessage}
+                        </p>
                       );
                     })
                   : null}

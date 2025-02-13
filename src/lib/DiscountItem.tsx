@@ -7,6 +7,7 @@ import {
 import {
   checkMinPurchase,
   checkFamilyPlanEligibility,
+  checkCanCombine,
 } from "@/services/discountUtilities";
 export class DiscountItem {
   id: string;
@@ -59,21 +60,15 @@ export class DiscountItem {
       switch (cond.condition) {
         case DISCOUNT_CONDITIONS.FAMILY_PLAN_PRODUCT_ELIGIBILITY:
           result = checkFamilyPlanEligibility(cart, cond);
-          console.log("result family", result);
           break;
 
         case DISCOUNT_CONDITIONS.MIN_PURCHASE:
           result = checkMinPurchase(cart, cond);
-          //console.log("min purchase", result);
           break;
 
         case DISCOUNT_CONDITIONS.CAN_COMBINE:
-          // if (discountSelected.length > 1 && cond.requiredValue === "FALSE") {
-          //   errorMessage = `This discount cannot be combine with other discount`;
-          // } else {
-          //   errorMessage = "";
-          //   conditionMet = true;
-          // }
+          result = checkCanCombine(discountSelected, cond);
+          console.log("combine result", result);
           break;
         default:
           result.errorMessage = "Unknown discount condition.";

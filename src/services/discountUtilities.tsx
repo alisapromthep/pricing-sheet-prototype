@@ -22,13 +22,11 @@ export function checkFamilyPlanEligibility(
 ) {
   let allFamilyEligible = true;
   let notEligibleProduct: string = "";
-  console.log("cart", cart);
   if (condition.requiredValue) {
     cart.forEach((product) => {
       const { selectedProductItem: item } = product;
-      console.log(product);
       if (!item.familyPlanEligible) {
-        notEligibleProduct += item.id;
+        notEligibleProduct += `${item.category} ${item.model}`;
         allFamilyEligible = false;
       }
     });
@@ -40,6 +38,20 @@ export function checkFamilyPlanEligibility(
     } else {
       return { conditionMet: true, errorMessage: "" };
     }
+  } else {
+    return { conditionMet: true, errorMessage: "" };
+  }
+}
+
+export function checkCanCombine(
+  discountSelected: DiscountInfoType[],
+  condition: { [key: string]: any }
+) {
+  if (discountSelected.length > 1 && !condition.requiredValue) {
+    return {
+      conditionMet: false,
+      errorMessage: `This discount cannot be combine with other discount`,
+    };
   } else {
     return { conditionMet: true, errorMessage: "" };
   }
