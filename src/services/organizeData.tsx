@@ -101,7 +101,7 @@ export function fillInProductCategories(data, list, indexes) {
       id,
       category,
       model,
-      familyPlanEligible,
+      familyPlanEligible: familyPlanEligible === "TRUE",
     });
     const pricesArray = data[i].slice(3).map((price) => Number(price));
 
@@ -132,12 +132,20 @@ export function organizeDiscountInfo(
 
     for (let j = 0; j < headers.length; j++) {
       const header = headers[j].trim();
-      const value = rowData[j];
-      if (header === "checkboxConditions" && value) {
+      let value: string | boolean = rowData[j].trim();
+      switch (value) {
+        case "TRUE":
+          value = true;
+          break;
+        case "FALSE":
+          value = false;
+          break;
+      }
+      if (header === "checkboxConditions" && typeof value === "string") {
         discountObject[header] = value.split(",").map((cond) => {
           return { id: uid.rnd(), label: cond.trim(), conditionMet: false };
         });
-      } else if (header in DISCOUNT_CONDITIONS && value !== "FALSE") {
+      } else if (header in DISCOUNT_CONDITIONS) {
         discountObject["internalConditions"] =
           discountObject["internalConditions"] || []; // Ensure array exists
         discountObject["internalConditions"].push({
@@ -147,7 +155,7 @@ export function organizeDiscountInfo(
           conditionMet: false,
         });
       } else {
-        discountObject[header] = value.trim();
+        discountObject[header] = value;
       }
     }
 

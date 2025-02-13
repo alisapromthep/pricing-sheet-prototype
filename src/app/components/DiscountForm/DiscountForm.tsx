@@ -23,10 +23,8 @@ const DiscountForm: React.FC<discountFormProps> = () => {
   } = pricingTool;
 
   useEffect(() => {
-    isCombinable(discountSelected);
-
     isDiscountApplicable(discountSelected);
-    console.log("discountSelected", discountSelected);
+    //console.log("discountSelected", discountSelected);
     // if (discountSelected.length > 1) {
     //   discountSelected.forEach((discount) => {
     //     const { internalConditions } = discount;
@@ -90,7 +88,7 @@ const DiscountForm: React.FC<discountFormProps> = () => {
   const handleApplyDiscounts = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
-  console.log(discountErrors);
+
   return (
     <div className="flex flex-col">
       <form onSubmit={handleApplyDiscounts}>
@@ -128,19 +126,17 @@ const DiscountForm: React.FC<discountFormProps> = () => {
               {/* error msg condition specific*/}
               <div>
                 {internalConditions
-                  ? internalConditions.map((cond) => (
-                      <p className="text-red-500">{cond.errorMessage}</p>
-                    ))
+                  ? internalConditions.map((cond) => {
+                      //console.log("internalConditions, error?", cond);
+                      return (
+                        <p className="text-red-500">{cond.errorMessage}</p>
+                      );
+                    })
                   : null}
               </div>
             </div>
           );
         })}
-        <div>
-          {discountErrors
-            ? discountErrors.map((msg) => <p className="text-red-500">{msg}</p>)
-            : null}
-        </div>
         <button type="submit" className="bg-lime-500 font-bold p-2 rounded">
           Apply Discount
         </button>

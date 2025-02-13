@@ -1,6 +1,13 @@
 import { ProductItem } from "@/lib/ProductItem";
 import { selectedProductType } from "@/app/_types/ProductTypes";
-import { DISCOUNT_CONDITIONS } from "@/app/_types/DiscountTypes";
+import {
+  DISCOUNT_CONDITIONS,
+  DiscountInfoType,
+} from "@/app/_types/DiscountTypes";
+import {
+  checkMinPurchase,
+  checkFamilyPlanEligibility,
+} from "@/services/discountUtilities";
 export class DiscountItem {
   id: string;
   name: string;
@@ -26,7 +33,6 @@ export class DiscountItem {
     discountValue = 0,
     applyToProduct = [],
     applyOn = "",
-    canCombine = "FALSE",
     checkboxConditions = [],
     internalConditions = [],
   } = {}) {
@@ -37,57 +43,48 @@ export class DiscountItem {
       (this.discountValue = discountValue),
       (this.applyToProduct = applyToProduct),
       (this.applyOn = applyOn),
-      (this.canCombine = canCombine),
       (this.checkboxConditions = checkboxConditions),
       (this.internalConditions = internalConditions);
   }
 
-  checkInternalConditions(cart: selectedProductType[]) {
+  checkInternalConditions(
+    cart: selectedProductType[],
+    discountSelected: DiscountInfoType[]
+  ) {
     let allConditionsMet = true;
 
     this.internalConditions = this.internalConditions.map((cond) => {
-      let conditionMet = false;
-      let errorMessage = "";
+      let result = { conditionMet: false, errorMessage: "" };
 
       switch (cond.condition) {
         case DISCOUNT_CONDITIONS.FAMILY_PLAN_PRODUCT_ELIGIBILITY:
-          let allFamilyEligible = true;
-          let notEligibleProduct: string = "";
-
-          cart.forEach((product) => {
-            const { selectedProductItem: item } = product;
-            console.log(product);
-            //TODO: when adding new product to cart, item.familyPlan becomes undefined
-            if (!item.familyPlanEligible) {
-              notEligibleProduct += item.id;
-              allFamilyEligible = false;
-            }
-          });
-          if (!allFamilyEligible) {
-            errorMessage = `${notEligibleProduct} is not eligible for family plan discount`;
-          } else {
-            conditionMet = true;
-          }
+          result = checkFamilyPlanEligibility(cart, cond);
+          console.log("result family", result);
           break;
 
         case DISCOUNT_CONDITIONS.MIN_PURCHASE:
-          if (cart.length < (cond.requiredValue || 0)) {
-            errorMessage = `Minimum purchase required: ${cond.requiredValue} items.`;
-          } else {
-            conditionMet = true;
-          }
+          result = checkMinPurchase(cart, cond);
+          //console.log("min purchase", result);
           break;
 
+        case DISCOUNT_CONDITIONS.CAN_COMBINE:
+          // if (discountSelected.length > 1 && cond.requiredValue === "FALSE") {
+          //   errorMessage = `This discount cannot be combine with other discount`;
+          // } else {
+          //   errorMessage = "";
+          //   conditionMet = true;
+          // }
+          break;
         default:
-          errorMessage = "Unknown discount condition.";
+          result.errorMessage = "Unknown discount condition.";
       }
 
       // If any condition fails, mark allConditionsMet as false
-      if (!conditionMet) {
+      if (!result.conditionMet) {
         allConditionsMet = false;
       }
 
-      return { ...cond, conditionMet, errorMessage };
+      return { ...cond, ...result };
     });
 
     return allConditionsMet;
