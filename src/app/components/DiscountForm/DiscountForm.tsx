@@ -118,7 +118,6 @@ const DiscountForm: React.FC<discountFormProps> = () => {
               <div>
                 {internalConditions
                   ? internalConditions.map((cond) => {
-                      console.log("internalConditions, error?", cond);
                       return (
                         <p key={cond.id} className="text-red-500">
                           {cond.errorMessage}

@@ -52,12 +52,7 @@ interface PricingContextType {
   deleteForm: (formID: string) => void;
   clearForm: (formID: string) => void;
   updateTotalPrice: () => void;
-  addform: () => void;
-  availableDiscounts: DiscountInfoType[];
-  discountSelected: string[];
-  setDiscountSelected: React.Dispatch<React.SetStateAction<string[]>>;
-  discountErrors: string[];
-  setDiscountErrors: React.Dispatch<React.SetStateAction<string[]>>;
+  addForm: () => void;
 }
 
 const PricingContext = createContext<PricingContextType | undefined>(undefined);
@@ -99,32 +94,11 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
   const [cart, setCart] = useState<selectedProductType[]>([]);
   const [totalPrice, setTotalPrice] =
     useState<totalPriceType>(initialTotalPrice);
-  const [availableDiscounts, setAvailableDiscounts] = useState<
-    DiscountInfoType[]
-  >([]);
-  const [discountSelected, setDiscountSelected] = useState<DiscountItem[]>([]);
-  const [discountedPrice, setDiscountedPrice] = useState<DiscountedPriceType[]>(
-    []
-  );
-
-  const [discountErrors, setDiscountErrors] = useState<string[]>([]);
 
   if (!data) {
     return <p>loading...</p>;
   }
   const { sheetsData, loading, error } = data;
-
-  //get discount Information
-
-  useEffect(() => {
-    if (sheetsData.discounts) {
-      const structuredDiscounts = organizeDiscountInfo(sheetsData.discounts);
-      const discountItems = createDiscountItem(structuredDiscounts);
-      console.log(discountItems);
-
-      setAvailableDiscounts(discountItems);
-    }
-  }, [sheetsData]);
 
   //create product function, give it an ID and return empty product info with an id.
 
@@ -222,23 +196,6 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
     });
   };
 
-  //Individual discount condition checks function in discountConditionChecks file
-  //
-  const isDiscountApplicable = (
-    cart: selectedProductType[],
-    discountSelected: DiscountOptionType[]
-  ) => {
-    //no discount selected
-    if (!discountSelected || discountSelected.length === 0) {
-      return;
-    }
-    discountSelected.forEach((discount) => {
-      discount.checkInternalConditions(cart, discountSelected);
-    });
-  };
-  //TODO: Add discount calculations, BOGO and Family plans
-  const applyDiscount = () => {};
-
   return (
     <PricingContext.Provider
       value={{
@@ -254,12 +211,6 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
         clearForm,
         updateTotalPrice,
         addForm,
-        availableDiscounts,
-        discountSelected,
-        setDiscountSelected,
-        isDiscountApplicable,
-        discountErrors,
-        setDiscountErrors,
       }}
     >
       {children}

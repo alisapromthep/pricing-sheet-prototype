@@ -54,7 +54,7 @@ export class DiscountItem {
   ) {
     let allConditionsMet = true;
 
-    this.internalConditions = this.internalConditions.map((cond) => {
+    const updatedInternalConditions = this.internalConditions.map((cond) => {
       let result = { conditionMet: false, errorMessage: "" };
 
       switch (cond.condition) {
@@ -68,7 +68,6 @@ export class DiscountItem {
 
         case DISCOUNT_CONDITIONS.CAN_COMBINE:
           result = checkCanCombine(discountSelected, cond);
-          console.log("combine result", result);
           break;
         default:
           result.errorMessage = "Unknown discount condition.";
@@ -81,6 +80,8 @@ export class DiscountItem {
 
       return { ...cond, ...result };
     });
+    console.log("updatedInternalCondition", updatedInternalConditions);
+    this.internalConditions = updatedInternalConditions;
 
     return allConditionsMet;
   }
