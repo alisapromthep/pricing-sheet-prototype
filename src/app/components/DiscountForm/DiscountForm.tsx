@@ -66,7 +66,13 @@ const DiscountForm: React.FC = () => {
             ...discount,
             checkboxConditions: checkboxConditions.map((cond) => {
               if (cond.id === conditionID) {
-                return { ...cond, conditionMet: checked };
+                return {
+                  ...cond,
+                  conditionMet: checked,
+                  errorMessage: checked
+                    ? ""
+                    : "Please ensure checkbox condition and check the checkbox",
+                };
               } else {
                 return cond;
               }
@@ -87,7 +93,7 @@ const DiscountForm: React.FC = () => {
     <div className="flex flex-col">
       <form onSubmit={handleApplyDiscounts}>
         {availableDiscounts.map((discount, i) => {
-          const { id, name, checkboxConditions, internalConditions } = discount;
+          const { id, name, checkboxConditions } = discount;
           //console.log("discountSelected inside map", discountSelected);
           return (
             <div key={id}>
@@ -118,17 +124,39 @@ const DiscountForm: React.FC = () => {
                   </div>
                 )}
               </div>
-              {/* error msg condition specific*/}
+              {
+                <div>
+                  {/* checkbox Error */}
+                  {discountSelected?.findIndex(
+                    (discount) => discount.id === id
+                  ) !== -1 &&
+                    discountSelected?.map((discount) => {
+                      const { checkboxConditions } = discount;
+                      console.log("checkbox", discount);
+                      console.log("checkbox", checkboxConditions);
+                      return checkboxConditions?.map((cond) => {
+                        return (
+                          <p key={cond.id} className="text-red-500">
+                            {cond.errorMessage}
+                          </p>
+                        );
+                      });
+                    })}
+                </div>
+              }
               <div>
-                {internalConditions
-                  ? internalConditions.map((cond) => {
-                      return (
-                        <p key={cond.id} className="text-red-500">
-                          {cond.errorMessage}
-                        </p>
-                      );
-                    })
-                  : null}
+                {/* {internal Condition errors} */}
+                {discountSelected?.findIndex(
+                  (discount) => discount.id === id
+                ) !== -1 &&
+                  discountSelected?.map((discount) => {
+                    const { internalConditions: intCond } = discount;
+                    return (
+                      <p key={intCond.id} className="text-red-500">
+                        {intCond.errorMessage}
+                      </p>
+                    );
+                  })}
               </div>
             </div>
           );

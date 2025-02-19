@@ -45,7 +45,13 @@ export function organizeDiscountInfo(
         discountObject[header] = arrProducts;
       } else if (header === "checkboxConditions" && typeof value === "string") {
         discountObject[header] = value.split(",").map((cond) => {
-          return { id: uid.rnd(), label: cond.trim(), conditionMet: false };
+          return {
+            id: uid.rnd(),
+            label: cond.trim(),
+            conditionMet: false,
+            errorMessage:
+              "Please ensure checkbox condition and check the checkbox",
+          };
         });
       } else if (header in DISCOUNT_CONDITIONS) {
         discountObject["internalConditions"] =
