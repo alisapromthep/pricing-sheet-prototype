@@ -13,19 +13,9 @@ import {
   ProductItemsType,
   selectedProductType,
 } from "@/app/_types/ProductTypes";
-import {
-  DISCOUNT_CONDITIONS,
-  DiscountOptionType,
-  DiscountInfoType,
-  DiscountedPriceType,
-} from "@/app/_types/DiscountTypes";
-import {
-  organizeDiscountInfo,
-  createDiscountItem,
-} from "@/services/organizeData";
+import { DiscountedPriceType } from "@/app/_types/DiscountTypes";
 import { useGoogleSheetsContext } from "./GoogleSheetsContext";
 import { ProductItem } from "../ProductItem";
-import { DiscountItem } from "../DiscountItem";
 
 interface totalPriceType {
   totalFramePrice: number;
@@ -95,10 +85,10 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
   const [totalPrice, setTotalPrice] =
     useState<totalPriceType>(initialTotalPrice);
 
-  if (!data) {
-    return <p>loading...</p>;
-  }
-  const { sheetsData, loading, error } = data;
+  // if (!data) {
+  //   return <p>loading...</p>;
+  // }
+  // const { sheetsData, loading, error } = data;
 
   //create product function, give it an ID and return empty product info with an id.
 

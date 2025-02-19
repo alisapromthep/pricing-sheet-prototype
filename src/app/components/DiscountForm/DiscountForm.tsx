@@ -2,49 +2,52 @@
 
 import { usePricingContext } from "@/lib/context/PricingContext";
 import { useEffect } from "react";
-import internal from "stream";
+import { useDiscountContext } from "@/lib/context/DiscountContext";
 
-type discountFormProps = {
-  labelsArray: string[];
-};
-
-const DiscountForm: React.FC<discountFormProps> = () => {
+const DiscountForm: React.FC = () => {
   const pricingTool = usePricingContext();
+  const discountTool = useDiscountContext();
+  const { cart } = pricingTool;
 
   const {
-    cart,
     availableDiscounts,
     discountSelected,
     setDiscountSelected,
     isDiscountApplicable,
-    isCombinable,
-    discountErrors,
-    setDiscountErrors,
-  } = pricingTool;
+  } = discountTool;
+
+  //console.log("discountSelected before render", discountSelected);
 
   useEffect(() => {
     isDiscountApplicable(cart, discountSelected);
-  }, [discountSelected, cart]);
+  }, [cart]);
+
+  useEffect(() => {
+    console.log("Updated discountSelected:", discountSelected);
+  }, [discountSelected]);
 
   const handleCheckBox = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-
-    // Find the corresponding discount object in discountSelected
-    const existingDiscountIndex = discountSelected.findIndex(
+    const doesExists = discountSelected.findIndex(
       (discount) => discount.id === value
     );
 
     // Update discountSelected based on checkbox selection
-    setDiscountSelected((prevDiscountSelected) => {
-      if (existingDiscountIndex !== -1) {
-        // Discount already selected, remove it
-        return prevDiscountSelected.filter((discount) => discount.id !== value);
+
+    setDiscountSelected((prevSelected) => {
+      if (doesExists !== -1) {
+        const updatedSelection = prevSelected.filter(
+          (discount) => discount.id !== value
+        );
+
+        return [...updatedSelection];
       } else {
-        // Discount not selected, add it with initial conditions
-        const selectedDiscount = availableDiscounts.find(
+        //add discount to it
+        const newSelection = availableDiscounts.find(
           (discount) => discount.id === value
         );
-        return [...prevDiscountSelected, selectedDiscount];
+
+        return [...prevSelected, newSelection];
       }
     });
   };
@@ -85,6 +88,7 @@ const DiscountForm: React.FC<discountFormProps> = () => {
       <form onSubmit={handleApplyDiscounts}>
         {availableDiscounts.map((discount, i) => {
           const { id, name, checkboxConditions, internalConditions } = discount;
+          //console.log("discountSelected inside map", discountSelected);
           return (
             <div key={id}>
               <label>
@@ -92,7 +96,7 @@ const DiscountForm: React.FC<discountFormProps> = () => {
                 {name}
               </label>
               <div>
-                {discountSelected.findIndex(
+                {discountSelected?.findIndex(
                   (discount) => discount.id === id
                 ) !== -1 && (
                   <div key={id}>

@@ -1,13 +1,4 @@
-export interface DiscountInfoType {
-  name: string;
-  description: string;
-  discountType: string;
-  discountValue: number;
-  applyToProduct: string[];
-  applyOn: string;
-  conditionLabel: string;
-  conditionName: string;
-  canCombine: boolean;
+export interface DiscountDataType {
   [key: string]: string | number | boolean | string[];
 }
 
@@ -20,7 +11,12 @@ export interface DiscountItemType {
   applyToProduct: string[];
   applyOn: string;
   canCombine: string;
-  checkboxConditions: { id: string; label: string; conditionMet: boolean }[];
+  checkboxConditions: {
+    id: string;
+    label: string;
+    conditionMet: boolean;
+    errorMessage?: string;
+  }[];
   internalConditions: {
     condition: string;
     requiredValue?: any;

@@ -11,33 +11,26 @@ import React, {
 import { selectedProductType } from "@/app/_types/ProductTypes";
 import {
   DISCOUNT_CONDITIONS,
-  DiscountOptionType,
-  DiscountInfoType,
   DiscountedPriceType,
   DiscountItemType,
 } from "@/app/_types/DiscountTypes";
-import {
-  organizeDiscountInfo,
-  createDiscountItem,
-} from "@/services/organizeData";
 import { useGoogleSheetsContext } from "./GoogleSheetsContext";
-import { ProductItem } from "../ProductItem";
-import { DiscountItem } from "../DiscountItem";
 import {
   checkMinPurchase,
   checkFamilyPlanEligibility,
   checkCanCombine,
+  organizeDiscountInfo,
 } from "@/services/discountUtilities";
 
 interface DiscountContextType {
-  availableDiscounts: DiscountInfoType[];
-  discountSelected: string[];
-  setDiscountSelected: React.Dispatch<React.SetStateAction<string[]>>;
+  availableDiscounts: DiscountItemType[];
+  discountSelected: DiscountItemType[];
+  setDiscountSelected: React.Dispatch<React.SetStateAction<DiscountItemType[]>>;
   discountErrors: string[];
   setDiscountErrors: React.Dispatch<React.SetStateAction<string[]>>;
   isDiscountApplicable: (
     cart: selectedProductType[],
-    discountSelected: DiscountOptionType[]
+    discountSelected: DiscountItemType[]
   ) => any;
 }
 
@@ -50,22 +43,12 @@ export const DiscountProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const data = useGoogleSheetsContext();
 
-  const discountObject: DiscountItemType = {
-    id: "",
-    name: "",
-    description: "",
-    discountType: "",
-    discountValue: 0,
-    applyToProduct: [],
-    applyOn: "",
-    checkboxConditions: [],
-    internalConditions: [],
-  };
-
   const [availableDiscounts, setAvailableDiscounts] = useState<
-    DiscountInfoType[]
+    DiscountItemType[]
   >([]);
-  const [discountSelected, setDiscountSelected] = useState<DiscountItem[]>([]);
+  const [discountSelected, setDiscountSelected] = useState<DiscountItemType[]>(
+    []
+  );
   const [discountedPrice, setDiscountedPrice] = useState<DiscountedPriceType[]>(
     []
   );
@@ -81,10 +64,7 @@ export const DiscountProvider: React.FC<{ children: ReactNode }> = ({
 
   useEffect(() => {
     if (sheetsData.discounts) {
-      const structuredDiscounts = organizeDiscountInfo(sheetsData.discounts);
-      const discountItems = createDiscountItem(structuredDiscounts);
-      console.log(discountItems);
-
+      const discountItems = organizeDiscountInfo(sheetsData.discounts);
       setAvailableDiscounts(discountItems);
     }
   }, [sheetsData]);
@@ -95,11 +75,11 @@ export const DiscountProvider: React.FC<{ children: ReactNode }> = ({
   const checkInternalConditions = (
     discount: DiscountItemType,
     cart: selectedProductType[],
-    discountSelected: DiscountInfoType[]
+    discountSelected: DiscountItemType[]
   ) => {
     let allConditionsMet = true;
-    let {internalConditions} = discount;
- 
+    let { internalConditions } = discount;
+
     const updatedInternalConditions = internalConditions.map((cond) => {
       let result = { conditionMet: false, errorMessage: "" };
 
@@ -126,27 +106,30 @@ export const DiscountProvider: React.FC<{ children: ReactNode }> = ({
 
       return { ...cond, ...result };
     });
-    console.log("updatedInternalCondition", updatedInternalConditions);
     internalConditions = updatedInternalConditions;
 
-    return allConditionsMet;
-  }
-}
+    return { updatedInternalConditions, allConditionsMet };
+  };
 
   const isDiscountApplicable = (
     cart: selectedProductType[],
-    discountSelected: DiscountOptionType[]
+    discountSelected: DiscountItemType[]
   ) => {
     //no discount selected
     if (!discountSelected || discountSelected.length === 0) {
       return;
     }
-    setDiscountSelected((prev) => {
-      prev.map((discount) => {
-        discount.checkInternalConditions(discount, cart, discountSelected);
-        return { ...discount };
-      });
+    const updatedDiscounts = discountSelected.map((discount) => {
+      const { updatedInternalConditions, allConditionsMet } =
+        checkInternalConditions(discount, cart, discountSelected);
+      return {
+        ...discount,
+        internalConditions: updatedInternalConditions,
+        allConditionsMet,
+      };
     });
+
+    setDiscountSelected((prev) => [...updatedDiscounts]);
   };
   //TODO: Add discount calculations, BOGO and Family plans
   const applyDiscount = () => {};

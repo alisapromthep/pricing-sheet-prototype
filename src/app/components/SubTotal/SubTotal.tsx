@@ -1,10 +1,14 @@
 import React from "react";
 import { useEffect } from "react";
 import { usePricingContext } from "@/lib/context/PricingContext";
+import { useDiscountContext } from "@/lib/context/DiscountContext";
 
 function SubTotal() {
   const pricingTool = usePricingContext();
-  const { totalPrice, cart, updateTotalPrice, discountSelected } = pricingTool;
+  const discountTool = useDiscountContext();
+
+  const { totalPrice, cart, updateTotalPrice } = pricingTool;
+  const { discountSelected } = discountTool;
 
   useEffect(() => {
     updateTotalPrice();
@@ -27,7 +31,7 @@ function SubTotal() {
           <p>{`$${totalPrice.orderSubTotal}`}</p>
         </label>
       </div>
-      {discountSelected.length > 0 ? (
+      {discountSelected && discountSelected.length > 0 ? (
         <div>
           <h5>Discounts</h5>
           <p>Discount applied to:</p>
