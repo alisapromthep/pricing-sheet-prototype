@@ -20,7 +20,7 @@ const DiscountForm: React.FC = () => {
 
   useEffect(() => {
     isDiscountApplicable(cart, discountSelected);
-  }, [cart]);
+  }, [discountSelected, cart]);
 
   useEffect(() => {
     console.log("Updated discountSelected:", discountSelected);

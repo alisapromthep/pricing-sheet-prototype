@@ -119,17 +119,25 @@ export const DiscountProvider: React.FC<{ children: ReactNode }> = ({
     if (!discountSelected || discountSelected.length === 0) {
       return;
     }
-    const updatedDiscounts = discountSelected.map((discount) => {
-      const { updatedInternalConditions, allConditionsMet } =
-        checkInternalConditions(discount, cart, discountSelected);
-      return {
-        ...discount,
-        internalConditions: updatedInternalConditions,
-        allConditionsMet,
-      };
-    });
 
-    setDiscountSelected((prev) => [...updatedDiscounts]);
+    setDiscountSelected((prevDiscounts) => {
+      const updatedDiscounts = prevDiscounts.map((discount) => {
+        const { updatedInternalConditions, allConditionsMet } =
+          checkInternalConditions(discount, cart, prevDiscounts);
+
+        return {
+          ...discount,
+          internalConditions: updatedInternalConditions,
+          allConditionsMet,
+        };
+      });
+
+      // 🛑 Prevent infinite re-renders by checking if the state actually changed
+      if (JSON.stringify(updatedDiscounts) !== JSON.stringify(prevDiscounts)) {
+        return updatedDiscounts;
+      }
+      return prevDiscounts;
+    });
   };
   //TODO: Add discount calculations, BOGO and Family plans
   const applyDiscount = () => {};
