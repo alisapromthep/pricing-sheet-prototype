@@ -71,7 +71,7 @@ const DiscountForm: React.FC = () => {
                   conditionMet: checked,
                   errorMessage: checked
                     ? ""
-                    : "Please ensure checkbox condition and check the checkbox",
+                    : "Please ensure checkbox condition",
                 };
               } else {
                 return cond;
@@ -132,8 +132,6 @@ const DiscountForm: React.FC = () => {
                   ) !== -1 &&
                     discountSelected?.map((discount) => {
                       const { checkboxConditions } = discount;
-                      console.log("checkbox", discount);
-                      console.log("checkbox", checkboxConditions);
                       return checkboxConditions?.map((cond) => {
                         return (
                           <p key={cond.id} className="text-red-500">
@@ -150,12 +148,14 @@ const DiscountForm: React.FC = () => {
                   (discount) => discount.id === id
                 ) !== -1 &&
                   discountSelected?.map((discount) => {
-                    const { internalConditions: intCond } = discount;
-                    return (
-                      <p key={intCond.id} className="text-red-500">
-                        {intCond.errorMessage}
-                      </p>
-                    );
+                    const { internalConditions } = discount;
+                    return internalConditions.map((cond) => {
+                      return (
+                        <p key={cond.id} className="text-red-500">
+                          {cond.errorMessage}
+                        </p>
+                      );
+                    });
                   })}
               </div>
             </div>

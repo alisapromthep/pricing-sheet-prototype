@@ -132,7 +132,7 @@ export const DiscountProvider: React.FC<{ children: ReactNode }> = ({
         };
       });
 
-      // 🛑 Prevent infinite re-renders by checking if the state actually changed
+      // Prevent infinite re-renders by checking if the state actually changed
       if (JSON.stringify(updatedDiscounts) !== JSON.stringify(prevDiscounts)) {
         return updatedDiscounts;
       }
