@@ -14,6 +14,7 @@ const DiscountForm: React.FC = () => {
     discountSelected,
     setDiscountSelected,
     isDiscountApplicable,
+    discountErrors,
     applyDiscount,
   } = discountTool;
 
@@ -149,6 +150,9 @@ const DiscountForm: React.FC = () => {
         <button type="submit" className="bg-lime-500 font-bold p-2 rounded">
           Apply Discount
         </button>
+        <div>
+          {discountErrors && <p className="text-red-500">{discountErrors}</p>}
+        </div>
       </form>
     </div>
   );

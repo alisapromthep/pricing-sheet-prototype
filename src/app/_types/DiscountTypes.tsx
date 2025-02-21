@@ -24,6 +24,7 @@ export interface DiscountItemType {
     errorMessage?: string;
   }[];
 }
+export const DISCOUNT_TYPES = {};
 
 export const DISCOUNT_CONDITIONS = {
   FAMILY_PLAN_PRODUCT_ELIGIBILITY: "FAMILY_PLAN_PRODUCT_ELIGIBILITY",

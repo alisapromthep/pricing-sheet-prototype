@@ -28,8 +28,8 @@ interface DiscountContextType {
   availableDiscounts: DiscountItemType[];
   discountSelected: DiscountItemType[];
   setDiscountSelected: React.Dispatch<React.SetStateAction<DiscountItemType[]>>;
-  discountErrors: string[];
-  setDiscountErrors: React.Dispatch<React.SetStateAction<string[]>>;
+  discountErrors: string;
+  setDiscountErrors: React.Dispatch<React.SetStateAction<string>>;
   isDiscountApplicable: (
     cart: selectedProductType[],
     discountSelected: DiscountItemType[]
@@ -59,7 +59,7 @@ export const DiscountProvider: React.FC<{ children: ReactNode }> = ({
     []
   );
 
-  const [discountErrors, setDiscountErrors] = useState<string[]>([]);
+  const [discountErrors, setDiscountErrors] = useState<string>("");
 
   if (!data) {
     return <p>loading...</p>;
@@ -137,7 +137,6 @@ export const DiscountProvider: React.FC<{ children: ReactNode }> = ({
           allInternalConditionsMet,
         };
       });
-      console.log("updatedDiscount", updatedDiscounts);
       // Prevent infinite re-renders by checking if the state actually changed
       if (JSON.stringify(updatedDiscounts) !== JSON.stringify(prevDiscounts)) {
         return updatedDiscounts;
@@ -151,11 +150,20 @@ export const DiscountProvider: React.FC<{ children: ReactNode }> = ({
     // console.log("applyDiscount", discountSelected);
     const checkboxResult = verifyCheckBoxConditions(discountSelected);
     const internalResult = verifyInternalConditions(discountSelected);
-
+    console.log("discounts", discountSelected);
     console.log(checkboxResult, internalResult);
     //check that all conditions are met
     //if not met return error
     //all conditions met
+    if (!checkboxResult || !internalResult) {
+      setDiscountErrors((prev) => "some conditions are not met");
+      return;
+    } else {
+      //need for calculations:
+      //applyOn, discountType, discountValue, applyToProduct
+      //loop through the cart for lesser value of the according to applyToProduct
+      //apply discount calculation using discountType and value
+    }
   };
 
   return (
