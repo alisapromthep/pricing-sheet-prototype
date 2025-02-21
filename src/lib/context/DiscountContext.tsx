@@ -20,6 +20,8 @@ import {
   checkFamilyPlanEligibility,
   checkCanCombine,
   organizeDiscountInfo,
+  verifyCheckBoxConditions,
+  verifyInternalConditions,
 } from "@/services/discountUtilities";
 
 interface DiscountContextType {
@@ -29,6 +31,10 @@ interface DiscountContextType {
   discountErrors: string[];
   setDiscountErrors: React.Dispatch<React.SetStateAction<string[]>>;
   isDiscountApplicable: (
+    cart: selectedProductType[],
+    discountSelected: DiscountItemType[]
+  ) => any;
+  applyDiscount: (
     cart: selectedProductType[],
     discountSelected: DiscountItemType[]
   ) => any;
@@ -77,7 +83,7 @@ export const DiscountProvider: React.FC<{ children: ReactNode }> = ({
     cart: selectedProductType[],
     discountSelected: DiscountItemType[]
   ) => {
-    let allConditionsMet = true;
+    let allInternalConditionsMet = true;
     let { internalConditions } = discount;
 
     const updatedInternalConditions = internalConditions.map((cond) => {
@@ -101,14 +107,14 @@ export const DiscountProvider: React.FC<{ children: ReactNode }> = ({
 
       // If any condition fails, mark allConditionsMet as false
       if (!result.conditionMet) {
-        allConditionsMet = false;
+        allInternalConditionsMet = false;
       }
 
       return { ...cond, ...result };
     });
     internalConditions = updatedInternalConditions;
 
-    return { updatedInternalConditions, allConditionsMet };
+    return { updatedInternalConditions, allInternalConditionsMet };
   };
 
   const isDiscountApplicable = (
@@ -122,16 +128,16 @@ export const DiscountProvider: React.FC<{ children: ReactNode }> = ({
 
     setDiscountSelected((prevDiscounts) => {
       const updatedDiscounts = prevDiscounts.map((discount) => {
-        const { updatedInternalConditions, allConditionsMet } =
+        const { updatedInternalConditions, allInternalConditionsMet } =
           checkInternalConditions(discount, cart, prevDiscounts);
 
         return {
           ...discount,
           internalConditions: updatedInternalConditions,
-          allConditionsMet,
+          allInternalConditionsMet,
         };
       });
-
+      console.log("updatedDiscount", updatedDiscounts);
       // Prevent infinite re-renders by checking if the state actually changed
       if (JSON.stringify(updatedDiscounts) !== JSON.stringify(prevDiscounts)) {
         return updatedDiscounts;
@@ -139,8 +145,18 @@ export const DiscountProvider: React.FC<{ children: ReactNode }> = ({
       return prevDiscounts;
     });
   };
+
   //TODO: Add discount calculations, BOGO and Family plans
-  const applyDiscount = () => {};
+  const applyDiscount = (cart, discountSelected) => {
+    // console.log("applyDiscount", discountSelected);
+    const checkboxResult = verifyCheckBoxConditions(discountSelected);
+    const internalResult = verifyInternalConditions(discountSelected);
+
+    console.log(checkboxResult, internalResult);
+    //check that all conditions are met
+    //if not met return error
+    //all conditions met
+  };
 
   return (
     <DiscountContext.Provider

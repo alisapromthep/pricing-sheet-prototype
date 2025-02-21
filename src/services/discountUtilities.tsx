@@ -124,3 +124,30 @@ export function checkCanCombine(
     return { conditionMet: true, errorMessage: "" };
   }
 }
+
+export function verifyCheckBoxConditions(discountSelected) {
+  let allCheckboxChecked = true;
+
+  discountSelected.forEach((discount) => {
+    const { checkboxConditions } = discount;
+    checkboxConditions.forEach((cond) => {
+      if (!cond.conditionMet) {
+        allCheckboxChecked = false;
+      } else {
+        return;
+      }
+    });
+  });
+  return allCheckboxChecked;
+}
+
+export function verifyInternalConditions(discountSelected) {
+  let allInternalConditionsMet = true;
+
+  discountSelected.forEach((discount) => {
+    if (!discount.allInternalConditionsMet) {
+      allInternalConditionsMet = false;
+    }
+  });
+  return allInternalConditionsMet;
+}

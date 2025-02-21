@@ -20,11 +20,14 @@ interface LensFormProps {
   formID: string;
 }
 
+//TODO: optimize, currently it re-render 20+ times to populated
+
 const LensForm: React.FC<LensFormProps> = ({ formID }) => {
   const data = useGoogleSheetsContext();
 
   const pricingTool = usePricingContext();
-  const { updateProduct } = pricingTool;
+  const { cart, updateProduct } = pricingTool;
+  //console.log("cart", cart);
 
   const { sheetsData, loading, error } = data || {};
   const { lens } = sheetsData;

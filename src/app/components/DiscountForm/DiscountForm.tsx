@@ -14,6 +14,7 @@ const DiscountForm: React.FC = () => {
     discountSelected,
     setDiscountSelected,
     isDiscountApplicable,
+    applyDiscount,
   } = discountTool;
 
   //console.log("discountSelected before render", discountSelected);
@@ -87,77 +88,61 @@ const DiscountForm: React.FC = () => {
 
   const handleApplyDiscounts = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    applyDiscount(cart, discountSelected);
   };
-
   return (
     <div className="flex flex-col">
       <form onSubmit={handleApplyDiscounts}>
-        {availableDiscounts.map((discount, i) => {
-          const { id, name, checkboxConditions } = discount;
-          //console.log("discountSelected inside map", discountSelected);
+        {availableDiscounts.map((discount) => {
+          const { id, name, checkboxConditions, internalConditions } = discount;
+
+          // Find the selected discount
+          const selectedDiscount = discountSelected.find((d) => d.id === id);
+
           return (
             <div key={id}>
+              {/* Main Checkbox */}
               <label>
                 <input type="checkbox" value={id} onChange={handleCheckBox} />
                 {name}
               </label>
-              <div>
-                {discountSelected?.findIndex(
-                  (discount) => discount.id === id
-                ) !== -1 && (
-                  <div key={id}>
-                    {checkboxConditions
-                      ? checkboxConditions.map((cond) => {
-                          return (
-                            <label key={cond.id}>
-                              <input
-                                type="checkbox"
-                                name="checkboxCondition"
-                                value={cond.id}
-                                onChange={(e) => handleConditionCheckBox(e, id)}
-                              />
-                              {cond.label}
-                            </label>
-                          );
-                        })
-                      : null}
-                  </div>
-                )}
-              </div>
-              {
+              {/* Show Checkbox Conditions if Selected */}
+              {selectedDiscount && checkboxConditions && (
                 <div>
-                  {/* checkbox Error */}
-                  {discountSelected?.findIndex(
-                    (discount) => discount.id === id
-                  ) !== -1 &&
-                    discountSelected?.map((discount) => {
-                      const { checkboxConditions } = discount;
-                      return checkboxConditions?.map((cond) => {
-                        return (
-                          <p key={cond.id} className="text-red-500">
-                            {cond.errorMessage}
-                          </p>
-                        );
-                      });
-                    })}
+                  {checkboxConditions.map((cond) => (
+                    <label key={cond.id}>
+                      <input
+                        type="checkbox"
+                        name="checkboxCondition"
+                        value={cond.id}
+                        onChange={(e) => handleConditionCheckBox(e, id)}
+                      />
+                      {cond.label}
+                    </label>
+                  ))}
                 </div>
-              }
-              <div>
-                {/* {internal Condition errors} */}
-                {discountSelected?.findIndex(
-                  (discount) => discount.id === id
-                ) !== -1 &&
-                  discountSelected?.map((discount) => {
-                    const { internalConditions } = discount;
-                    return internalConditions.map((cond) => {
-                      return (
-                        <p key={cond.id} className="text-red-500">
-                          {cond.errorMessage}
-                        </p>
-                      );
-                    });
-                  })}
-              </div>
+              )}
+              {selectedDiscount && (
+                <div>
+                  {/* Checkbox Condition Errors */}
+                  {selectedDiscount.checkboxConditions?.map((cond) =>
+                    cond.errorMessage ? (
+                      <p key={cond.id} className="text-red-500">
+                        {cond.errorMessage}
+                      </p>
+                    ) : null
+                  )}
+
+                  {/* Internal Condition Errors */}
+                  {selectedDiscount.internalConditions?.map((cond) =>
+                    cond.errorMessage ? (
+                      <p key={cond.id} className="text-red-500">
+                        {cond.errorMessage}
+                      </p>
+                    ) : null
+                  )}
+                </div>
+              )}
             </div>
           );
         })}
