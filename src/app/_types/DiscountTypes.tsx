@@ -8,8 +8,9 @@ export interface DiscountItemType {
   description: string;
   discountType: string;
   discountValue: number;
-  applyToProduct: string[];
+  applyToProduct: string;
   applyOn: string;
+  applyToNth: string[];
   canCombine: string;
   checkboxConditions: {
     id: string;
@@ -24,12 +25,12 @@ export interface DiscountItemType {
     errorMessage?: string;
   }[];
 }
-export const DISCOUNT_TYPES = {};
 
 export const DISCOUNT_CONDITIONS = {
   FAMILY_PLAN_PRODUCT_ELIGIBILITY: "FAMILY_PLAN_PRODUCT_ELIGIBILITY",
   MIN_PURCHASE: "MIN_PURCHASE",
   CAN_COMBINE: "CAN_COMBINE",
+  FULL_SET_PURCHASE: "FULl_SET_PURCHASE",
 };
 
 interface DiscountConditionType {

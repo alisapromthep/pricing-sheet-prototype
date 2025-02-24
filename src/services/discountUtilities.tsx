@@ -40,7 +40,7 @@ export function organizeDiscountInfo(
           value = false;
           break;
       }
-      if (header === "applyToProduct" && typeof value === "string") {
+      if (header === "applyToNth" && typeof value === "string") {
         const arrProducts = value.split(",").map((product) => product.trim());
         discountObject[header] = arrProducts;
       } else if (header === "checkboxConditions" && typeof value === "string") {
@@ -150,4 +150,15 @@ export function verifyInternalConditions(discountSelected) {
     }
   });
   return allInternalConditionsMet;
+}
+
+export function getSmallestValues(cart, productType, numberOfProducts) {
+  //productType - frames, lens, frame+len
+  //numberOfProducts - number of products getting discounted
+
+  const discountProducts = cart.map((product) => {
+    console.log(product);
+  });
+
+  //return {productID, targetprice }
 }
