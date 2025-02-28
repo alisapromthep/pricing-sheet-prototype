@@ -152,12 +152,28 @@ export function verifyInternalConditions(discountSelected) {
   return allInternalConditionsMet;
 }
 
-export function getSmallestPrice(cart, productType) {
-  //productType - frames, lens, set (frame + lens)
+export function getPrice(product, productType) {
+  const priceMap = {
+    frame: product.framePrice,
+    lens: product.lensSubTotal,
+    set: product.Total,
+  };
 
-  const discountProducts = cart.map((product) => {
-    console.log(product);
-  });
+  return priceMap[productType] ?? 0; // Default to 0 if productType is invalid
+}
+export function getNthSmallestPrices(cart, productType, applyToNth = [1]) {
+  if (cart.length === 0) return [];
 
-  //return {productID, targetprice }
+  // Extract relevant prices with their product IDs
+  const sortedProducts = cart
+    .map((product) => ({
+      productID: product.id,
+      price: getPrice(product, productType),
+    }))
+    .sort((a, b) => a.price - b.price); // Sort by price (ascending)
+
+  // Retrieve Nth smallest prices
+  return applyToNth
+    .map((nth) => sortedProducts[nth - 1]) // Get the Nth item (1-based index)
+    .filter(Boolean); // Remove undefined values (if N is larger than available items)
 }

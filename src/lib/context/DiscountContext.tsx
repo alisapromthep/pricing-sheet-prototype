@@ -22,7 +22,7 @@ import {
   organizeDiscountInfo,
   verifyCheckBoxConditions,
   verifyInternalConditions,
-  getSmallestPrice,
+  getNthSmallestPrices,
 } from "@/services/discountUtilities";
 
 interface DiscountContextType {
@@ -176,7 +176,12 @@ export const DiscountProvider: React.FC<{ children: ReactNode }> = ({
           applyToNth,
         } = currentDiscount;
 
-        const smallestPriceProducts = getSmallestPrice(cart, applyToProduct);
+        const smallestPriceProducts = getNthSmallestPrices(
+          cart,
+          applyToProduct,
+          applyToNth
+        );
+        console.log("result of smallest", smallestPriceProducts);
       } else {
         //combinable
         console.log("combinable discounts");

@@ -6,12 +6,22 @@ import { usePricingContext } from "@/lib/context/PricingContext";
 
 export default function PricingSheet() {
   const pricingTool = usePricingContext();
-
   const { cart, setCart, addForm } = pricingTool;
 
   useEffect(() => {
-    addForm();
+    const savedCart = localStorage.getItem("cart");
+    if (savedCart) {
+      setCart(JSON.parse(savedCart));
+    } else {
+      addForm();
+    }
   }, []);
+
+  useEffect(() => {
+    if (cart.length > 0) {
+      localStorage.setItem("cart", JSON.stringify(cart));
+    }
+  }, [cart]);
 
   useEffect(() => {
     console.log("Cart updated:", cart);

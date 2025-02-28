@@ -108,42 +108,44 @@ const DiscountForm: React.FC = () => {
                 {name}
               </label>
               {/* Show Checkbox Conditions if Selected */}
-              {selectedDiscount && checkboxConditions && (
-                <div>
-                  {checkboxConditions.map((cond) => (
-                    <label key={cond.id}>
-                      <input
-                        type="checkbox"
-                        name="checkboxCondition"
-                        value={cond.id}
-                        onChange={(e) => handleConditionCheckBox(e, id)}
-                      />
-                      {cond.label}
-                    </label>
-                  ))}
-                </div>
-              )}
-              {selectedDiscount && (
-                <div>
-                  {/* Checkbox Condition Errors */}
-                  {selectedDiscount.checkboxConditions?.map((cond) =>
-                    cond.errorMessage ? (
-                      <p key={cond.id} className="text-red-500">
-                        {cond.errorMessage}
-                      </p>
-                    ) : null
-                  )}
+              <div className="ml-4">
+                {selectedDiscount && checkboxConditions && (
+                  <div>
+                    {checkboxConditions.map((cond) => (
+                      <label key={cond.id}>
+                        <input
+                          type="checkbox"
+                          name="checkboxCondition"
+                          value={cond.id}
+                          onChange={(e) => handleConditionCheckBox(e, id)}
+                        />
+                        {cond.label}
+                      </label>
+                    ))}
+                  </div>
+                )}
+                {selectedDiscount && (
+                  <div>
+                    {/* Checkbox Condition Errors */}
+                    {selectedDiscount.checkboxConditions?.map((cond) =>
+                      cond.errorMessage ? (
+                        <p key={cond.id} className="text-red-500">
+                          {cond.errorMessage}
+                        </p>
+                      ) : null
+                    )}
 
-                  {/* Internal Condition Errors */}
-                  {selectedDiscount.internalConditions?.map((cond) =>
-                    cond.errorMessage ? (
-                      <p key={cond.id} className="text-red-500">
-                        {cond.errorMessage}
-                      </p>
-                    ) : null
-                  )}
-                </div>
-              )}
+                    {/* Internal Condition Errors */}
+                    {selectedDiscount.internalConditions?.map((cond) =>
+                      cond.errorMessage ? (
+                        <p key={cond.id} className="text-red-500">
+                          {cond.errorMessage}
+                        </p>
+                      ) : null
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
           );
         })}

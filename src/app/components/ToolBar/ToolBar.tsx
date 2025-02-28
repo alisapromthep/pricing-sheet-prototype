@@ -9,7 +9,12 @@ import DiscountForm from "../DiscountForm/DiscountForm";
 function ToolBar() {
   const pricingTool = usePricingContext();
 
-  const { addForm } = pricingTool;
+  const { addForm, setCart } = pricingTool;
+
+  const handleResetCart = () => {
+    setCart([]);
+    localStorage.removeItem("cart");
+  };
 
   return (
     <div>
@@ -25,6 +30,7 @@ function ToolBar() {
         <DiscountForm />
       </div>
       <SubTotal />
+      <button onClick={handleResetCart}>Reset Cart</button>
     </div>
   );
 }
