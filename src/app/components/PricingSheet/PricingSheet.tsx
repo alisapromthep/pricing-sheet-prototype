@@ -13,6 +13,10 @@ export default function PricingSheet() {
     addForm();
   }, []);
 
+  useEffect(() => {
+    console.log("Cart updated:", cart);
+  }, [cart]);
+
   return (
     <div>
       <div className="flex flex-wrap">

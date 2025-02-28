@@ -112,7 +112,7 @@ export function checkFamilyPlanEligibility(
 }
 
 export function checkCanCombine(
-  discountSelected: DiscountInfoType[],
+  discountSelected: DiscountItemType[],
   condition: { [key: string]: any }
 ) {
   if (discountSelected.length > 1 && !condition.requiredValue) {
@@ -152,9 +152,8 @@ export function verifyInternalConditions(discountSelected) {
   return allInternalConditionsMet;
 }
 
-export function getSmallestValues(cart, productType, numberOfProducts) {
-  //productType - frames, lens, frame+len
-  //numberOfProducts - number of products getting discounted
+export function getSmallestPrice(cart, productType) {
+  //productType - frames, lens, set (frame + lens)
 
   const discountProducts = cart.map((product) => {
     console.log(product);

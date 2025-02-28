@@ -22,7 +22,7 @@ import {
   organizeDiscountInfo,
   verifyCheckBoxConditions,
   verifyInternalConditions,
-  getSmallestValues,
+  getSmallestPrice,
 } from "@/services/discountUtilities";
 
 interface DiscountContextType {
@@ -161,19 +161,22 @@ export const DiscountProvider: React.FC<{ children: ReactNode }> = ({
       return;
     } else {
       //for calculations:
-      //applyOn, discountType, discountValue, applyToProduct
+      //applyOn, discountType, discountValue, applyToProduct, applyToNth
       //loop through the cart for lesser or most value of the according to applyToProduct
       //apply discount calculation using discountType and value
       if (discountSelected.length === 1) {
         //not combinable, so only one discount to process
         const currentDiscount = discountSelected[0];
         console.log(currentDiscount);
-        const { applyOn, discountType, discountValue, applyToProduct } =
-          currentDiscount;
-        const numOfApply = applyToProduct.length;
+        const {
+          applyOn,
+          discountType,
+          discountValue,
+          applyToProduct,
+          applyToNth,
+        } = currentDiscount;
 
-        if (numOfApply === 1 && applyToProduct[0] === "frame") {
-        }
+        const smallestPriceProducts = getSmallestPrice(cart, applyToProduct);
       } else {
         //combinable
         console.log("combinable discounts");
