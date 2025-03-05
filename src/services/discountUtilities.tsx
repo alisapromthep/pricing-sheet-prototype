@@ -156,7 +156,7 @@ export function getPrice(product, productType) {
   const priceMap = {
     frame: product.framePrice,
     lens: product.lensSubTotal,
-    set: product.Total,
+    set: product.total,
   };
 
   return priceMap[productType] ?? 0; // Default to 0 if productType is invalid
@@ -171,6 +171,8 @@ export function getNthSmallestPrices(cart, productType, applyToNth = [1]) {
       price: getPrice(product, productType),
     }))
     .sort((a, b) => a.price - b.price); // Sort by price (ascending)
+
+  //console.log(sortedProducts);
 
   // Retrieve Nth smallest prices
   return applyToNth

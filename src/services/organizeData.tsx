@@ -103,7 +103,7 @@ export function fillInProductCategories(data, list, indexes) {
       model,
       familyPlanEligible: familyPlanEligible === "TRUE",
     });
-    const pricesArray = data[i].slice(3).map((price) => Number(price));
+    const pricesArray = data[i].slice(4).map((price) => Number(price));
 
     newProduct.addPrices(indexes, pricesArray);
 
