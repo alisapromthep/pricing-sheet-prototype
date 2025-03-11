@@ -13,7 +13,6 @@ import {
   ProductItemsType,
   selectedProductType,
 } from "@/app/_types/ProductTypes";
-import { DiscountedPriceType } from "@/app/_types/DiscountTypes";
 import { useGoogleSheetsContext } from "./GoogleSheetsContext";
 import { ProductItem } from "../ProductItem";
 
@@ -60,7 +59,7 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
     selectedIndex: "",
     indexPrice: 0,
     familyPlanEligible: false,
-    lensTreatment: "",
+    lensTreatment: {},
     lensTreatmentPrice: 0,
     addOn: {},
     addOnPrice: 0,

@@ -58,8 +58,7 @@ const LensForm: React.FC<LensFormProps> = ({ formID }) => {
 
         //fill each categories with the products
         fillInProductCategories(lens, productListByCategory, productIndexes);
-        //setProductListByCategory(productListByCategory);
-        console.log("productListByCategory", productListByCategory);
+        //console.log("productListByCategory", productListByCategory);
 
         setFormOptions({
           lensCategories,
@@ -97,7 +96,6 @@ const LensForm: React.FC<LensFormProps> = ({ formID }) => {
       currentForm.model
     );
 
-    console.log("productInfo", productInfo);
     if (productInfo) {
       updateProduct(
         { familyPlanEligible: productInfo.familyPlanEligible },
