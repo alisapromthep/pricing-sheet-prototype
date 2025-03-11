@@ -43,6 +43,7 @@ export function fetchProductIndexes(dataHeaders: []) {
 }
 
 export function fetchSelectedProductInfo(productList, selectedModel: string) {
+  console.log("productList", productList);
   const productInfo = productList.find(
     (product) => product.model === selectedModel
   );
@@ -51,6 +52,10 @@ export function fetchSelectedProductInfo(productList, selectedModel: string) {
 }
 
 export function calculateBasePrice(productInfo, selectedIndex: string) {
+  console.log("insideCalculateBasePrice", productInfo, selectedIndex);
+  if (!productInfo || !selectedIndex) {
+    return;
+  }
   return productInfo?.prices[selectedIndex];
 }
 
@@ -81,6 +86,9 @@ export function fetchOptions(sheetData) {
 
 //function that goes through the array of lens and pick out a list of lens categories
 export function fetchCategoriesList(data) {
+  if (!data) {
+    return;
+  }
   const listByCategory = data.slice(1).reduce((acc, [_id, category]) => {
     if (!acc[category]) {
       acc[category] = [];
@@ -94,6 +102,9 @@ export function fetchCategoriesList(data) {
 //fill in the categories with products
 
 export function fillInProductCategories(data, list, indexes) {
+  if (!data) {
+    return;
+  }
   for (let i = 1; i < data.length; i++) {
     const [id, category, model, familyPlanEligible] = data[i]; // Destructure data array elements
 
@@ -109,4 +120,5 @@ export function fillInProductCategories(data, list, indexes) {
 
     list[category].push(newProduct);
   }
+  return list;
 }

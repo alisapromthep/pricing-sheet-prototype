@@ -2,37 +2,25 @@
 
 import LensForm from "../LensForm/LensForm";
 import OptionsForm from "../OptionsForm/OptionsForm";
-import DiscountForm from "../DiscountForm/DiscountForm";
 import { useGoogleSheetsContext } from "@/lib/context/GoogleSheetsContext";
 import { fetchLabels, fetchOptions } from "@/services/organizeData";
 import { usePricingContext } from "@/lib/context/PricingContext";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { IoMdCloseCircleOutline } from "react-icons/io";
-
-const bogo = [
-  "Apply BOGO?",
-  "All sets purchased within 30 days?",
-  "discount will be applied to",
-  "discount amount",
-];
-
-const family = [
-  "Apply Family Plan?",
-  "Are there at least two family members in this order?",
-  "Lens discount will be applied to",
-  "discount amount",
-];
-
 interface FormProps {
   index: number;
   formID: string;
 }
 
 const Form: React.FC<FormProps> = ({ index, formID }) => {
-  const [inputFramePrice, setInputFramePrice] = useState<string>("");
-
   const data = useGoogleSheetsContext();
   const pricingTool = usePricingContext();
+  const { cart } = pricingTool;
+  const currentForm = cart.find((form) => form.id === formID);
+
+  const [inputFramePrice, setInputFramePrice] = useState<number>(
+    currentForm.framePrice | 0
+  );
 
   const { createProduct, updateProduct, deleteForm, clearForm } = pricingTool;
 
@@ -42,12 +30,10 @@ const Form: React.FC<FormProps> = ({ index, formID }) => {
   const { sheetsData, loading, error } = data;
   const { addOn, lens, lensTreatment, mcssAddon, packages, superflexAddon } =
     sheetsData;
-  const { cart } = pricingTool;
-  const currentForm = cart.find((form) => form.id === formID);
 
-  useEffect(() => {
-    createProduct();
-  }, []);
+  // useEffect(() => {
+  //   createProduct();
+  // }, []);
 
   const handleInputFramePrice = (
     e: React.KeyboardEvent<HTMLInputElement>,

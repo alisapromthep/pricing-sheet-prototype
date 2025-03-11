@@ -163,7 +163,7 @@ export function getPrice(product, productType) {
 }
 export function getNthSmallestPrices(cart, productType, applyToNth = [1]) {
   if (cart.length === 0) return [];
-
+  console.log("inside getNth", productType);
   // Extract relevant prices with their product IDs
   const sortedProducts = cart
     .map((product) => ({
@@ -172,7 +172,7 @@ export function getNthSmallestPrices(cart, productType, applyToNth = [1]) {
     }))
     .sort((a, b) => a.price - b.price); // Sort by price (ascending)
 
-  //console.log(sortedProducts);
+  console.log("sortedProducts", sortedProducts);
 
   // Retrieve Nth smallest prices
   return applyToNth

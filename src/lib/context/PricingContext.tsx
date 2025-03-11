@@ -55,9 +55,11 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
   const initialForm: selectedProductType = {
     id: "",
     framePrice: 0,
-    selectedProductItem: new ProductItem({}),
+    category: "",
+    model: "",
     selectedIndex: "",
     indexPrice: 0,
+    familyPlanEligible: false,
     lensTreatment: "",
     lensTreatmentPrice: 0,
     addOn: {},
@@ -94,17 +96,8 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
 
   const createProduct = () => {
     const newProduct = {
+      ...initialForm,
       id: uid.rnd(),
-      framePrice: 0,
-      selectedProductItem: new ProductItem({}),
-      selectedIndex: "",
-      indexPrice: 0,
-      lensTreatment: "",
-      lensTreatmentPrice: 0,
-      addOn: {},
-      addOnPrice: 0,
-      lensSubTotal: 0,
-      total: 0,
     };
 
     setCurrentProduct(newProduct);

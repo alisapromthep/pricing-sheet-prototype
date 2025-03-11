@@ -28,7 +28,7 @@ export default function PricingSheet() {
   }, [cart]);
 
   return (
-    <div>
+    <div className="col-span-2">
       <div className="flex flex-wrap">
         {cart.map((form, index) => {
           return <Form key={form.id} index={index} formID={form.id} />;

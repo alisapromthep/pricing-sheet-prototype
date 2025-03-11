@@ -17,7 +17,7 @@ function ToolBar() {
   };
 
   return (
-    <div>
+    <div className="p-4">
       <button
         onClick={addForm}
         className="bg-lime-500 font-bold p-2 rounded flex items-center justify-between"

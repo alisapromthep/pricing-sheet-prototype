@@ -13,9 +13,11 @@ export interface ProductItemsType {
 export interface selectedProductType {
   id: string;
   framePrice: number;
-  selectedProductItem: ProductItemsType;
+  category: string;
+  model: string;
   selectedIndex: string;
   indexPrice: number;
+  familyPlanEligible: boolean;
   lensTreatment: string;
   lensTreatmentPrice: number;
   addOn: { [key: string]: string };
