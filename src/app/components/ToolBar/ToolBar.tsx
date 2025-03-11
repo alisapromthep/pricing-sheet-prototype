@@ -14,13 +14,14 @@ function ToolBar() {
   const handleResetCart = () => {
     setCart([]);
     localStorage.removeItem("cart");
+    addForm();
   };
 
   return (
-    <div className="p-4">
+    <div className="justify-between p-4 flex flex-row xl:flex-col">
       <button
         onClick={addForm}
-        className="bg-lime-500 font-bold p-2 rounded flex items-center justify-between"
+        className="hidden bg-lime-500 font-bold p-2 rounded xl:flex xl:items-center"
       >
         <IoMdAddCircleOutline />
         Add Another Pair
@@ -30,7 +31,14 @@ function ToolBar() {
         <DiscountForm />
       </div>
       <SubTotal />
-      <button onClick={handleResetCart}>Reset Cart</button>
+      <div className="flex">
+        <button
+          className="self-end my-4 bg-red-600 text-white font-bold p-2 rounded flex items-center justify-between"
+          onClick={handleResetCart}
+        >
+          Reset Cart
+        </button>
+      </div>
     </div>
   );
 }

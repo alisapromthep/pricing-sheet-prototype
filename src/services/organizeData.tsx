@@ -1,10 +1,4 @@
 import { ProductItem } from "@/lib/ProductItem";
-import {
-  DISCOUNT_CONDITIONS,
-  DiscountInfoType,
-  DiscountOptionType,
-} from "@/app/_types/DiscountTypes";
-import { DiscountItem } from "@/lib/DiscountItem";
 import ShortUniqueId from "short-unique-id";
 
 const uid = new ShortUniqueId();
@@ -43,7 +37,6 @@ export function fetchProductIndexes(dataHeaders: []) {
 }
 
 export function fetchSelectedProductInfo(productList, selectedModel: string) {
-  console.log("productList", productList);
   const productInfo = productList.find(
     (product) => product.model === selectedModel
   );
@@ -52,7 +45,6 @@ export function fetchSelectedProductInfo(productList, selectedModel: string) {
 }
 
 export function calculateBasePrice(productInfo, selectedIndex: string) {
-  console.log("insideCalculateBasePrice", productInfo, selectedIndex);
   if (!productInfo || !selectedIndex) {
     return;
   }

@@ -22,7 +22,7 @@ const Form: React.FC<FormProps> = ({ index, formID }) => {
     currentForm.framePrice | 0
   );
 
-  const { createProduct, updateProduct, deleteForm, clearForm } = pricingTool;
+  const { updateProduct, deleteForm, clearForm } = pricingTool;
 
   if (!data) {
     return <p>loading...</p>;
@@ -30,10 +30,6 @@ const Form: React.FC<FormProps> = ({ index, formID }) => {
   const { sheetsData, loading, error } = data;
   const { addOn, lens, lensTreatment, mcssAddon, packages, superflexAddon } =
     sheetsData;
-
-  // useEffect(() => {
-  //   createProduct();
-  // }, []);
 
   const handleInputFramePrice = (
     e: React.KeyboardEvent<HTMLInputElement>,
@@ -46,15 +42,10 @@ const Form: React.FC<FormProps> = ({ index, formID }) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    //console.log(e);
   };
 
-  //TODO: Add styling
-
-  //console.log("currentProduct", currentProduct);
-
   return (
-    <div className="m-4 p-4 border border-gray-200">
+    <div className="max-w-md m-4 p-4 border border-gray-200">
       <div className=" flex justify-between">
         <button
           onClick={() => {

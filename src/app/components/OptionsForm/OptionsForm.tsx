@@ -8,7 +8,6 @@ type FormProps = {
   optionsData: string[][];
   label: string;
   name: string;
-  selectedValue: string;
   formID: string;
 };
 
@@ -16,7 +15,6 @@ const OptionsForm: React.FC<FormProps> = ({
   optionsData,
   label,
   name,
-  selectedValue,
   formID,
 }) => {
   const [error, setError] = useState<boolean>(false);
@@ -26,7 +24,6 @@ const OptionsForm: React.FC<FormProps> = ({
   const { cart, updateProduct } = pricingTool;
   const currentForm = cart.find((form) => form.id === formID);
   const selectedOptions = currentForm[name];
-  console.log(selectedOptions);
 
   const handleSelectOption = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selected = optionObject?.find(

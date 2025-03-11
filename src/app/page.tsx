@@ -3,7 +3,7 @@ import ToolBar from "./components/ToolBar/ToolBar";
 
 export default function Home() {
   return (
-    <div className="grid grid-cols-3">
+    <div className="grid grid-row-5 xl:grid-cols-5">
       <PricingSheet />
       <ToolBar />
     </div>
