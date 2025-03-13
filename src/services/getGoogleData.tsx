@@ -2,7 +2,7 @@
 
 import { google } from "googleapis";
 
-export async function getGoogleSheetData() {
+export async function getGoogleSheetData(): Promise<Record<string, any[][]>> {
   const auth = await google.auth.getClient({
     scopes: ["https://www.googleapis.com/auth/spreadsheets.readonly"],
   });

@@ -1,4 +1,5 @@
 import { ProductItem } from "@/lib/ProductItem";
+import crypto from "crypto";
 import { selectedProductType } from "@/app/_types/ProductTypes";
 import {
   DiscountDataType,
@@ -8,6 +9,15 @@ import {
 import ShortUniqueId from "short-unique-id";
 
 const uid = new ShortUniqueId();
+
+function generateConsistentId(baseId: string, prefix: string = "cond") {
+  const hash = crypto
+    .createHash("md5")
+    .update(baseId)
+    .digest("hex")
+    .slice(0, 8);
+  return `${prefix}-${hash}`;
+}
 
 //isolate and organize discount information into object
 export function organizeDiscountInfo(
@@ -45,8 +55,9 @@ export function organizeDiscountInfo(
         discountObject[header] = arrProducts;
       } else if (header === "checkboxConditions" && typeof value === "string") {
         discountObject[header] = value.split(",").map((cond) => {
+          const conditionID = generateConsistentId(cond.trim(), "cbx");
           return {
-            id: uid.rnd(),
+            id: conditionID,
             label: cond.trim(),
             conditionMet: false,
             errorMessage:
@@ -56,8 +67,9 @@ export function organizeDiscountInfo(
       } else if (header in DISCOUNT_CONDITIONS) {
         discountObject["internalConditions"] =
           discountObject["internalConditions"] || []; // Ensure array exists
+        const conditionID = generateConsistentId(header, "int");
         discountObject["internalConditions"].push({
-          id: uid.rnd(),
+          id: conditionID,
           condition: header, // Use the header as the condition name
           requiredValue: value,
           conditionMet: false,
@@ -92,9 +104,8 @@ export function checkFamilyPlanEligibility(
   let notEligibleProduct: string = "";
   if (condition.requiredValue) {
     cart.forEach((product) => {
-      const { selectedProductItem: item } = product;
-      if (!item.familyPlanEligible) {
-        notEligibleProduct += `${item.category} ${item.model}`;
+      if (!product.familyPlanEligible) {
+        notEligibleProduct += `${product.category} ${product.model}`;
         allFamilyEligible = false;
       }
     });

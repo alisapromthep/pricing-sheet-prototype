@@ -86,11 +86,6 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
   const [totalPrice, setTotalPrice] =
     useState<totalPriceType>(initialTotalPrice);
 
-  // if (!data) {
-  //   return <p>loading...</p>;
-  // }
-  // const { sheetsData, loading, error } = data;
-
   //create product function, give it an ID and return empty product info with an id.
 
   const createProduct = () => {

@@ -17,15 +17,30 @@ const DiscountForm: React.FC = () => {
     discountErrors,
     applyDiscount,
   } = discountTool;
-
-  //console.log("discountSelected before render", discountSelected);
+  console.log(
+    "avaiableDiscount",
+    availableDiscounts,
+    "discountSelected",
+    discountSelected
+  );
+  useEffect(() => {
+    const savedDiscount = localStorage.getItem("discount");
+    if (savedDiscount) {
+      const parsedSavedDiscount = JSON.parse(savedDiscount);
+      setDiscountSelected([...parsedSavedDiscount]);
+    }
+  }, []);
 
   useEffect(() => {
     isDiscountApplicable(cart, discountSelected);
   }, [discountSelected, cart]);
 
   useEffect(() => {
-    console.log("Updated discountSelected:", discountSelected);
+    localStorage.setItem("discount", JSON.stringify(discountSelected));
+  }, [discountSelected]);
+
+  useEffect(() => {
+    console.log("update discountSelected", discountSelected);
   }, [discountSelected]);
 
   const handleCheckBox = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,26 +78,20 @@ const DiscountForm: React.FC = () => {
     setDiscountSelected((prevDiscountSelected) => {
       return prevDiscountSelected.map((discount) => {
         if (discount.id === discountID) {
-          const { checkboxConditions } = discount;
-          return {
-            ...discount,
-            checkboxConditions: checkboxConditions.map((cond) => {
-              if (cond.id === conditionID) {
-                return {
+          const updatedConditions = discount.checkboxConditions.map((cond) =>
+            cond.id === conditionID
+              ? {
                   ...cond,
                   conditionMet: checked,
                   errorMessage: checked
                     ? ""
                     : "Please ensure checkbox condition",
-                };
-              } else {
-                return cond;
-              }
-            }),
-          };
-        } else {
-          return discount;
+                }
+              : cond
+          );
+          return { ...discount, checkboxConditions: updatedConditions };
         }
+        return discount;
       });
     });
   };
@@ -97,34 +106,53 @@ const DiscountForm: React.FC = () => {
         {availableDiscounts.map((discount) => {
           const { id, name, checkboxConditions, internalConditions } = discount;
 
+          const isChecked = discountSelected.some(
+            (discount) => discount.id === id
+          );
           // Find the selected discount
-          const selectedDiscount = discountSelected.find((d) => d.id === id);
+          const selectedDiscount = discountSelected.find(
+            (discount) => discount.id === id
+          );
 
           return (
             <div key={id}>
               {/* Main Checkbox */}
               <label>
-                <input type="checkbox" value={id} onChange={handleCheckBox} />
+                <input
+                  type="checkbox"
+                  value={id}
+                  onChange={handleCheckBox}
+                  checked={isChecked}
+                />
                 {name}
               </label>
               {/* Show Checkbox Conditions if Selected */}
               <div className="ml-4">
-                {selectedDiscount && checkboxConditions && (
+                {isChecked && checkboxConditions && (
                   <div>
-                    {checkboxConditions.map((cond) => (
-                      <label key={cond.id}>
-                        <input
-                          type="checkbox"
-                          name="checkboxCondition"
-                          value={cond.id}
-                          onChange={(e) => handleConditionCheckBox(e, id)}
-                        />
-                        {cond.label}
-                      </label>
-                    ))}
+                    {checkboxConditions.map((cond) => {
+                      const isConditionChecked =
+                        selectedDiscount?.checkboxConditions
+                          ? selectedDiscount.checkboxConditions.some((c) => {
+                              return c.id === cond.id && c.conditionMet;
+                            })
+                          : false;
+                      return (
+                        <label key={cond.id}>
+                          <input
+                            type="checkbox"
+                            name="checkboxCondition"
+                            value={cond.id}
+                            onChange={(e) => handleConditionCheckBox(e, id)}
+                            checked={isConditionChecked}
+                          />
+                          {cond.label}
+                        </label>
+                      );
+                    })}
                   </div>
                 )}
-                {selectedDiscount && (
+                {isChecked && (
                   <div>
                     {/* Checkbox Condition Errors */}
                     {selectedDiscount.checkboxConditions?.map((cond) =>

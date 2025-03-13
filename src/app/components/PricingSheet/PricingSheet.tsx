@@ -8,12 +8,16 @@ import { IoMdAddCircleOutline } from "react-icons/io";
 export default function PricingSheet() {
   const pricingTool = usePricingContext();
   const { cart, setCart, addForm } = pricingTool;
-
+  // console.log("pricingtool", cart, setCart, addForm);
+  // console.log("pricingcontenxt", usePricingContext);
+  // console.log("localStorage", localStorage.getItem("cart"));
   useEffect(() => {
     const savedCart = localStorage.getItem("cart");
     if (savedCart) {
+      console.log("savedCart?");
       setCart(JSON.parse(savedCart));
     } else {
+      console.log("addForm?");
       addForm();
     }
   }, []);
@@ -25,7 +29,8 @@ export default function PricingSheet() {
   }, [cart]);
 
   return (
-    <div className="row-span-4 xl:col-span-4">
+    // <div className="row-span-4 xl:col-span-4">
+    <div className="col-span-4">
       <div className="mx-2 mt-2  xl:hidden">
         <button
           onClick={addForm}
