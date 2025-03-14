@@ -9,7 +9,6 @@ import {
   getCategoriesList,
   fillInProductCategories,
   getLensBasePrice,
-  getupdateLensBasePrice,
 } from "@/services/organizeData";
 import { useGoogleSheetsContext } from "@/lib/context/GoogleSheetsContext";
 import { PricesType, ProductItemsType } from "@/app/_types/ProductTypes";
@@ -97,63 +96,43 @@ const LensForm: React.FC<LensFormProps> = ({ formID }) => {
     }
   }, [currentForm.category, formOptions.productListByCategory]);
 
-  const handleSelectChange = (e, field) => {
-    switch (field) {
-      case "index":
-        const bPrice = getLensBasePrice(
-          currentForm.productInfo,
-          e.target.value
-        );
-        const updateIndex = {
-          selectedIndex: e.target.value,
-          lensBasePrice: bPrice,
-        };
-        updateProduct(updateIndex, formID);
-        break;
-      case "category":
-        const newProductList =
-          formOptions.productListByCategory[e.target.value];
+  const handleSelectChange = (
+    e: React.ChangeEvent<HTMLSelectElement>,
+    field: string
+  ) => {
+    const value = e.target.value;
 
-        updateLensBasePrice(
-          formOptions.productListByCategory,
-          e.target.value,
-          currentForm.model,
-          currentForm.index,
-          formID
-        );
-        const updateCategory = {
-          category: e.target.value,
-          productList: newProductList,
-        };
+    const updates: Record<string, any> = { [field]: value };
 
-        updateProduct(updateCategory, formID);
-        break;
-      case "model":
-        const productInfo = getSelectedProductInfo(
-          currentForm.productList,
-          e.target.value
-        );
-        updateLensBasePrice(
-          formOptions.productListByCategory,
-          currentForm.category,
-          e.target.value,
-          currentForm.index,
-          formID
-        );
-        const updateModel = {
-          model: e.target.value,
-          familyPlanEligible: productInfo?.familyPlanEligible,
-        };
-        updateProduct(updateModel, formID);
-        break;
-      default:
-        updateProduct(
-          {
-            [field]: e.target.value,
-          },
-          formID
-        );
+    if (field === "index") {
+      updates.lensBasePrice = getLensBasePrice(currentForm.productInfo, value);
+    } else if (field === "category") {
+      updates.productList = formOptions.productListByCategory[value];
+
+      updateLensBasePrice(
+        formOptions.productListByCategory,
+        value,
+        currentForm.model,
+        currentForm.index,
+        formID
+      );
+    } else if (field === "model") {
+      const productInfo = getSelectedProductInfo(
+        currentForm.productList,
+        value
+      );
+      updates.familyPlanEligible = productInfo?.familyPlanEligible;
+
+      updateLensBasePrice(
+        formOptions.productListByCategory,
+        currentForm.category,
+        value,
+        currentForm.index,
+        formID
+      );
     }
+
+    updateProduct(updates, formID);
   };
 
   if (loading || error || !sheetsData) {

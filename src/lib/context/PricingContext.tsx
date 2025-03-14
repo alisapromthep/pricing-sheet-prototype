@@ -172,14 +172,13 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
     selectedIndex: string,
     formID: string
   ) => {
-    console.log("updating lens base price?");
     const selectedProductInfo = productListByCategory[selectedCategory];
     const productInfo = getSelectedProductInfo(
       selectedProductInfo,
       selectedModel
     );
     const updatedLensBasePrice = getLensBasePrice(productInfo, selectedIndex);
-    console.log("updatedLensBasePrice", updatedLensBasePrice);
+
     updateProduct({ lensBasePrice: updatedLensBasePrice }, formID);
   };
 
