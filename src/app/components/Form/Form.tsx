@@ -3,7 +3,7 @@
 import LensForm from "../LensForm/LensForm";
 import OptionsForm from "../OptionsForm/OptionsForm";
 import { useGoogleSheetsContext } from "@/lib/context/GoogleSheetsContext";
-import { fetchLabels, fetchOptions } from "@/services/organizeData";
+import { getLabels, getOptions } from "@/services/organizeData";
 import { usePricingContext } from "@/lib/context/PricingContext";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 interface FormProps {
@@ -73,14 +73,14 @@ const Form: React.FC<FormProps> = ({ index, formID }) => {
         <LensForm formID={formID} />
         <h4 className="font-bold my-2">Lens Treatments & Add Ons</h4>
         <OptionsForm
-          optionsData={fetchOptions(lensTreatment)}
-          label={fetchLabels(lensTreatment)}
+          optionsData={getOptions(lensTreatment)}
+          label={getLabels(lensTreatment)}
           name="lensTreatment"
           formID={formID}
         />
         <OptionsForm
-          optionsData={fetchOptions(addOn)}
-          label={fetchLabels(addOn)}
+          optionsData={getOptions(addOn)}
+          label={getLabels(addOn)}
           name="addOn"
           formID={formID}
         />

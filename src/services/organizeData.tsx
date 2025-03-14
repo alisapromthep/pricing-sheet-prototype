@@ -1,9 +1,7 @@
+import { ProductItemsType } from "@/app/_types/ProductTypes";
 import { ProductItem } from "@/lib/ProductItem";
-import ShortUniqueId from "short-unique-id";
 
-const uid = new ShortUniqueId();
-
-export function fetchProductTypes(data: string[]) {
+export function getProductTypes(data: string[]) {
   if (!data) {
     return;
   }
@@ -18,14 +16,14 @@ export function fetchProductTypes(data: string[]) {
   return productTypes;
 }
 
-export function fetchProductListInfo(
+export function getProductListInfo(
   selectedType: string,
   productsByCategory: {}
 ) {
   return productsByCategory[selectedType];
 }
 
-export function fetchProductIndexes(dataHeaders: []) {
+export function getProductIndexes(dataHeaders: []) {
   if (!dataHeaders) {
     return;
   }
@@ -36,15 +34,15 @@ export function fetchProductIndexes(dataHeaders: []) {
   return productIndexes;
 }
 
-export function fetchSelectedProductInfo(productList, selectedModel: string) {
-  const productInfo = productList.find(
+export function getSelectedProductInfo(productList, selectedModel: string) {
+  const productInfo = productList?.find(
     (product) => product.model === selectedModel
   );
 
   return productInfo;
 }
 
-export function calculateBasePrice(productInfo, selectedIndex: string) {
+export function getLensBasePrice(productInfo, selectedIndex: string) {
   if (!productInfo || !selectedIndex) {
     return;
   }
@@ -62,14 +60,14 @@ export function organizeOptionsData(data: string[][]) {
   }));
 }
 
-export function fetchLabels(sheetData) {
+export function getLabels(sheetData) {
   if (!sheetData) {
     return;
   }
   return sheetData[0][0];
 }
 
-export function fetchOptions(sheetData) {
+export function getOptions(sheetData) {
   if (!sheetData) {
     return;
   }
@@ -77,7 +75,7 @@ export function fetchOptions(sheetData) {
 }
 
 //function that goes through the array of lens and pick out a list of lens categories
-export function fetchCategoriesList(data) {
+export function getCategoriesList(data) {
   if (!data) {
     return;
   }

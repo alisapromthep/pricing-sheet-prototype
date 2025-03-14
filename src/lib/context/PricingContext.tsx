@@ -14,7 +14,10 @@ import {
   selectedProductType,
 } from "@/app/_types/ProductTypes";
 import { useGoogleSheetsContext } from "./GoogleSheetsContext";
-import { ProductItem } from "../ProductItem";
+import {
+  getSelectedProductInfo,
+  getLensBasePrice,
+} from "@/services/organizeData";
 
 interface totalPriceType {
   totalFramePrice: number;
@@ -42,6 +45,13 @@ interface PricingContextType {
   clearForm: (formID: string) => void;
   updateTotalPrice: () => void;
   addForm: () => void;
+  updateLensBasePrice: (
+    productListByCategory: Record<string, ProductItemsType[]>,
+    selectedCategory: string,
+    selectedModel: string,
+    selectedIndex: string,
+    formID: string
+  ) => void;
 }
 
 const PricingContext = createContext<PricingContextType | undefined>(undefined);
@@ -57,7 +67,7 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
     category: "",
     model: "",
     selectedIndex: "",
-    indexPrice: 0,
+    lensBasePrice: 0,
     familyPlanEligible: false,
     lensTreatment: {},
     lensTreatmentPrice: 0,
@@ -137,7 +147,7 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
             Number(
               updates.lensTreatmentPrice ?? updatedForm.lensTreatmentPrice
             ) +
-            Number(updates.indexPrice ?? updatedForm.indexPrice) +
+            Number(updates.lensBasePrice ?? updatedForm.lensBasePrice) +
             Number(updates.addOnPrice ?? (updatedForm.addOnPrice || 0));
 
           // Recalculate total
@@ -154,6 +164,23 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
         return form; // Return unchanged form if ID doesn't match
       });
     });
+  };
+  const updateLensBasePrice = (
+    productListByCategory: Record<string, ProductItemsType[]>,
+    selectedCategory: string,
+    selectedModel: string,
+    selectedIndex: string,
+    formID: string
+  ) => {
+    console.log("updating lens base price?");
+    const selectedProductInfo = productListByCategory[selectedCategory];
+    const productInfo = getSelectedProductInfo(
+      selectedProductInfo,
+      selectedModel
+    );
+    const updatedLensBasePrice = getLensBasePrice(productInfo, selectedIndex);
+    console.log("updatedLensBasePrice", updatedLensBasePrice);
+    updateProduct({ lensBasePrice: updatedLensBasePrice }, formID);
   };
 
   const deleteForm = (formID: string) => {
@@ -188,6 +215,7 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
         clearForm,
         updateTotalPrice,
         addForm,
+        updateLensBasePrice,
       }}
     >
       {children}

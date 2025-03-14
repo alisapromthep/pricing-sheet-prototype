@@ -2,13 +2,14 @@
 
 import { useEffect, useState } from "react";
 import {
-  fetchProductTypes,
-  fetchProductListInfo,
-  fetchSelectedProductInfo,
-  calculateBasePrice,
-  fetchProductIndexes,
-  fetchCategoriesList,
+  getProductTypes,
+  getProductListInfo,
+  getSelectedProductInfo,
+  getProductIndexes,
+  getCategoriesList,
   fillInProductCategories,
+  getLensBasePrice,
+  getupdateLensBasePrice,
 } from "@/services/organizeData";
 import { useGoogleSheetsContext } from "@/lib/context/GoogleSheetsContext";
 import { PricesType, ProductItemsType } from "@/app/_types/ProductTypes";
@@ -24,7 +25,7 @@ const LensForm: React.FC<LensFormProps> = ({ formID }) => {
   const data = useGoogleSheetsContext();
   const pricingTool = usePricingContext();
 
-  const { cart, updateProduct } = pricingTool;
+  const { cart, updateProduct, updateLensBasePrice } = pricingTool;
 
   const currentForm = cart.find((form) => form.id === formID);
 
@@ -42,7 +43,7 @@ const LensForm: React.FC<LensFormProps> = ({ formID }) => {
     //getting all the lens products from sheetData
     //then getting the indexes and productlist
     if (sheetsData) {
-      const lensType = fetchProductTypes(lens);
+      const lensType = getProductTypes(lens);
 
       if (lensType && lensType.length > 0) {
         //setLensCategories(lensType);
@@ -50,11 +51,11 @@ const LensForm: React.FC<LensFormProps> = ({ formID }) => {
         const selectedCategory = currentForm.category || lensType[0];
         //setSelectedCategory(selectedCategory);
 
-        const productIndexes = fetchProductIndexes(lens[0]);
+        const productIndexes = getProductIndexes(lens[0]);
         //setProductIndexes(productIndexes);
 
         //get the list of product by categories
-        const productListByCategory = fetchCategoriesList(lens);
+        const productListByCategory = getCategoriesList(lens);
 
         //fill each categories with the products
         fillInProductCategories(lens, productListByCategory, productIndexes);
@@ -85,47 +86,75 @@ const LensForm: React.FC<LensFormProps> = ({ formID }) => {
         productInfo: currentForm.productInfo || initialProductList[0],
         model: currentForm.model || initialProductList[0].model,
         index: currentForm.selectedIndex || formOptions.productIndexes[0],
+        lensBasePrice:
+          currentForm.lensBasePrice ||
+          getLensBasePrice(
+            initialProductList[0],
+            formOptions.productIndexes[0]
+          ),
       };
       updateProduct(initialInfo, formID);
     }
   }, [currentForm.category, formOptions.productListByCategory]);
 
-  useEffect(() => {
-    const productInfo = fetchSelectedProductInfo(
-      formOptions.productList,
-      currentForm.model
-    );
-
-    if (productInfo) {
-      updateProduct(
-        { familyPlanEligible: productInfo.familyPlanEligible },
-        formID
-      );
-    }
-  }, [currentForm.model]);
-
   const handleSelectChange = (e, field) => {
-    if (field === "index") {
-      const bPrice = calculateBasePrice(
-        currentForm.productInfo,
-        currentForm.index
-      );
-      const updateIndex = {
-        selectedIndex: e.target.value,
-        indexPrice: bPrice,
-      };
-      updateProduct(updateIndex, formID);
-    } else {
-      updateProduct(
-        {
-          [field]: e.target.value,
-        },
-        formID
-      );
+    switch (field) {
+      case "index":
+        const bPrice = getLensBasePrice(
+          currentForm.productInfo,
+          e.target.value
+        );
+        const updateIndex = {
+          selectedIndex: e.target.value,
+          lensBasePrice: bPrice,
+        };
+        updateProduct(updateIndex, formID);
+        break;
+      case "category":
+        const newProductList =
+          formOptions.productListByCategory[e.target.value];
+
+        updateLensBasePrice(
+          formOptions.productListByCategory,
+          e.target.value,
+          currentForm.model,
+          currentForm.index,
+          formID
+        );
+        const updateCategory = {
+          category: e.target.value,
+          productList: newProductList,
+        };
+
+        updateProduct(updateCategory, formID);
+        break;
+      case "model":
+        const productInfo = getSelectedProductInfo(
+          currentForm.productList,
+          e.target.value
+        );
+        updateLensBasePrice(
+          formOptions.productListByCategory,
+          currentForm.category,
+          e.target.value,
+          currentForm.index,
+          formID
+        );
+        const updateModel = {
+          model: e.target.value,
+          familyPlanEligible: productInfo?.familyPlanEligible,
+        };
+        updateProduct(updateModel, formID);
+        break;
+      default:
+        updateProduct(
+          {
+            [field]: e.target.value,
+          },
+          formID
+        );
     }
   };
-
-  //console.log("currentForm", currentForm);
 
   if (loading || error || !sheetsData) {
     return <p>loading...</p>;
@@ -182,9 +211,9 @@ const LensForm: React.FC<LensFormProps> = ({ formID }) => {
       <div className="my-1 flex items-center justify-between">
         <p>Base Price</p>
         <p className="mx-2 px-4 py-2 pr-8">
-          {isNaN(currentForm.indexPrice)
+          {isNaN(currentForm.lensBasePrice)
             ? "unavailable"
-            : `$${currentForm.indexPrice}`}
+            : `$${currentForm.lensBasePrice}`}
         </p>
       </div>
       <div className="my-1 flex items-center justify-between">
