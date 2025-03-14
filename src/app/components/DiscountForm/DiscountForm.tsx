@@ -17,12 +17,7 @@ const DiscountForm: React.FC = () => {
     discountErrors,
     applyDiscount,
   } = discountTool;
-  console.log(
-    "avaiableDiscount",
-    availableDiscounts,
-    "discountSelected",
-    discountSelected
-  );
+
   useEffect(() => {
     const savedDiscount = localStorage.getItem("discount");
     if (savedDiscount) {

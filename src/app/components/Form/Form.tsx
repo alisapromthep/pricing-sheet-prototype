@@ -5,7 +5,6 @@ import OptionsForm from "../OptionsForm/OptionsForm";
 import { useGoogleSheetsContext } from "@/lib/context/GoogleSheetsContext";
 import { fetchLabels, fetchOptions } from "@/services/organizeData";
 import { usePricingContext } from "@/lib/context/PricingContext";
-import { useEffect, useState } from "react";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 interface FormProps {
   index: number;
@@ -15,14 +14,9 @@ interface FormProps {
 const Form: React.FC<FormProps> = ({ index, formID }) => {
   const data = useGoogleSheetsContext();
   const pricingTool = usePricingContext();
-  const { cart } = pricingTool;
+  const { cart, updateProduct, deleteForm, clearForm } = pricingTool;
+
   const currentForm = cart.find((form) => form.id === formID);
-
-  const [inputFramePrice, setInputFramePrice] = useState<number>(
-    currentForm.framePrice | 0
-  );
-
-  const { updateProduct, deleteForm, clearForm } = pricingTool;
 
   if (!data) {
     return <p>loading...</p>;
@@ -36,8 +30,9 @@ const Form: React.FC<FormProps> = ({ index, formID }) => {
     formID
   ) => {
     const { name, value } = e.target;
-    setInputFramePrice((prev) => e.target.value);
-    updateProduct({ [name]: Number(value) }, formID);
+    const updatedValue = value === "" ? null : Number(value);
+
+    updateProduct({ [name]: updatedValue }, formID);
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -70,7 +65,7 @@ const Form: React.FC<FormProps> = ({ index, formID }) => {
           <input
             name="framePrice"
             type="number"
-            value={inputFramePrice}
+            value={currentForm.framePrice || ""}
             onChange={(e) => handleInputFramePrice(e, formID)}
             placeholder="Enter frame price"
           />
