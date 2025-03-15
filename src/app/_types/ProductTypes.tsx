@@ -12,6 +12,7 @@ export interface ProductItemsType {
 
 export interface selectedProductType {
   id: string;
+  pairNumber: number;
   framePrice: number;
   category: string;
   model: string;
@@ -24,4 +25,5 @@ export interface selectedProductType {
   addOnPrice: number;
   lensSubTotal: number;
   total: number;
+  discounted: boolean;
 }

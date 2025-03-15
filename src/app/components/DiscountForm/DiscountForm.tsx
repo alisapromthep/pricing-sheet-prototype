@@ -34,10 +34,6 @@ const DiscountForm: React.FC = () => {
     localStorage.setItem("discount", JSON.stringify(discountSelected));
   }, [discountSelected]);
 
-  useEffect(() => {
-    console.log("update discountSelected", discountSelected);
-  }, [discountSelected]);
-
   const handleCheckBox = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     const doesExists = discountSelected.findIndex(

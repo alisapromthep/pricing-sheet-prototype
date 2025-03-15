@@ -23,7 +23,9 @@ import {
   verifyCheckBoxConditions,
   verifyInternalConditions,
   getNthSmallestPrices,
+  calculateDiscountedPrice,
 } from "@/services/discountUtilities";
+import { usePricingContext } from "@/lib/context/PricingContext";
 
 interface DiscountContextType {
   availableDiscounts: DiscountItemType[];
@@ -49,6 +51,8 @@ export const DiscountProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const data = useGoogleSheetsContext();
+  const pricingTool = usePricingContext();
+  const { cart, updateProduct } = pricingTool;
 
   const [availableDiscounts, setAvailableDiscounts] = useState<
     DiscountItemType[]
@@ -151,8 +155,7 @@ export const DiscountProvider: React.FC<{ children: ReactNode }> = ({
     // console.log("applyDiscount", discountSelected);
     const checkboxResult = verifyCheckBoxConditions(discountSelected);
     const internalResult = verifyInternalConditions(discountSelected);
-    console.log("discounts", discountSelected);
-    console.log(checkboxResult, internalResult);
+
     //check that all conditions are met
     //if not met return error
     //all conditions met
@@ -182,6 +185,16 @@ export const DiscountProvider: React.FC<{ children: ReactNode }> = ({
           applyToNth
         );
         console.log("result of smallest", smallestPriceProducts);
+        smallestPriceProducts.map((form) => {
+          updateProduct({ discounted: true }, form.id);
+          const discountedInfo = calculateDiscountedPrice(
+            form,
+            applyToProduct,
+            discountType,
+            discountValue
+          );
+          console.log(discountedInfo);
+        });
       } else {
         //combinable
         console.log("combinable discounts");

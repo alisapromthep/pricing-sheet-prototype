@@ -1,14 +1,14 @@
 import { ProductItem } from "@/lib/ProductItem";
 import crypto from "crypto";
-import { selectedProductType } from "@/app/_types/ProductTypes";
+import {
+  ProductItemsType,
+  selectedProductType,
+} from "@/app/_types/ProductTypes";
 import {
   DiscountDataType,
   DiscountItemType,
   DISCOUNT_CONDITIONS,
 } from "@/app/_types/DiscountTypes";
-import ShortUniqueId from "short-unique-id";
-
-const uid = new ShortUniqueId();
 
 function generateConsistentId(baseId: string, prefix: string = "cond") {
   const hash = crypto
@@ -51,8 +51,7 @@ export function organizeDiscountInfo(
           break;
       }
       if (header === "applyToNth" && typeof value === "string") {
-        const arrProducts = value.split(",").map((product) => product.trim());
-        discountObject[header] = arrProducts;
+        discountObject[header] = Number(value);
       } else if (header === "checkboxConditions" && typeof value === "string") {
         discountObject[header] = value.split(",").map((cond) => {
           const conditionID = generateConsistentId(cond.trim(), "cbx");
@@ -172,21 +171,82 @@ export function getPrice(product, productType) {
 
   return priceMap[productType] ?? 0; // Default to 0 if productType is invalid
 }
-export function getNthSmallestPrices(cart, productType, applyToNth = [1]) {
+export function getNthSmallestPrices(cart, productType, applyToNth = 1) {
   if (cart.length === 0) return [];
-  console.log("inside getNth", productType);
-  // Extract relevant prices with their product IDs
+
   const sortedProducts = cart
     .map((product) => ({
       productID: product.id,
+      priceType: productType,
       price: getPrice(product, productType),
     }))
     .sort((a, b) => a.price - b.price); // Sort by price (ascending)
 
-  console.log("sortedProducts", sortedProducts);
+  // console.log("applyToNth", applyToNth);
+  // console.log("sortedProducts", sortedProducts);
+  const smallestProducts = [];
+  for (let i = 0; i < applyToNth; i++) {
+    const smallestProduct = cart.find(
+      (product) => product.id === sortedProducts[i].productID
+    );
+    smallestProducts.push(smallestProduct);
+  }
+  return smallestProducts;
+}
 
-  // Retrieve Nth smallest prices
-  return applyToNth
-    .map((nth) => sortedProducts[nth - 1]) // Get the Nth item (1-based index)
-    .filter(Boolean); // Remove undefined values (if N is larger than available items)
+export function calculateDiscountedPrice(
+  product: selectedProductType,
+  applyToProduct: string,
+  discountType: string,
+  discountValue: string
+) {
+  console.log("calculating", product);
+  //determine discountType: free item, percentage, amount off
+  //get the corresponding price as per applyToProduct
+  let originalPrice = 0;
+
+  // Determine the original price based on `applyToProduct`
+  switch (applyToProduct) {
+    case "frame":
+      originalPrice = product.framePrice;
+      break;
+    case "lens":
+      originalPrice = product.lensSubTotal;
+      break;
+    case "set":
+      originalPrice = product.total;
+      break;
+    default:
+      console.warn("Invalid applyToProduct value:", applyToProduct);
+      return { discountedPrice: 0, discountAmount: 0 };
+  }
+
+  let discountAmount = 0;
+  let discountedPrice = originalPrice;
+
+  if (!originalPrice || isNaN(originalPrice))
+    return { discountedPrice, discountAmount };
+
+  // Apply discount based on discountType
+  switch (discountType) {
+    case "free":
+      discountAmount = originalPrice;
+      discountedPrice = 0;
+      break;
+
+    case "percentage":
+      discountAmount = (originalPrice * Number(discountValue)) / 100;
+      discountedPrice = originalPrice - discountAmount;
+      break;
+
+    case "amountOff":
+      discountAmount = Number(discountValue);
+      discountedPrice = Math.max(originalPrice - discountAmount, 0); // Prevent negative price
+      break;
+
+    default:
+      console.warn("Invalid discount type:", discountType);
+  }
+
+  return { discountedPrice, discountAmount };
 }

@@ -14,10 +14,8 @@ export default function PricingSheet() {
   useEffect(() => {
     const savedCart = localStorage.getItem("cart");
     if (savedCart) {
-      console.log("savedCart?");
       setCart(JSON.parse(savedCart));
     } else {
-      console.log("addForm?");
       addForm();
     }
   }, []);

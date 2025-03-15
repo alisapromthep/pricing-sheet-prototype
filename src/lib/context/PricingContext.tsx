@@ -63,6 +63,7 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
 
   const initialForm: selectedProductType = {
     id: "",
+    pairNumber: 0,
     framePrice: 0,
     category: "",
     model: "",
@@ -75,6 +76,7 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
     addOnPrice: 0,
     lensSubTotal: 0,
     total: 0,
+    discounted: false,
   };
 
   const initialTotalPrice: totalPriceType = {
@@ -102,6 +104,7 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
     const newProduct = {
       ...initialForm,
       id: uid.rnd(),
+      pairNumber: cart.length + 1,
     };
 
     setCurrentProduct(newProduct);
