@@ -8,11 +8,22 @@ function SubTotal() {
   const discountTool = useDiscountContext();
 
   const { totalPrice, cart, updateTotalPrice } = pricingTool;
-  const { discountSelected } = discountTool;
+  const {
+    discountSelected,
+    discountedPrice,
+    discountedProducts,
+    updateDiscountedTotal,
+  } = discountTool;
+  console.log(discountedProducts);
 
   useEffect(() => {
     updateTotalPrice();
   }, [cart]);
+
+  useEffect(() => {
+    updateDiscountedTotal(totalPrice, discountedProducts);
+  }),
+    [discountedProducts];
 
   return (
     <div>
@@ -31,15 +42,19 @@ function SubTotal() {
           <p>{`$${totalPrice.orderSubTotal}`}</p>
         </label>
       </div>
-      {discountSelected && discountSelected.length > 0 ? (
-        <div>
-          <h5>Discounts</h5>
-          <p>Discount applied to:</p>
-          <p>Discount amount</p>
-        </div>
-      ) : (
-        ""
-      )}
+      {discountedProducts && discountedProducts.length > 0
+        ? discountedProducts.map((price, i) => {
+            return (
+              <div key={i}>
+                <h5>Discounts</h5>
+                <p>Discount applied to: Pair#{`${price.pairNumber}`}</p>
+                <p>Discount amount ${`${price.discountAmount}`}</p>
+                <p>Discounted Price ${`${price.discountedPrice}`}</p>
+                <p>Total Costs${`${discountedPrice}`}</p>
+              </div>
+            );
+          })
+        : ""}
     </div>
   );
 }

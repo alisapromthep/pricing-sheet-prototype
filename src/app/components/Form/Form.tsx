@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import LensForm from "../LensForm/LensForm";
 import OptionsForm from "../OptionsForm/OptionsForm";
 import { useGoogleSheetsContext } from "@/lib/context/GoogleSheetsContext";
@@ -17,6 +18,10 @@ const Form: React.FC<FormProps> = ({ index, formID }) => {
   const { cart, updateProduct, deleteForm, clearForm } = pricingTool;
 
   const currentForm = cart.find((form) => form.id === formID);
+
+  useEffect(() => {
+    updateProduct({ pairNumber: index + 1 }, formID);
+  }, []);
 
   if (!data) {
     return <p>loading...</p>;
@@ -99,14 +104,6 @@ const Form: React.FC<FormProps> = ({ index, formID }) => {
           }`}</p>
         </label>
       </div>
-      {/* 
-      <div>
-        <h3>Discounts</h3>
-        <p>BOGO</p>
-        <DiscountForm labelsArray={bogo} />
-        <p>Family Plan</p>
-        <DiscountForm labelsArray={family} />
-      </div> */}
     </div>
   );
 };

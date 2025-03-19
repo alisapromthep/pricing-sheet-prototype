@@ -13,7 +13,6 @@ import {
   ProductItemsType,
   selectedProductType,
 } from "@/app/_types/ProductTypes";
-import { useGoogleSheetsContext } from "./GoogleSheetsContext";
 import {
   getSelectedProductInfo,
   getLensBasePrice,
@@ -59,8 +58,6 @@ const PricingContext = createContext<PricingContextType | undefined>(undefined);
 export const PricingProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const data = useGoogleSheetsContext();
-
   const initialForm: selectedProductType = {
     id: "",
     pairNumber: 0,
@@ -101,10 +98,10 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
   //create product function, give it an ID and return empty product info with an id.
 
   const createProduct = () => {
+    console.log("cart in createProduct", cart);
     const newProduct = {
       ...initialForm,
       id: uid.rnd(),
-      pairNumber: cart.length + 1,
     };
 
     setCurrentProduct(newProduct);

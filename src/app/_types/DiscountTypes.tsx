@@ -46,8 +46,10 @@ interface DiscountConditionType {
     * errorMessage: '',
    } */
 
-interface DiscountedPriceType {
-  discountNames: string;
-  discountAppliedTo: string[];
+interface DiscountedProductType {
+  applyToProduct: string;
   discountAmount: number;
+  discountedPrice: number;
+  id: string;
+  pairNumber: number;
 }

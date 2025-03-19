@@ -8,6 +8,7 @@ import {
   DiscountDataType,
   DiscountItemType,
   DISCOUNT_CONDITIONS,
+  DiscountedProductType,
 } from "@/app/_types/DiscountTypes";
 
 function generateConsistentId(baseId: string, prefix: string = "cond") {
@@ -201,6 +202,7 @@ export function calculateDiscountedPrice(
   discountValue: string
 ) {
   console.log("calculating", product);
+  const { id, pairNumber } = product;
   //determine discountType: free item, percentage, amount off
   //get the corresponding price as per applyToProduct
   let originalPrice = 0;
@@ -248,5 +250,5 @@ export function calculateDiscountedPrice(
       console.warn("Invalid discount type:", discountType);
   }
 
-  return { discountedPrice, discountAmount };
+  return { discountedPrice, discountAmount, applyToProduct, pairNumber, id };
 }

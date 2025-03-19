@@ -11,7 +11,7 @@ import React, {
 import { selectedProductType } from "@/app/_types/ProductTypes";
 import {
   DISCOUNT_CONDITIONS,
-  DiscountedPriceType,
+  DiscountedProductType,
   DiscountItemType,
 } from "@/app/_types/DiscountTypes";
 import { useGoogleSheetsContext } from "./GoogleSheetsContext";
@@ -24,6 +24,7 @@ import {
   verifyInternalConditions,
   getNthSmallestPrices,
   calculateDiscountedPrice,
+  calculateDiscountedTotal,
 } from "@/services/discountUtilities";
 import { usePricingContext } from "@/lib/context/PricingContext";
 
@@ -41,6 +42,16 @@ interface DiscountContextType {
     cart: selectedProductType[],
     discountSelected: DiscountItemType[]
   ) => any;
+  discountedPrice: number;
+  setDiscountedPrice: React.Dispatch<React.SetStateAction<number>>;
+  discountedProducts: DiscountedProductType[];
+  setDiscountedProducts: React.Dispatch<
+    React.SetStateAction<DiscountedProductType[]>
+  >;
+  updateDiscountedTotal: (
+    total: number,
+    discountedProducts: DiscountedProductType[]
+  ) => void;
 }
 
 const DiscountContext = createContext<DiscountContextType | undefined>(
@@ -52,7 +63,7 @@ export const DiscountProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const data = useGoogleSheetsContext();
   const pricingTool = usePricingContext();
-  const { cart, updateProduct } = pricingTool;
+  const { updateProduct, totalPrice } = pricingTool;
 
   const [availableDiscounts, setAvailableDiscounts] = useState<
     DiscountItemType[]
@@ -60,9 +71,11 @@ export const DiscountProvider: React.FC<{ children: ReactNode }> = ({
   const [discountSelected, setDiscountSelected] = useState<DiscountItemType[]>(
     []
   );
-  const [discountedPrice, setDiscountedPrice] = useState<DiscountedPriceType[]>(
-    []
-  );
+  const [discountedPrice, setDiscountedPrice] = useState<number>(0);
+
+  const [discountedProducts, setDiscountedProducts] = useState<
+    DiscountedProductType[]
+  >([]);
 
   const [discountErrors, setDiscountErrors] = useState<string>("");
 
@@ -187,19 +200,35 @@ export const DiscountProvider: React.FC<{ children: ReactNode }> = ({
         console.log("result of smallest", smallestPriceProducts);
         smallestPriceProducts.map((form) => {
           updateProduct({ discounted: true }, form.id);
-          const discountedInfo = calculateDiscountedPrice(
+          const calculatedDiscount = calculateDiscountedPrice(
             form,
             applyToProduct,
             discountType,
             discountValue
           );
-          console.log(discountedInfo);
+          console.log(calculatedDiscount);
+          setDiscountedProducts((prev) => [...prev, calculatedDiscount]);
         });
       } else {
         //combinable
         console.log("combinable discounts");
       }
     }
+  };
+
+  const updateDiscountedTotal = (
+    total: number,
+    discountedProducts: DiscountedProductType[]
+  ) => {
+    let newTotal = total.orderSubTotal;
+
+    discountedProducts.map((product) => {
+      const { discountAmount } = product;
+      newTotal -= discountAmount;
+    });
+    console.log(newTotal, "newTotal");
+
+    setDiscountedPrice(newTotal);
   };
 
   return (
@@ -212,6 +241,11 @@ export const DiscountProvider: React.FC<{ children: ReactNode }> = ({
         discountErrors,
         setDiscountErrors,
         applyDiscount,
+        discountedPrice,
+        setDiscountedPrice,
+        discountedProducts,
+        setDiscountedProducts,
+        updateDiscountedTotal,
       }}
     >
       {children}
