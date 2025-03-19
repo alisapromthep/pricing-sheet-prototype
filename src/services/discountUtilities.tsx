@@ -186,7 +186,11 @@ export function getNthSmallestPrices(cart, productType, applyToNth = 1) {
   // console.log("applyToNth", applyToNth);
   // console.log("sortedProducts", sortedProducts);
   const smallestProducts = [];
-  for (let i = 0; i < applyToNth; i++) {
+  let applyToNthNumber = applyToNth;
+  if (applyToNth >= 2 && cart.length < 3) {
+    applyToNthNumber = 1;
+  }
+  for (let i = 0; i < applyToNthNumber; i++) {
     const smallestProduct = cart.find(
       (product) => product.id === sortedProducts[i].productID
     );

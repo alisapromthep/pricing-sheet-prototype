@@ -198,17 +198,20 @@ export const DiscountProvider: React.FC<{ children: ReactNode }> = ({
           applyToNth
         );
         console.log("result of smallest", smallestPriceProducts);
-        smallestPriceProducts.map((form) => {
-          updateProduct({ discounted: true }, form.id);
-          const calculatedDiscount = calculateDiscountedPrice(
-            form,
-            applyToProduct,
-            discountType,
-            discountValue
-          );
-          console.log(calculatedDiscount);
-          setDiscountedProducts((prev) => [...prev, calculatedDiscount]);
-        });
+        const calculatedDiscountedProducts = smallestPriceProducts.map(
+          (form) => {
+            updateProduct({ discounted: true }, form.id);
+            const calculatedDiscount = calculateDiscountedPrice(
+              form,
+              applyToProduct,
+              discountType,
+              discountValue
+            );
+            console.log(calculatedDiscount);
+            return calculatedDiscount;
+          }
+        );
+        setDiscountedProducts(calculatedDiscountedProducts);
       } else {
         //combinable
         console.log("combinable discounts");

@@ -12,6 +12,8 @@ interface FormProps {
   formID: string;
 }
 
+//TODO: optimized loading time, data are static: don't need to fetch each time
+
 const Form: React.FC<FormProps> = ({ index, formID }) => {
   const data = useGoogleSheetsContext();
   const pricingTool = usePricingContext();

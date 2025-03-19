@@ -95,7 +95,7 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
   const [totalPrice, setTotalPrice] =
     useState<totalPriceType>(initialTotalPrice);
 
-  //create product function, give it an ID and return empty product info with an id.
+  //TODO: create a cart cap at 3
 
   const createProduct = () => {
     console.log("cart in createProduct", cart);
