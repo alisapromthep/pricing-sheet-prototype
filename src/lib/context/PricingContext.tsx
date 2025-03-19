@@ -98,7 +98,6 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
   //TODO: create a cart cap at 3
 
   const createProduct = () => {
-    console.log("cart in createProduct", cart);
     const newProduct = {
       ...initialForm,
       id: uid.rnd(),

@@ -165,7 +165,6 @@ export const DiscountProvider: React.FC<{ children: ReactNode }> = ({
 
   //TODO: Add discount calculations, BOGO and Family plans
   const applyDiscount = (cart, discountSelected) => {
-    // console.log("applyDiscount", discountSelected);
     const checkboxResult = verifyCheckBoxConditions(discountSelected);
     const internalResult = verifyInternalConditions(discountSelected);
 
@@ -183,7 +182,6 @@ export const DiscountProvider: React.FC<{ children: ReactNode }> = ({
       if (discountSelected.length === 1) {
         //not combinable, so only one discount to process
         const currentDiscount = discountSelected[0];
-        console.log(currentDiscount);
         const {
           applyOn,
           discountType,
@@ -197,7 +195,6 @@ export const DiscountProvider: React.FC<{ children: ReactNode }> = ({
           applyToProduct,
           applyToNth
         );
-        console.log("result of smallest", smallestPriceProducts);
         const calculatedDiscountedProducts = smallestPriceProducts.map(
           (form) => {
             updateProduct({ discounted: true }, form.id);
@@ -207,7 +204,6 @@ export const DiscountProvider: React.FC<{ children: ReactNode }> = ({
               discountType,
               discountValue
             );
-            console.log(calculatedDiscount);
             return calculatedDiscount;
           }
         );
@@ -215,6 +211,7 @@ export const DiscountProvider: React.FC<{ children: ReactNode }> = ({
       } else {
         //combinable
         console.log("combinable discounts");
+        //TODO: combinable discount
       }
     }
   };
@@ -229,7 +226,6 @@ export const DiscountProvider: React.FC<{ children: ReactNode }> = ({
       const { discountAmount } = product;
       newTotal -= discountAmount;
     });
-    console.log(newTotal, "newTotal");
 
     setDiscountedPrice(newTotal);
   };

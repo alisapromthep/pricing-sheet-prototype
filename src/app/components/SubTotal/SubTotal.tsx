@@ -14,7 +14,6 @@ function SubTotal() {
     discountedProducts,
     updateDiscountedTotal,
   } = discountTool;
-  console.log(discountedProducts);
 
   useEffect(() => {
     updateTotalPrice();

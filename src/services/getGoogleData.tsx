@@ -22,7 +22,6 @@ export async function getGoogleSheetData(): Promise<Record<string, any[][]>> {
     spreadsheetId: process.env.SHEET_ID!,
     ranges,
   });
-  //console.log("response in getGoogleData", response);
 
   // Map the data into an object for better structure
   const result: Record<string, any[][]> = {};
