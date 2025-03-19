@@ -225,7 +225,7 @@ export const DiscountProvider: React.FC<{ children: ReactNode }> = ({
   ) => {
     let newTotal = total.orderSubTotal;
 
-    discountedProducts.map((product) => {
+    discountedProducts.forEach((product) => {
       const { discountAmount } = product;
       newTotal -= discountAmount;
     });

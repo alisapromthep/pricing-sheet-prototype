@@ -50,11 +50,11 @@ function SubTotal() {
                 <p>Discount applied to: Pair#{`${price.pairNumber}`}</p>
                 <p>Discount amount ${`${price.discountAmount}`}</p>
                 <p>Discounted Price ${`${price.discountedPrice}`}</p>
-                <p>Total Costs${`${discountedPrice}`}</p>
               </div>
             );
           })
         : ""}
+      <p>Total Costs${`${discountedPrice}`}</p>
     </div>
   );
 }
