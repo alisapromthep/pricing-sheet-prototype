@@ -21,7 +21,7 @@ const OptionsForm: React.FC<FormProps> = ({
   const optionObject = organizeOptionsData(optionsData);
 
   const pricingTool = usePricingContext();
-  const { cart, updateProduct } = pricingTool;
+  const { cart, updateProduct, updateOptions } = pricingTool;
   const currentForm = cart.find((form) => form.id === formID);
   const selectedOptions = currentForm[name];
 
@@ -34,6 +34,7 @@ const OptionsForm: React.FC<FormProps> = ({
         [name]: selected,
         [`${name}Price`]: Number(selected.price),
       };
+      updateOptions(updateInfo, formID);
       updateProduct(updateInfo, formID);
     } else {
       setError(true);
@@ -46,7 +47,35 @@ const OptionsForm: React.FC<FormProps> = ({
 
   return (
     <div className="flex flex-col">
-      <label className="my-1 flex items-center justify-between">
+      <fieldset>
+        <legend className="my-1 flex items-center justify-between">
+          {label}
+        </legend>
+        {optionObject?.map((option, i) => {
+          console.log("optionObject", option);
+          return (
+            <div key={i} className="grid grid-cols-3">
+              <label>
+                <input
+                  type="checkbox"
+                  id=""
+                  name="label"
+                  value={option.option}
+                />
+                {option.option}
+              </label>
+              <p className="text-gray-500">{option.price}</p>
+            </div>
+          );
+        })}
+      </fieldset>
+      <div className="my-1 flex items-center justify-between">
+        <p>Price</p>
+        <p className="mx-2 px-4 py-2 pr-8">
+          {error ? "unavailable" : `$${selectedOptions.price ?? 0}`}
+        </p>
+      </div>
+      {/* <label className="my-1 flex items-center justify-between">
         {label}
         <select
           value={selectedOptions.option}
@@ -74,7 +103,7 @@ const OptionsForm: React.FC<FormProps> = ({
         <p className="mx-2 px-4 py-2 pr-8">
           {error ? "unavailable" : `${selectedOptions.family ?? "N/A"}`}
         </p>
-      </div>
+      </div> */}
     </div>
   );
 };

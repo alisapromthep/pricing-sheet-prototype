@@ -51,6 +51,10 @@ interface PricingContextType {
     selectedIndex: string,
     formID: string
   ) => void;
+  updateOptions: (
+    name: keyof selectedProductType,
+    value: string | number
+  ) => void;
 }
 
 const PricingContext = createContext<PricingContextType | undefined>(undefined);
@@ -125,13 +129,12 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
         if (form.id === formID) {
           let updateOptionPrice = 0;
           let updateOptionsSelected = [];
+          console.log(updates);
         }
         return form;
       });
     });
   };
-
-  //calculate add on prices
 
   //Add function to calculate the order subtotal
 
@@ -233,6 +236,7 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
         updateTotalPrice,
         addForm,
         updateLensBasePrice,
+        updateOptions,
       }}
     >
       {children}

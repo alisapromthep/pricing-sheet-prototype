@@ -79,18 +79,20 @@ const Form: React.FC<FormProps> = ({ index, formID }) => {
         </label>
         <LensForm formID={formID} />
         <h4 className="font-bold my-2">Lens Treatments & Add Ons</h4>
-        <OptionsForm
-          optionsData={getOptions(lensTreatment)}
-          label={getLabels(lensTreatment)}
-          name="lensTreatment"
-          formID={formID}
-        />
-        <OptionsForm
-          optionsData={getOptions(addOn)}
-          label={getLabels(addOn)}
-          name="addOn"
-          formID={formID}
-        />
+        <div className="grid grid-cols-2">
+          <OptionsForm
+            optionsData={getOptions(lensTreatment)}
+            label={getLabels(lensTreatment)}
+            name="lensTreatment"
+            formID={formID}
+          />
+          <OptionsForm
+            optionsData={getOptions(addOn)}
+            label={getLabels(addOn)}
+            name="addOn"
+            formID={formID}
+          />
+        </div>
       </form>
       <div>
         <label className="flex items-center justify-between">
