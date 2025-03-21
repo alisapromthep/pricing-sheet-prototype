@@ -19,9 +19,9 @@ export interface selectedProductType {
   selectedIndex: string;
   lensBasePrice: number;
   familyPlanEligible: boolean;
-  lensTreatment: { [key: string]: string };
+  lensTreatment: { [key: string]: string }[];
   lensTreatmentPrice: number;
-  addOn: { [key: string]: string };
+  addOn: { [key: string]: string }[];
   addOnPrice: number;
   lensSubTotal: number;
   total: number;

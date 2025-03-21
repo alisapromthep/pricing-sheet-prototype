@@ -67,9 +67,9 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
     selectedIndex: "",
     lensBasePrice: 0,
     familyPlanEligible: false,
-    lensTreatment: {},
+    lensTreatment: [],
     lensTreatmentPrice: 0,
-    addOn: {},
+    addOn: [],
     addOnPrice: 0,
     lensSubTotal: 0,
     total: 0,
@@ -113,6 +113,25 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
     const newForm = createProduct();
     setCart((prev) => [...prev, newForm]);
   };
+
+  //update add ons
+
+  const updateOptions = (
+    updates: { [key: string]: string | number },
+    formID: string
+  ) => {
+    setCart((prevForms) => {
+      return prevForms.map((form) => {
+        if (form.id === formID) {
+          let updateOptionPrice = 0;
+          let updateOptionsSelected = [];
+        }
+        return form;
+      });
+    });
+  };
+
+  //calculate add on prices
 
   //Add function to calculate the order subtotal
 
@@ -160,7 +179,7 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
             total: updatedTotal,
           };
         }
-        return form; // Return unchanged form if ID doesn't match
+        return form;
       });
     });
   };
