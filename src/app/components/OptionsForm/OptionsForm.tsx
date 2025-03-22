@@ -1,7 +1,7 @@
 "use client";
 
 import { organizeOptionsData } from "@/services/organizeData";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { usePricingContext } from "@/lib/context/PricingContext";
 
 type FormProps = {
@@ -23,19 +23,22 @@ const OptionsForm: React.FC<FormProps> = ({
   const pricingTool = usePricingContext();
   const { cart, updateProduct, updateOptions } = pricingTool;
   const currentForm = cart.find((form) => form.id === formID);
-  const selectedOptions = currentForm[name];
 
-  const handleSelectOption = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  useEffect(() => {
+    console.log("cart", cart);
+  }, [cart]);
+
+  const handleSelectOption = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    name: string,
+    formID: string
+  ) => {
     const selected = optionObject?.find(
       (object) => object.option === e.target.value
     );
+
     if (selected) {
-      const updateInfo = {
-        [name]: selected,
-        [`${name}Price`]: Number(selected.price),
-      };
-      updateOptions(updateInfo, formID);
-      updateProduct(updateInfo, formID);
+      updateOptions(name, selected, formID);
     } else {
       setError(true);
     }
@@ -48,31 +51,42 @@ const OptionsForm: React.FC<FormProps> = ({
   return (
     <div className="flex flex-col">
       <fieldset>
-        <legend className="my-1 flex items-center justify-between">
+        <legend className="font-bold my-1 flex items-center justify-between">
           {label}
         </legend>
-        {optionObject?.map((option, i) => {
-          console.log("optionObject", option);
-          return (
-            <div key={i} className="grid grid-cols-3">
-              <label>
-                <input
-                  type="checkbox"
-                  id=""
-                  name="label"
-                  value={option.option}
-                />
-                {option.option}
-              </label>
-              <p className="text-gray-500">{option.price}</p>
-            </div>
-          );
-        })}
+        <div className="grid grid-cols-2">
+          {optionObject?.map((option, i) => {
+            //console.log("optionObject", option);
+            const isOptionChecked = currentForm[name].some(
+              (opt) => opt.option === option.option
+            );
+            return (
+              <div key={i} className="grid grid-cols-2 justify-between">
+                <label>
+                  <input
+                    type="checkbox"
+                    id=""
+                    name="label"
+                    value={option.option}
+                    className="mr-1"
+                    onChange={(e) => handleSelectOption(e, name, formID)}
+                    checked={isOptionChecked}
+                  />
+                  {option.option}
+                </label>
+                <div className="flex flex-row">
+                  <p className="mr-2 text-gray-500">{option.price}</p>
+                  <p className="text-gray-500">{option.family}</p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </fieldset>
       <div className="my-1 flex items-center justify-between">
         <p>Price</p>
         <p className="mx-2 px-4 py-2 pr-8">
-          {error ? "unavailable" : `$${selectedOptions.price ?? 0}`}
+          {error ? "unavailable" : `$${currentForm[`${name}Price`] || ""}`}
         </p>
       </div>
       {/* <label className="my-1 flex items-center justify-between">

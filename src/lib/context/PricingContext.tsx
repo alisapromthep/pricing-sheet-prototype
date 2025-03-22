@@ -118,22 +118,47 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
     setCart((prev) => [...prev, newForm]);
   };
 
-  //update add ons
-
   const updateOptions = (
-    updates: { [key: string]: string | number },
+    optionName: keyof selectedProductType, // Ensures type safety
+    updatedInfo: { option: string; price: number; familyEligible: boolean },
     formID: string
   ) => {
-    setCart((prevForms) => {
-      return prevForms.map((form) => {
-        if (form.id === formID) {
-          let updateOptionPrice = 0;
-          let updateOptionsSelected = [];
-          console.log(updates);
+    setCart((prevForms) =>
+      prevForms.map((form) => {
+        if (form.id !== formID) return form;
+
+        const currentOptions = Array.isArray(form[optionName])
+          ? form[optionName]
+          : [];
+
+        const isAlreadySelected = currentOptions.some(
+          (opt) => opt.option === updatedInfo.option
+        );
+
+        let updatedOptions;
+        if (isAlreadySelected) {
+          updatedOptions = currentOptions.filter(
+            (opt) => opt.option !== updatedInfo.option
+          );
+        } else {
+          updatedOptions =
+            currentOptions.length < 5
+              ? [...currentOptions, updatedInfo]
+              : currentOptions;
         }
-        return form;
-      });
-    });
+
+        const updatedPrice = updatedOptions.reduce(
+          (sum, opt) => sum + Number(opt.price),
+          0
+        );
+
+        return {
+          ...form,
+          [optionName]: updatedOptions,
+          [`${optionName}Price`]: updatedPrice,
+        };
+      })
+    );
   };
 
   //Add function to calculate the order subtotal
