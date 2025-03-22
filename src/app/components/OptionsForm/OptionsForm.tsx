@@ -24,10 +24,6 @@ const OptionsForm: React.FC<FormProps> = ({
   const { cart, updateProduct, updateOptions } = pricingTool;
   const currentForm = cart.find((form) => form.id === formID);
 
-  useEffect(() => {
-    console.log("cart", cart);
-  }, [cart]);
-
   const handleSelectOption = (
     e: React.ChangeEvent<HTMLInputElement>,
     name: string,
@@ -53,6 +49,9 @@ const OptionsForm: React.FC<FormProps> = ({
       <fieldset>
         <legend className="font-bold my-1 flex items-center justify-between">
           {label}
+        </legend>
+        <legend className="">
+          Choose up to 5 <span className="lowercase">{label}</span>
         </legend>
         <div className="grid grid-cols-2">
           {optionObject?.map((option, i) => {

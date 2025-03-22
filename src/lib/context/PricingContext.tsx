@@ -118,8 +118,38 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
     setCart((prev) => [...prev, newForm]);
   };
 
+  //Add function to calculate the order subtotal
+
+  const updateTotalPrice = () => {
+    const updatedTotalPrice = cart.reduce((accu, form) => {
+      return {
+        totalFramePrice: Number(accu.totalFramePrice + (form.framePrice || 0)),
+        totalLensPrice: Number(accu.totalLensPrice + (form.lensSubTotal || 0)),
+        orderSubTotal: Number(accu.orderSubTotal + (form.total || 0)),
+      };
+    }, initialTotalPrice);
+
+    setTotalPrice(updatedTotalPrice);
+  };
+
+  const calculateLensSubTotal = (
+    form: selectedProductType,
+    updates: Partial<selectedProductType>
+  ) => {
+    const lensTreatmentPrice = Number(
+      updates.lensTreatmentPrice ?? form.lensTreatmentPrice
+    );
+    const lensBasePrice = Number(updates.lensBasePrice ?? form.lensBasePrice);
+    const addOnPrice = Number(updates.addOnPrice ?? (form.addOnPrice || 0));
+
+    const lensSubTotal = lensTreatmentPrice + lensBasePrice + addOnPrice;
+    const total = Number(updates.framePrice ?? form.framePrice) + lensSubTotal;
+
+    return { lensSubTotal, total };
+  };
+
   const updateOptions = (
-    optionName: keyof selectedProductType, // Ensures type safety
+    optionName: keyof selectedProductType,
     updatedInfo: { option: string; price: number; familyEligible: boolean },
     formID: string
   ) => {
@@ -152,65 +182,40 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
           0
         );
 
-        return {
-          ...form,
+        // Update product prices using updateProduct
+        const updates = {
           [optionName]: updatedOptions,
           [`${optionName}Price`]: updatedPrice,
+        };
+        const { lensSubTotal, total } = calculateLensSubTotal(form, updates);
+        return { ...form, ...updates, lensSubTotal, total };
+      })
+    );
+  };
+
+  const updateProduct = (
+    updates: Partial<selectedProductType>,
+    formID: string
+  ) => {
+    setCart((prevForms) =>
+      prevForms.map((form) => {
+        if (form.id !== formID) return form;
+
+        // Merge updates with the current form
+        const updatedForm = { ...form, ...updates };
+
+        // Recalculate totals
+        const { lensSubTotal, total } = calculateLensSubTotal(form, updates);
+
+        return {
+          ...updatedForm,
+          lensSubTotal,
+          total,
         };
       })
     );
   };
 
-  //Add function to calculate the order subtotal
-
-  const updateTotalPrice = () => {
-    const updatedTotalPrice = cart.reduce((accu, form) => {
-      return {
-        totalFramePrice: Number(accu.totalFramePrice + (form.framePrice || 0)),
-        totalLensPrice: Number(accu.totalLensPrice + (form.lensSubTotal || 0)),
-        orderSubTotal: Number(accu.orderSubTotal + (form.total || 0)),
-      };
-    }, initialTotalPrice);
-
-    setTotalPrice(updatedTotalPrice);
-  };
-
-  const updateProduct = (
-    updates: { [key: string]: string | number },
-    formID: string
-  ) => {
-    setCart((prevForms) => {
-      return prevForms.map((form) => {
-        if (form.id === formID) {
-          let updatedLensSubTotal = 0;
-          let updatedTotal = 0;
-
-          // Merge updates with the current form
-          const updatedForm = { ...form, ...updates };
-
-          // Recalculate lensSubTotal
-          updatedLensSubTotal =
-            Number(
-              updates.lensTreatmentPrice ?? updatedForm.lensTreatmentPrice
-            ) +
-            Number(updates.lensBasePrice ?? updatedForm.lensBasePrice) +
-            Number(updates.addOnPrice ?? (updatedForm.addOnPrice || 0));
-
-          // Recalculate total
-          updatedTotal =
-            Number(updates.framePrice ?? updatedForm.framePrice) +
-            updatedLensSubTotal;
-
-          return {
-            ...updatedForm,
-            lensSubTotal: updatedLensSubTotal,
-            total: updatedTotal,
-          };
-        }
-        return form;
-      });
-    });
-  };
   const updateLensBasePrice = (
     productListByCategory: Record<string, ProductItemsType[]>,
     selectedCategory: string,
