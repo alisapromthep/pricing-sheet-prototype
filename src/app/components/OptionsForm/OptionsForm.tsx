@@ -55,7 +55,6 @@ const OptionsForm: React.FC<FormProps> = ({
         </legend>
         <div className="grid grid-cols-2">
           {optionObject?.map((option, i) => {
-            //console.log("optionObject", option);
             const isOptionChecked = currentForm[name].some(
               (opt) => opt.option === option.option
             );

@@ -114,6 +114,9 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
   //Add new form
 
   const addForm = () => {
+    if (cart.length === 3) {
+      return;
+    }
     const newForm = createProduct();
     setCart((prev) => [...prev, newForm]);
   };
