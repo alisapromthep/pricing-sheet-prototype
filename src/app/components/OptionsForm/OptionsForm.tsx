@@ -1,8 +1,11 @@
 "use client";
 
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import { FaCheck, FaChevronDown } from "react-icons/fa";
 import { organizeOptionsData } from "@/services/organizeData";
 import { useState, useEffect } from "react";
 import { usePricingContext } from "@/lib/context/PricingContext";
+import SelectedButton from "../SelectedButton/SelectedButton";
 
 type FormProps = {
   optionsData: string[][];
@@ -23,14 +26,15 @@ const OptionsForm: React.FC<FormProps> = ({
   const pricingTool = usePricingContext();
   const { cart, updateProduct, updateOptions } = pricingTool;
   const currentForm = cart.find((form) => form.id === formID);
+  const selectedArr = currentForm[name];
 
   const handleSelectOption = (
-    e: React.ChangeEvent<HTMLInputElement>,
+    optionName: string,
     name: string,
     formID: string
   ) => {
     const selected = optionObject?.find(
-      (object) => object.option === e.target.value
+      (objectObj) => objectObj.option === optionName
     );
 
     if (selected) {
@@ -46,7 +50,42 @@ const OptionsForm: React.FC<FormProps> = ({
 
   return (
     <div className="flex flex-col">
-      <fieldset>
+      <DropdownMenu.Root>
+        <DropdownMenu.Trigger asChild>
+          <button className="flex items-center justify-between gap-2 border p-2 rounded-md">
+            {selectedArr.length > 0
+              ? selectedArr.map((selected) => selected.option).join(" ")
+              : "Select..."}
+            <FaChevronDown className="h-4 w-4" />
+          </button>
+        </DropdownMenu.Trigger>
+
+        <DropdownMenu.Content className="bg-white shadow-lg rounded-md w-56 p-2">
+          {optionObject?.map((optionObj, i) => {
+            const isOptionChecked = currentForm[name].some(
+              (opt) => opt.option === optionObj.option
+            );
+            return (
+              <DropdownMenu.Item
+                key={i}
+                onSelect={() =>
+                  handleSelectOption(optionObj.option, name, formID)
+                }
+                className={`            flex items-center justify-between p-2 hover:bg-gray-100 cursor-pointer
+              ${isOptionChecked && "font-bold"}`}
+              >
+                {optionObj.option}
+                <span className="mr-2 text-gray-500">{optionObj.price}</span>
+                <span className="text-gray-500">{optionObj.family}</span>
+                {isOptionChecked && (
+                  <FaCheck className="h-4 w-4 text-blue-500" />
+                )}
+              </DropdownMenu.Item>
+            );
+          })}
+        </DropdownMenu.Content>
+      </DropdownMenu.Root>
+      {/* <fieldset>
         <legend className="font-bold my-1 flex items-center justify-between">
           {label}
         </legend>
@@ -80,42 +119,13 @@ const OptionsForm: React.FC<FormProps> = ({
             );
           })}
         </div>
-      </fieldset>
+      </fieldset> */}
       <div className="my-1 flex items-center justify-between">
         <p>Price</p>
         <p className="mx-2 px-4 py-2 pr-8">
           {error ? "unavailable" : `$${currentForm[`${name}Price`] || ""}`}
         </p>
       </div>
-      {/* <label className="my-1 flex items-center justify-between">
-        {label}
-        <select
-          value={selectedOptions.option}
-          onChange={handleSelectOption}
-          className="block w-2/3 text-wrap mx-2 px-4 py-2 pr-8 bg-gray-100 border border-gray-400 hover:border-gray-500  rounded shadow leading-tight focus:outline-none focus:shadow-outline
-          "
-        >
-          {optionObject?.map((optionObject, i) => {
-            return (
-              <option key={i} value={optionObject.option}>
-                {optionObject.option}
-              </option>
-            );
-          })}
-        </select>
-      </label>
-      <div className="my-1 flex items-center justify-between">
-        <p>Price</p>
-        <p className="mx-2 px-4 py-2 pr-8">
-          {error ? "unavailable" : `$${selectedOptions.price ?? 0}`}
-        </p>
-      </div>
-      <div className="my-1 flex items-center justify-between">
-        <p>Family Plan Eligible?</p>
-        <p className="mx-2 px-4 py-2 pr-8">
-          {error ? "unavailable" : `${selectedOptions.family ?? "N/A"}`}
-        </p>
-      </div> */}
     </div>
   );
 };
