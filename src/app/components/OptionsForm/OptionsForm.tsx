@@ -55,14 +55,14 @@ const OptionsForm: React.FC<FormProps> = ({
           <button className="flex items-center justify-between gap-2 border p-2 rounded-md">
             {selectedArr.length > 0
               ? selectedArr.map((selected) => selected.option).join(" ")
-              : "Select..."}
+              : "NONE"}
             <FaChevronDown className="h-4 w-4" />
           </button>
         </DropdownMenu.Trigger>
 
         <DropdownMenu.Content className="bg-white shadow-lg rounded-md w-56 p-2">
           {optionObject?.map((optionObj, i) => {
-            const isOptionChecked = currentForm[name].some(
+            let isOptionChecked = currentForm[name].some(
               (opt) => opt.option === optionObj.option
             );
             return (
@@ -123,7 +123,7 @@ const OptionsForm: React.FC<FormProps> = ({
       <div className="my-1 flex items-center justify-between">
         <p>Price</p>
         <p className="mx-2 px-4 py-2 pr-8">
-          {error ? "unavailable" : `$${currentForm[`${name}Price`] || ""}`}
+          {error ? "unavailable" : `$${currentForm[`${name}Price`] || "0"}`}
         </p>
       </div>
     </div>
