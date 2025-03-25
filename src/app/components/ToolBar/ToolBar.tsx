@@ -24,28 +24,22 @@ function ToolBar() {
   };
 
   return (
-    // <div className="justify-between p-4 flex flex-row xl:flex-col">
-    <div className="justify-between p-4 flex flex-col">
+    <div className="p-4 grid grid-cols-4">
       <button
         onClick={addForm}
-        className="hidden bg-lime-500 font-bold p-2 rounded xl:flex xl:items-center"
+        className="bg-lime-500 font-bold p-2 rounded xl:flex xl:items-center"
       >
         <IoMdAddCircleOutline />
         Add Another Pair
       </button>
-      <div>
-        <p>Discounts</p>
-        <DiscountForm />
-      </div>
-      <SubTotal />
-      <div className="flex">
-        <button
-          className="self-end my-4 bg-red-600 text-white font-bold p-2 rounded flex items-center justify-between"
-          onClick={handleResetCart}
-        >
-          Reset Cart
-        </button>
-      </div>
+      <button>Discounts</button>
+      <button>Totals</button>
+      <button
+        className="my-4 bg-red-600 text-white font-bold p-2 rounded flex items-center justify-between"
+        onClick={handleResetCart}
+      >
+        Reset Cart
+      </button>
     </div>
   );
 }

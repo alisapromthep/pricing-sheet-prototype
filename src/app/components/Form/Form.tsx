@@ -47,7 +47,7 @@ const Form: React.FC<FormProps> = ({ index, formID }) => {
   };
 
   return (
-    <div className="max-w-md m-4 p-4 border border-gray-200">
+    <div className="m-4 p-4 border border-gray-200">
       <div className=" flex justify-between">
         <button
           onClick={() => {
