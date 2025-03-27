@@ -9,6 +9,8 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        'rv-navy':'#0e334d',
+        'rv-red':'#d6001c',
         background: "var(--background)",
         foreground: "var(--foreground)",
       },

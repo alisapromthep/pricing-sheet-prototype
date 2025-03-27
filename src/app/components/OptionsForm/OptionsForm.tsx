@@ -24,7 +24,7 @@ const OptionsForm: React.FC<FormProps> = ({
   const optionObject = organizeOptionsData(optionsData);
 
   const pricingTool = usePricingContext();
-  const { cart, updateProduct, updateOptions } = pricingTool;
+  const { cart, updateOptions } = pricingTool;
   const currentForm = cart.find((form) => form.id === formID);
   const selectedArr = currentForm[name];
 
@@ -59,7 +59,6 @@ const OptionsForm: React.FC<FormProps> = ({
             <FaChevronDown className="h-4 w-4" />
           </button>
         </DropdownMenu.Trigger>
-
         <DropdownMenu.Content className="bg-white shadow-lg rounded-md w-64 p-2">
           {optionObject?.map((optionObj, i) => {
             const isChecked = selectedArr.some(
