@@ -44,20 +44,14 @@ const OptionsForm: React.FC<FormProps> = ({
     }
   };
 
-  const handleRemoveOption = (optionName: string) => {
-    const updatedOptions = selectedArr.filter(
-      (opt) => opt.option !== optionName
-    );
-    updateOptions(name, updatedOptions, formID);
-  };
-
   if (!optionsData || !label) {
     return <p>loading...</p>;
   }
 
   return (
     <div className="flex flex-col">
-      {/* Dropdown */}
+      <p className="font-bold">{label}</p>
+      <p className="text-sm text-gray-500">Select up to 5 {name}</p>
       <DropdownMenu.Root>
         <DropdownMenu.Trigger asChild>
           <button className="flex items-center justify-between gap-2 border p-2 rounded-md w-64">
