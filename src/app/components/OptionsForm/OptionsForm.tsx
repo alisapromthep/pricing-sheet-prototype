@@ -1,7 +1,7 @@
 "use client";
 
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import { FaCheck, FaChevronDown } from "react-icons/fa";
+import { FaCheck, FaChevronDown, FaTimes } from "react-icons/fa";
 import { organizeOptionsData } from "@/services/organizeData";
 import { useState, useEffect } from "react";
 import { usePricingContext } from "@/lib/context/PricingContext";
@@ -44,25 +44,31 @@ const OptionsForm: React.FC<FormProps> = ({
     }
   };
 
+  const handleRemoveOption = (optionName: string) => {
+    const updatedOptions = selectedArr.filter(
+      (opt) => opt.option !== optionName
+    );
+    updateOptions(name, updatedOptions, formID);
+  };
+
   if (!optionsData || !label) {
     return <p>loading...</p>;
   }
 
   return (
     <div className="flex flex-col">
+      {/* Dropdown */}
       <DropdownMenu.Root>
         <DropdownMenu.Trigger asChild>
-          <button className="flex items-center justify-between gap-2 border p-2 rounded-md">
-            {selectedArr.length > 0
-              ? selectedArr.map((selected) => selected.option).join(" ")
-              : "NONE"}
+          <button className="flex items-center justify-between gap-2 border p-2 rounded-md w-64">
+            {selectedArr.length > 0 ? "Select more..." : "NONE"}
             <FaChevronDown className="h-4 w-4" />
           </button>
         </DropdownMenu.Trigger>
 
-        <DropdownMenu.Content className="bg-white shadow-lg rounded-md w-56 p-2">
+        <DropdownMenu.Content className="bg-white shadow-lg rounded-md w-64 p-2">
           {optionObject?.map((optionObj, i) => {
-            let isOptionChecked = currentForm[name].some(
+            const isChecked = selectedArr.some(
               (opt) => opt.option === optionObj.option
             );
             return (
@@ -71,55 +77,41 @@ const OptionsForm: React.FC<FormProps> = ({
                 onSelect={() =>
                   handleSelectOption(optionObj.option, name, formID)
                 }
-                className={`            flex items-center justify-between p-2 hover:bg-gray-100 cursor-pointer
-              ${isOptionChecked && "font-bold"}`}
+                className={`flex items-center justify-between p-2 hover:bg-gray-100 cursor-pointer ${
+                  isChecked && "font-bold"
+                }`}
               >
-                {optionObj.option}
-                <span className="mr-2 text-gray-500">{optionObj.price}</span>
+                <span>{optionObj.option}</span>
+                <span className="text-gray-500">{optionObj.price}</span>
                 <span className="text-gray-500">{optionObj.family}</span>
-                {isOptionChecked && (
-                  <FaCheck className="h-4 w-4 text-blue-500" />
-                )}
+                {isChecked && <FaCheck className="h-4 w-4 text-blue-500" />}
               </DropdownMenu.Item>
             );
           })}
         </DropdownMenu.Content>
       </DropdownMenu.Root>
-      {/* <fieldset>
-        <legend className="font-bold my-1 flex items-center justify-between">
-          {label}
-        </legend>
-        <legend className="">
-          Choose up to 5 <span className="lowercase">{label}</span>
-        </legend>
-        <div className="grid grid-cols-2">
-          {optionObject?.map((option, i) => {
-            const isOptionChecked = currentForm[name].some(
-              (opt) => opt.option === option.option
-            );
-            return (
-              <div key={i} className="grid grid-cols-2 justify-between">
-                <label>
-                  <input
-                    type="checkbox"
-                    id=""
-                    name="label"
-                    value={option.option}
-                    className="mr-1"
-                    onChange={(e) => handleSelectOption(e, name, formID)}
-                    checked={isOptionChecked}
-                  />
-                  {option.option}
-                </label>
-                <div className="flex flex-row">
-                  <p className="mr-2 text-gray-500">{option.price}</p>
-                  <p className="text-gray-500">{option.family}</p>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </fieldset> */}
+
+      {/* Selected Items List */}
+      <div className="flex flex-wrap gap-2">
+        {selectedArr.map((selected) => (
+          <div
+            key={selected.option}
+            className="flex items-center gap-1 bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm"
+          >
+            <span>{selected.option}</span>
+            <button
+              onClick={() => handleSelectOption(selected.option, name, formID)}
+              className="text-red-500 hover:text-red-700"
+            >
+              <FaTimes className="h-3 w-3" />
+            </button>
+          </div>
+        ))}
+      </div>
+      {/* Error message */}
+      {error && (
+        <p className="text-red-500 text-sm">An error occurred. Try again.</p>
+      )}
       <div className="my-1 flex items-center justify-between">
         <p>Price</p>
         <p className="mx-2 px-4 py-2 pr-8">
