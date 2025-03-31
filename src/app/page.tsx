@@ -12,8 +12,10 @@ export default function Home() {
       <Header />
       <ToolBar />
       <PricingSheet />
-      <DiscountForm />
-      <SubTotal />
+      <div className="p-2 md:p-8 md:grid md:grid-cols-2">
+        <DiscountForm />
+        <SubTotal />
+      </div>
     </div>
   );
 }

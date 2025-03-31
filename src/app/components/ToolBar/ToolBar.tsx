@@ -1,11 +1,10 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { usePricingContext } from "@/lib/context/PricingContext";
 import { useDiscountContext } from "@/lib/context/DiscountContext";
 import { IoMdAddCircleOutline } from "react-icons/io";
-import SubTotal from "../SubTotal/SubTotal";
-import DiscountForm from "../DiscountForm/DiscountForm";
 
 function ToolBar() {
   const pricingTool = usePricingContext();
@@ -24,27 +23,33 @@ function ToolBar() {
   };
 
   return (
-    <div className="p-2 grid grid-cols-5">
+    <div className="p-2 md:px-8 md:py-4 grid grid-cols-5 bg-rv-navy">
       <button
         onClick={addForm}
-        className="max-w-24 px-2 py-1 text-sm  bg-emerald-300 hover:bg-emerald-500 font-bold rounded flex items-center justify-center"
+        className="max-w-24 px-2 py-1 text-sm md:text-base  bg-emerald-300 hover:bg-emerald-500 font-bold rounded flex items-center justify-center"
       >
         <IoMdAddCircleOutline />
         Add
       </button>
-      <button className="max-w-24 px-2 py-1 text-sm rounded border border-rv-navy hover:bg-sky-50 ">
+      <Link
+        href="#discount-section"
+        className="max-w-24 px-2 py-1 bg-white text-xs md:text-base text-bold rounded border border-rv-navy hover:bg-sky-50 "
+      >
         Discounts
-      </button>
-      <button className="max-w-24 px-2 py-1 text-sm rounded border border-rv-navy hover:bg-sky-50 ">
+      </Link>
+      <Link
+        href="#total-section"
+        className="max-w-24 px-2 py-1 bg-white text-sm md:text-base text-bold rounded border border-rv-navy hover:bg-sky-50 "
+      >
         Totals
-      </button>
+      </Link>
       <button
-        className="max-w-24 px-2 py-1 text-sm bg-red-600 hover:bg-red-800 text-white font-bold rounded flex items-center justify-center"
+        className="max-w-24 px-2 py-1 text-sm md:text-base bg-red-600 hover:bg-red-800 text-white font-bold rounded flex items-center justify-center"
         onClick={handleResetCart}
       >
         Reset
       </button>
-      <button className="max-w-24 px-2 py-1 text-sm rounded border border-rv-navy hover:bg-sky-50 ">
+      <button className="max-w-24 px-2 py-1 bg-white text-sm md:text-base text-bold rounded border border-rv-navy hover:bg-sky-50 ">
         Login
       </button>
     </div>

@@ -92,7 +92,7 @@ const DiscountForm: React.FC = () => {
     applyDiscount(cart, discountSelected);
   };
   return (
-    <div className="p-2 text-sm flex flex-col">
+    <div id="discount-section" className="text-sm md:text-base flex flex-col">
       <form onSubmit={handleApplyDiscounts}>
         {availableDiscounts.map((discount) => {
           const { id, name, checkboxConditions, internalConditions } = discount;
