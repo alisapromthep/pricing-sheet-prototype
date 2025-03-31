@@ -92,7 +92,7 @@ const DiscountForm: React.FC = () => {
     applyDiscount(cart, discountSelected);
   };
   return (
-    <div className="flex flex-col">
+    <div className="p-2 text-sm flex flex-col">
       <form onSubmit={handleApplyDiscounts}>
         {availableDiscounts.map((discount) => {
           const { id, name, checkboxConditions, internalConditions } = discount;
@@ -168,7 +168,7 @@ const DiscountForm: React.FC = () => {
             </div>
           );
         })}
-        <button type="submit" className="bg-lime-500 font-bold p-2 rounded">
+        <button type="submit" className="bg-emerald-300 font-bold p-2 rounded">
           Apply Discount
         </button>
         <div>

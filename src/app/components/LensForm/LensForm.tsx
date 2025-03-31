@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import {
   getProductTypes,
-  getProductListInfo,
   getSelectedProductInfo,
   getProductIndexes,
   getCategoriesList,
@@ -145,7 +144,7 @@ const LensForm: React.FC<LensFormProps> = ({ formID }) => {
         <select
           value={currentForm.category}
           onChange={(e) => handleSelectChange(e, "category")}
-          className="mx-2 px-4 py-2 pr-8 bg-gray-100 border border-gray-400 hover:border-gray-500  rounded shadow leading-tight focus:outline-none focus:shadow-outline
+          className="mx-2 px-4 py-2 pr-8 border border-rv-navy hover:bg-sky-50  rounded shadow leading-tight focus:outline-none focus:shadow-outline
           "
         >
           {formOptions.lensCategories.map((category, i) => (
@@ -160,7 +159,7 @@ const LensForm: React.FC<LensFormProps> = ({ formID }) => {
         <select
           value={currentForm.model}
           onChange={(e) => handleSelectChange(e, "model")}
-          className="mx-2 px-4 py-2 pr-8 bg-gray-100 border border-gray-400 hover:border-gray-500  rounded shadow leading-tight focus:outline-none focus:shadow-outline
+          className="mx-2 px-4 py-2 pr-8 border border-rv-navy hover:bg-sky-50  rounded shadow leading-tight focus:outline-none focus:shadow-outline
           "
         >
           {formOptions.productList &&
@@ -176,7 +175,7 @@ const LensForm: React.FC<LensFormProps> = ({ formID }) => {
         <select
           value={currentForm.selectedIndex}
           onChange={(e) => handleSelectChange(e, "index")}
-          className="mx-2 px-4 py-2 pr-8 bg-gray-100 border border-gray-400 hover:border-gray-500  rounded shadow leading-tight focus:outline-none focus:shadow-outline
+          className="mx-2 px-4 py-2 pr-8  border border-rv-navy hover:bg-sky-50  rounded shadow leading-tight focus:outline-none focus:shadow-outline
           "
         >
           {formOptions.productIndexes.map((type, i) => (

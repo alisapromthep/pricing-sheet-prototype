@@ -5,7 +5,6 @@ import { FaCheck, FaChevronDown, FaTimes } from "react-icons/fa";
 import { organizeOptionsData } from "@/services/organizeData";
 import { useState, useEffect } from "react";
 import { usePricingContext } from "@/lib/context/PricingContext";
-import SelectedButton from "../SelectedButton/SelectedButton";
 
 type FormProps = {
   optionsData: string[][];
@@ -49,12 +48,12 @@ const OptionsForm: React.FC<FormProps> = ({
   }
 
   return (
-    <div className="flex flex-col">
+    <div className="text-sm flex flex-col">
       <p className="font-bold">{label}</p>
       <p className="text-sm text-gray-500">Select up to 5 {name}</p>
       <DropdownMenu.Root>
         <DropdownMenu.Trigger asChild>
-          <button className="flex items-center justify-between gap-2 border p-2 rounded-md w-64">
+          <button className="border-rv-navy flex items-center justify-between gap-2 border p-2 rounded-md w-64">
             {selectedArr.length > 0 ? "Select more..." : "NONE"}
             <FaChevronDown className="h-4 w-4" />
           </button>
@@ -70,7 +69,7 @@ const OptionsForm: React.FC<FormProps> = ({
                 onSelect={() =>
                   handleSelectOption(optionObj.option, name, formID)
                 }
-                className={`flex items-center justify-between p-2 hover:bg-gray-100 cursor-pointer ${
+                className={`border-rv-navy flex items-center justify-between p-2 hover:bg-sky-50 cursor-pointer ${
                   isChecked && "font-bold"
                 }`}
               >
@@ -89,7 +88,7 @@ const OptionsForm: React.FC<FormProps> = ({
         {selectedArr.map((selected) => (
           <div
             key={selected.option}
-            className="flex items-center gap-1 bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm"
+            className="flex items-center gap-1 bg-sky-100 text-rv-navy px-3 py-1 rounded-full text-sm"
           >
             <span>{selected.option}</span>
             <button

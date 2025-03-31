@@ -24,21 +24,28 @@ function ToolBar() {
   };
 
   return (
-    <div className="p-4 grid grid-cols-4">
+    <div className="p-2 grid grid-cols-5">
       <button
         onClick={addForm}
-        className="bg-lime-500 font-bold p-2 rounded xl:flex xl:items-center"
+        className="max-w-24 px-2 py-1 text-sm  bg-emerald-300 hover:bg-emerald-500 font-bold rounded flex items-center justify-center"
       >
         <IoMdAddCircleOutline />
-        Add Another Pair
+        Add
       </button>
-      <button>Discounts</button>
-      <button>Totals</button>
+      <button className="max-w-24 px-2 py-1 text-sm rounded border border-rv-navy hover:bg-sky-50 ">
+        Discounts
+      </button>
+      <button className="max-w-24 px-2 py-1 text-sm rounded border border-rv-navy hover:bg-sky-50 ">
+        Totals
+      </button>
       <button
-        className="my-4 bg-red-600 text-white font-bold p-2 rounded flex items-center justify-between"
+        className="max-w-24 px-2 py-1 text-sm bg-red-600 hover:bg-red-800 text-white font-bold rounded flex items-center justify-center"
         onClick={handleResetCart}
       >
-        Reset Cart
+        Reset
+      </button>
+      <button className="max-w-24 px-2 py-1 text-sm rounded border border-rv-navy hover:bg-sky-50 ">
+        Login
       </button>
     </div>
   );

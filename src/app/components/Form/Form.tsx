@@ -28,9 +28,8 @@ const Form: React.FC<FormProps> = ({ index, formID }) => {
   if (!data) {
     return <p>loading...</p>;
   }
-  const { sheetsData, loading, error } = data;
-  const { addOn, lens, lensTreatment, mcssAddon, packages, superflexAddon } =
-    sheetsData;
+  const { sheetsData } = data;
+  const { addOn, lensTreatment } = sheetsData;
 
   const handleInputFramePrice = (
     e: React.KeyboardEvent<HTMLInputElement>,
@@ -47,7 +46,7 @@ const Form: React.FC<FormProps> = ({ index, formID }) => {
   };
 
   return (
-    <div className="m-4 p-4 border border-gray-200">
+    <div className="p-2 text-sm border border-gray-200">
       <div className=" flex justify-between">
         <button
           onClick={() => {
