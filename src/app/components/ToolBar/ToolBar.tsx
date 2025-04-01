@@ -23,33 +23,33 @@ function ToolBar() {
   };
 
   return (
-    <div className="p-2 md:px-8 md:py-4 grid grid-cols-5 bg-rv-navy">
+    <div className="sticky top-0 py-2 md:px-8 md:py-4 grid grid-cols-5 bg-rv-navy gap-1">
       <button
         onClick={addForm}
-        className="max-w-24 px-2 py-1 text-sm md:text-base  bg-emerald-300 hover:bg-emerald-500 font-bold rounded flex items-center justify-center"
+        className="max-w-24 p-1 text-white text-sm md:text-base font-bold rounded flex items-center justify-center"
       >
         <IoMdAddCircleOutline />
         Add
       </button>
       <Link
         href="#discount-section"
-        className="max-w-24 px-2 py-1 bg-white text-xs md:text-base text-bold rounded border border-rv-navy hover:bg-sky-50 "
+        className="max-w-24 p-1 text-white  text-sm md:text-base text-bold rounded border border-rv-navy "
       >
         Discounts
       </Link>
       <Link
         href="#total-section"
-        className="max-w-24 px-2 py-1 bg-white text-sm md:text-base text-bold rounded border border-rv-navy hover:bg-sky-50 "
+        className="max-w-24 p-1 text-white text-sm md:text-base text-bold rounded border border-rv-navy"
       >
         Totals
       </Link>
       <button
-        className="max-w-24 px-2 py-1 text-sm md:text-base bg-red-600 hover:bg-red-800 text-white font-bold rounded flex items-center justify-center"
+        className="max-w-24 p-1 text-sm md:text-base text-white font-bold rounded flex items-center justify-center"
         onClick={handleResetCart}
       >
         Reset
       </button>
-      <button className="max-w-24 px-2 py-1 bg-white text-sm md:text-base text-bold rounded border border-rv-navy hover:bg-sky-50 ">
+      <button className="max-w-24 p-1 text-white first-line:text-sm md:text-base text-bold rounded border border-rv-navy ">
         Login
       </button>
     </div>
