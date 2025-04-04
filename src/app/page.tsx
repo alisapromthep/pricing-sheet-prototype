@@ -1,21 +1,10 @@
-"use client";
-import DiscountForm from "./components/DiscountForm/DiscountForm";
-import PricingSheet from "./components/PricingSheet/PricingSheet";
-import SubTotal from "./components/SubTotal/SubTotal";
-import ToolBar from "./components/ToolBar/ToolBar";
 import Header from "./components/Header/Header";
 
 export default function Home() {
-  console.log("PricingSheet", PricingSheet);
   return (
-    <div className="">
+    <div>
       <Header />
-      <ToolBar />
-      <PricingSheet />
-      <div className="p-2 md:p-8 md:grid md:grid-cols-2">
-        <DiscountForm />
-        <SubTotal />
-      </div>
+      <h1>Login</h1>
     </div>
   );
 }
