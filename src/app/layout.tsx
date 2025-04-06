@@ -4,6 +4,7 @@ import "./globals.css";
 import { GoogleSheetsProvider } from "@/lib/context/GoogleSheetsContext";
 import { PricingProvider } from "@/lib/context/PricingContext";
 import { DiscountProvider } from "@/lib/context/DiscountContext";
+import { ClerkProvider, SignedIn, SignedOut, SignIn } from "@clerk/nextjs";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -28,17 +29,22 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <GoogleSheetsProvider>
-        <PricingProvider>
-          <DiscountProvider>
-            <body
-              className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-            >
-              {children}
-            </body>
-          </DiscountProvider>
-        </PricingProvider>
-      </GoogleSheetsProvider>
+      <ClerkProvider>
+        <GoogleSheetsProvider>
+          <PricingProvider>
+            <DiscountProvider>
+              <body
+                className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+              >
+                <SignedOut>
+                  <SignIn routing="hash" />
+                </SignedOut>
+                <SignedIn>{children}</SignedIn>
+              </body>
+            </DiscountProvider>
+          </PricingProvider>
+        </GoogleSheetsProvider>
+      </ClerkProvider>
     </html>
   );
 }
