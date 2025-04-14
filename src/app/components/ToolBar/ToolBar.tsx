@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePricingContext } from "@/lib/context/PricingContext";
 import { useDiscountContext } from "@/lib/context/DiscountContext";
 import { IoMdAddCircleOutline } from "react-icons/io";
+import { SignOutButton, SingOutButton } from "@clerk/nextjs";
 
 function ToolBar() {
   const pricingTool = usePricingContext();
@@ -49,9 +50,11 @@ function ToolBar() {
       >
         Reset
       </button>
-      <button className="max-w-24 p-1 text-white first-line:text-sm md:text-base text-bold rounded border border-rv-navy ">
-        Login
-      </button>
+      <SignOutButton>
+        <button className="max-w-24 p-1 text-white first-line:text-sm md:text-base text-bold rounded border border-rv-navy ">
+          Log Out
+        </button>
+      </SignOutButton>
     </div>
   );
 }
