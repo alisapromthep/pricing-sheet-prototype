@@ -5,6 +5,7 @@ import { GoogleSheetsProvider } from "@/lib/context/GoogleSheetsContext";
 import { PricingProvider } from "@/lib/context/PricingContext";
 import { DiscountProvider } from "@/lib/context/DiscountContext";
 import { ClerkProvider, SignedIn, SignedOut, SignIn } from "@clerk/nextjs";
+import Header from "@/app/components/Header/Header";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -29,22 +30,33 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <ClerkProvider>
-        <GoogleSheetsProvider>
-          <PricingProvider>
-            <DiscountProvider>
-              <body
-                className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-              >
-                <SignedOut>
-                  <SignIn routing="hash" />
-                </SignedOut>
-                <SignedIn>{children}</SignedIn>
-              </body>
-            </DiscountProvider>
-          </PricingProvider>
-        </GoogleSheetsProvider>
-      </ClerkProvider>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <ClerkProvider>
+          <GoogleSheetsProvider>
+            <PricingProvider>
+              <DiscountProvider>
+                <Header />
+                <main className="min-h-screen flex items-center justify-center">
+                  <SignedOut>
+                    <SignIn
+                      routing="hash"
+                      signUpUrl={undefined}
+                      appearance={{
+                        elements: {
+                          formButtonPrimary: "bg-blue-600 hover:bg-blue-700",
+                        },
+                      }}
+                    />
+                  </SignedOut>
+                  <SignedIn>{children}</SignedIn>
+                </main>
+              </DiscountProvider>
+            </PricingProvider>
+          </GoogleSheetsProvider>
+        </ClerkProvider>
+      </body>
     </html>
   );
 }
