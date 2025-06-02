@@ -38,7 +38,7 @@ export default function RootLayout({
             <PricingProvider>
               <DiscountProvider>
                 <Header />
-                <main className="min-h-screen flex items-center justify-center">
+                <main>
                   <SignedOut>
                     <SignIn
                       routing="hash"

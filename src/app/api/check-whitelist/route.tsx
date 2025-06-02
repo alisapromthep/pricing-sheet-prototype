@@ -1,20 +1,20 @@
 import { getWhiteListedEmails } from "@/lib/googleSheets";
 import { auth } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
 
 export async function GET() {
-  const { userId, sessionClaims } = auth();
-  const email = sessionClaims?.email;
-
-  if (!email) {
-    return new Response("Unauthorized", { status: 401 });
-  }
-
+  const authObject = auth();
+  console.log("authObject", authObject);
+  // const email = sessionClaims?.email;
+  // console.log("email", email);
   const whitelist = await getWhiteListedEmails();
-  const isAllowed = whitelist.includes(email);
+  console.log("whitelist", whitelist);
 
-  if (!isAllowed) {
-    return new Response("Forbidden", { status: 403 });
-  }
+  //const isAllowed = whitelist.includes(email);
 
-  return Response.json({ allowed: true });
+  // if (!isAllowed) {
+  //   return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  // }
+
+  return NextResponse.json({ ok: true });
 }
