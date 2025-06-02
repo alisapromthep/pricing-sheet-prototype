@@ -5,7 +5,7 @@ export function getProductTypes(data: string[]) {
   if (!data) {
     return;
   }
-  let productTypes: string[] = [];
+  const productTypes: string[] = [];
 
   for (let i = 1; i < data.length; i++) {
     if (productTypes.includes(data[i][1]) === false) {
@@ -18,7 +18,7 @@ export function getProductTypes(data: string[]) {
 
 export function getProductListInfo(
   selectedType: string,
-  productsByCategory: {}
+  productsByCategory: Record<string, any[]>
 ) {
   return productsByCategory[selectedType];
 }
@@ -79,12 +79,16 @@ export function getCategoriesList(data) {
   if (!data) {
     return;
   }
-  const listByCategory = data.slice(1).reduce((acc, [_id, category]) => {
-    if (!acc[category]) {
-      acc[category] = [];
-    }
-    return acc;
-  }, []);
+  const listByCategory = data
+    .slice(1)
+    .reduce((acc: Record<string, any[]>, [_id, category]) => {
+      if (category) {
+        if (!acc[category]) {
+          acc[category] = [];
+        }
+      }
+      return acc;
+    }, []);
 
   return listByCategory;
 }
