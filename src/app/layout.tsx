@@ -4,6 +4,7 @@ import "./globals.css";
 import { GoogleSheetsProvider } from "@/lib/context/GoogleSheetsContext";
 import { PricingProvider } from "@/lib/context/PricingContext";
 import { DiscountProvider } from "@/lib/context/DiscountContext";
+import Header from "./components/Header/Header";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -31,6 +32,7 @@ export default function RootLayout({
       <GoogleSheetsProvider>
         <PricingProvider>
           <DiscountProvider>
+            <Header />
             <body
               className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >
