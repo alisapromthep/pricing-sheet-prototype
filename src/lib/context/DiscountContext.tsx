@@ -36,11 +36,11 @@ interface DiscountContextType {
   isDiscountApplicable: (
     cart: selectedProductType[],
     discountSelected: DiscountItemType[]
-  ) => any;
+  ) => void;
   applyDiscount: (
     cart: selectedProductType[],
     discountSelected: DiscountItemType[]
-  ) => any;
+  ) => void;
   discountedPrice: number;
   setDiscountedPrice: React.Dispatch<React.SetStateAction<number>>;
   discountedProducts: DiscountedProductType[];
@@ -62,7 +62,7 @@ export const DiscountProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const data = useGoogleSheetsContext();
   const pricingTool = usePricingContext();
-  const { updateProduct, totalPrice } = pricingTool;
+  const { updateProduct } = pricingTool;
 
   const [availableDiscounts, setAvailableDiscounts] = useState<
     DiscountItemType[]
@@ -78,15 +78,16 @@ export const DiscountProvider: React.FC<{ children: ReactNode }> = ({
 
   const [discountErrors, setDiscountErrors] = useState<string>("");
 
+  const { sheetsData } = data || {};
+
   if (!data) {
     return <p>loading...</p>;
   }
-  const { sheetsData, loading, error } = data;
 
   //get discount Information
 
   useEffect(() => {
-    if (sheetsData.discounts) {
+    if (sheetsData?.discounts) {
       const discountItems = organizeDiscountInfo(sheetsData.discounts);
       setAvailableDiscounts(discountItems);
     }
@@ -162,8 +163,10 @@ export const DiscountProvider: React.FC<{ children: ReactNode }> = ({
     });
   };
 
-  //TODO: Add discount calculations, BOGO and Family plans
-  const applyDiscount = (cart, discountSelected) => {
+  const applyDiscount = (
+    cart: selectedProductType[],
+    discountSelected: DiscountItemType[]
+  ) => {
     const checkboxResult = verifyCheckBoxConditions(discountSelected);
     const internalResult = verifyInternalConditions(discountSelected);
 
@@ -171,7 +174,7 @@ export const DiscountProvider: React.FC<{ children: ReactNode }> = ({
     //if not met return error
     //all conditions met
     if (!checkboxResult || !internalResult) {
-      setDiscountErrors((prev) => "some conditions are not met");
+      setDiscountErrors("some conditions are not met");
       return;
     } else {
       //for calculations:
@@ -181,13 +184,8 @@ export const DiscountProvider: React.FC<{ children: ReactNode }> = ({
       if (discountSelected.length === 1) {
         //not combinable, so only one discount to process
         const currentDiscount = discountSelected[0];
-        const {
-          applyOn,
-          discountType,
-          discountValue,
-          applyToProduct,
-          applyToNth,
-        } = currentDiscount;
+        const { discountType, discountValue, applyToProduct, applyToNth } =
+          currentDiscount;
 
         const smallestPriceProducts = getNthSmallestPrices(
           cart,

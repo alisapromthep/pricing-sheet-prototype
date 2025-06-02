@@ -10,7 +10,7 @@ import React, {
 import { getGoogleSheetData } from "@/services/getGoogleData";
 
 interface SheetData {
-  [key: string]: any[];
+  [key: string]: string[];
 }
 
 interface GoogleSheetsContextType {
@@ -37,8 +37,24 @@ export const GoogleSheetsProvider: React.FC<{ children: ReactNode }> = ({
         const data = await getGoogleSheetData();
         //console.log(data);
         setSheetsData(data);
-      } catch (err: any) {
-        setError(err.message || "Failed to fetch sheets data");
+      } catch (err: unknown) {
+        // Now you MUST check the type of 'err' before using its properties
+        let errorMessage = "An unknown error occurred";
+
+        if (err instanceof Error) {
+          errorMessage = err.message;
+        } else if (typeof err === "string") {
+          errorMessage = err;
+        } else if (
+          err &&
+          typeof err === "object" &&
+          "message" in err &&
+          typeof err.message === "string"
+        ) {
+          errorMessage = err.message;
+        }
+
+        setError(errorMessage || "Failed to fetch sheets data");
       } finally {
         setLoading(false);
       }
@@ -47,9 +63,9 @@ export const GoogleSheetsProvider: React.FC<{ children: ReactNode }> = ({
     fetchSheetsData();
   }, []);
 
-  const addSheetData = (sheetName: string, data: any[]) => {
-    setSheetsData((prev) => ({ ...prev, [sheetName]: data }));
-  };
+  // const addSheetData = (sheetName: string, data: any[]) => {
+  //   setSheetsData((prev) => ({ ...prev, [sheetName]: data }));
+  // };
 
   return (
     <GoogleSheetsContext.Provider value={{ sheetsData, loading, error }}>

@@ -1,15 +1,30 @@
-import { ProductItem } from "@/lib/ProductItem";
 import crypto from "crypto";
+import { selectedProductType } from "@/app/_types/ProductTypes";
 import {
-  ProductItemsType,
-  selectedProductType,
-} from "@/app/_types/ProductTypes";
-import {
-  DiscountDataType,
   DiscountItemType,
   DISCOUNT_CONDITIONS,
-  DiscountedProductType,
 } from "@/app/_types/DiscountTypes";
+
+type RawDiscountRow = string[];
+interface ParsedCheckboxCondition {
+  id: string;
+  label: string;
+  conditionMet: boolean;
+  errorMessage: string;
+}
+
+interface ParsedInternalCondition {
+  id: string;
+  condition: string;
+  requiredValue: string | boolean | number;
+  conditionMet: boolean;
+  errorMessage?: string;
+}
+
+interface ConditionCheckResult {
+  conditionMet: boolean;
+  errorMessage: string;
+}
 
 function generateConsistentId(baseId: string, prefix: string = "cond") {
   const hash = crypto
@@ -22,14 +37,14 @@ function generateConsistentId(baseId: string, prefix: string = "cond") {
 
 //isolate and organize discount information into object
 export function organizeDiscountInfo(
-  data: string[]
+  data: string[][]
 ): DiscountItemType[] | string {
   if (!Array.isArray(data) || data.length === 0) {
     return "Invalid input: Data must be a non-empty array.";
   }
 
   const headers = data[0];
-  const discountsInfo: any[] = [];
+  const discountsInfo: DiscountItemType[] = [];
 
   for (let i = 1; i < data.length; i++) {
     const rowData = data[i];

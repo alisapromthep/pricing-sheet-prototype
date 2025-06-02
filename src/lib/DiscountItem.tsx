@@ -2,7 +2,7 @@ import { ProductItem } from "@/lib/ProductItem";
 import { selectedProductType } from "@/app/_types/ProductTypes";
 import {
   DISCOUNT_CONDITIONS,
-  DiscountInfoType,
+  DiscountItemType,
 } from "@/app/_types/DiscountTypes";
 import {
   checkMinPurchase,
@@ -50,7 +50,7 @@ export class DiscountItem {
 
   checkInternalConditions(
     cart: selectedProductType[],
-    discountSelected: DiscountInfoType[]
+    discountSelected: DiscountItemType[]
   ) {
     let allConditionsMet = true;
 
