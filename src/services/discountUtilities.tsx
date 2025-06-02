@@ -37,7 +37,7 @@ function generateConsistentId(baseId: string, prefix: string = "cond") {
 
 //isolate and organize discount information into object
 export function organizeDiscountInfo(
-  data: string[][]
+  data: string[]
 ): DiscountItemType[] | string {
   if (!Array.isArray(data) || data.length === 0) {
     return "Invalid input: Data must be a non-empty array.";

@@ -87,11 +87,24 @@ export const DiscountProvider: React.FC<{ children: ReactNode }> = ({
   //get discount Information
 
   useEffect(() => {
-    if (sheetsData?.discounts) {
+    if (sheetsData && sheetsData.discounts) {
       const discountItems = organizeDiscountInfo(sheetsData.discounts);
-      setAvailableDiscounts(discountItems);
+      if (typeof discountItems === "string") {
+        // Handle the error returned by organizeDiscountInfo
+        console.error("Error organizing discount info:", discountItems);
+        setAvailableDiscounts([]); // Or handle error state appropriately
+      } else {
+        setAvailableDiscounts(discountItems);
+      }
     }
   }, [sheetsData]);
+
+  // useEffect(() => {
+  //   if (sheetsData?.discounts) {
+  //     const discountItems = organizeDiscountInfo(sheetsData.discounts);
+  //     setAvailableDiscounts(discountItems);
+  //   }
+  // }, [sheetsData]);
 
   //Individual discount condition checks function in discountConditionChecks file
   //
