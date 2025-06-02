@@ -24,7 +24,6 @@ import {
   verifyInternalConditions,
   getNthSmallestPrices,
   calculateDiscountedPrice,
-  calculateDiscountedTotal,
 } from "@/services/discountUtilities";
 import { usePricingContext } from "@/lib/context/PricingContext";
 

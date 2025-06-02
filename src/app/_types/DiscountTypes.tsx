@@ -20,7 +20,7 @@ export interface DiscountItemType {
   }[];
   internalConditions: {
     condition: string;
-    requiredValue?: any;
+    requiredValue?: string | number | boolean;
     conditionMet: boolean;
     errorMessage?: string;
   }[];
@@ -33,11 +33,11 @@ export const DISCOUNT_CONDITIONS = {
   FULL_SET_PURCHASE: "FULl_SET_PURCHASE",
 };
 
-interface DiscountConditionType {
-  condition: string | number;
-  conditionMet?: boolean;
-  errorMessage?: string; // Optional error message
-}
+// interface DiscountConditionType {
+//   condition: string | number;
+//   conditionMet?: boolean;
+//   errorMessage?: string; // Optional error message
+// }
 
 //discount object inside discountSelected state
 /** discount = {
@@ -46,7 +46,7 @@ interface DiscountConditionType {
     * errorMessage: '',
    } */
 
-interface DiscountedProductType {
+export interface DiscountedProductType {
   applyToProduct: string;
   discountAmount: number;
   discountedPrice: number;
