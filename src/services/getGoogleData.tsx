@@ -19,7 +19,7 @@ export async function getGoogleSheetData(): Promise<Record<string, any[][]>> {
   ];
 
   const response = await sheets.spreadsheets.values.batchGet({
-    spreadsheetId: process.env.SHEET_ID!,
+    spreadsheetId: process.env.SHEET_ID_BETA!,
     ranges,
   });
 
