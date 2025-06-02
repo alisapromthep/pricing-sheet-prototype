@@ -32,11 +32,11 @@ export default function RootLayout({
       <GoogleSheetsProvider>
         <PricingProvider>
           <DiscountProvider>
-            <Header />
             <body
               className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >
-              {children}
+              <Header />
+              <main>{children}</main>
             </body>
           </DiscountProvider>
         </PricingProvider>

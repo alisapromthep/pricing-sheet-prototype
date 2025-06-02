@@ -49,9 +49,6 @@ function ToolBar() {
       >
         Reset
       </button>
-      <button className="max-w-24 p-1 text-white first-line:text-sm md:text-base text-bold rounded border border-rv-navy ">
-        Login
-      </button>
     </div>
   );
 }

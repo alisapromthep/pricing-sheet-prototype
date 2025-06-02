@@ -1,28 +1,26 @@
 "use client";
-import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
+  const router = useRouter();
+
   const handlePasswordSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real application, you would validate the password here (e.g., against an environment variable or API)
-    // For this beta, we'll use a simple client-side check.
-    if (password === "redhouse2024") {
-      // Example password
-      window.location.href = "/hoyacalculator"; // Redirect on success
-    } else {
-      setError("Incorrect password. Please try again.");
+    if (!password) {
+      setError("Please enter a password.");
+      return;
     }
+    // Redirect to the landing page with the password as a query parameter.
+    // The middleware will then handle the validation and redirection.
+    router.push(`/?password=${encodeURIComponent(password)}`);
   };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[calc(100vh-64px)] bg-white text-black p-4">
-      {/* Assuming your header takes up some height, min-h-[calc(100vh-header-height)] ensures content is centered below it */}
-      {/* For example, if your header is 64px tall, use min-h-[calc(100vh-64px)] */}
-
       <h1 className="text-4xl md:text-5xl font-bold mb-8 text-rv-navy">
         Welcome to RedHouse Vision Center
       </h1>
