@@ -80,9 +80,9 @@ export const DiscountProvider: React.FC<{ children: ReactNode }> = ({
 
   const { sheetsData } = data || {};
 
-  if (!data) {
-    return <p>loading...</p>;
-  }
+  // if (!data) {
+  //   return <p>loading...</p>;
+  // }
 
   //get discount Information
 
