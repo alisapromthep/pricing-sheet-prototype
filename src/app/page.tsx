@@ -14,7 +14,6 @@ export default function Home() {
       setError("Please enter a password.");
       return;
     }
-    // Redirect to the landing page with the password as a query parameter.
     // The middleware will then handle the validation and redirection.
     router.push(`/?password=${encodeURIComponent(password)}`);
   };
