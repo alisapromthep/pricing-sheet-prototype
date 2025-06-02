@@ -4,7 +4,7 @@ import type { NextRequest } from 'next/server';
 // This is where you would store your actual password.
 // For production, **DO NOT hardcode this value here**.
 // Use environment variables (e.g., process.env.HOYA_CALCULATOR_PASSWORD).
-const SECRET_PASSWORD = process.env.CALCULATOR_PASSWORD || "redhouse2024"; // Fallback for development if env not set
+const SECRET_PASSWORD = process.env.CALCULATOR_PASSWORD
 
 export function middleware(request: NextRequest) {
   const url = request.nextUrl;
