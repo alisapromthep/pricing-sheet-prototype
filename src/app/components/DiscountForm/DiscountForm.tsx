@@ -54,8 +54,10 @@ const DiscountForm: React.FC = () => {
         const newSelection = availableDiscounts.find(
           (discount) => discount.id === value
         );
-
-        return [...prevSelected, newSelection];
+        if (newSelection) {
+          return [...prevSelected, newSelection];
+        }
+        return prevSelected;
       }
     });
   };
@@ -65,6 +67,31 @@ const DiscountForm: React.FC = () => {
     discountID: string
   ) => {
     const { checked, value: conditionID } = e.target;
+
+    // setDiscountSelected((prevSelected) => {
+    //   const value = e.target.value;
+    //   const doesExists = prevSelected.findIndex(
+    //     (discount) => discount.id === value
+    //   );
+
+    //   if (doesExists !== -1) {
+    //     const updatedSelection = prevSelected.filter(
+    //       (discount) => discount.id !== value
+    //     );
+    //     return updatedSelection;
+    //   } else {
+    //     const newDiscountToAdd = availableDiscounts.find(
+    //       (discount) => discount.id === value
+    //     );
+
+    //     if (newDiscountToAdd) {
+    //       return [...prevSelected, newDiscountToAdd];
+    //     } else {
+    //       console.warn(`Attempted to add unknown discount with ID: ${value}`);
+    //       return prevSelected;
+    //     }
+    //   }
+    // });
 
     setDiscountSelected((prevDiscountSelected) => {
       return prevDiscountSelected.map((discount) => {
