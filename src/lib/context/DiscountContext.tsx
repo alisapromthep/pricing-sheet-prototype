@@ -263,5 +263,15 @@ export const DiscountProvider: React.FC<{ children: ReactNode }> = ({
 };
 
 export function useDiscountContext() {
-  return useContext(DiscountContext);
+  const context = useContext(DiscountContext);
+  if (context === undefined) {
+    throw new Error(
+      "useDiscountContext must be used within a DiscountProvider"
+    );
+  }
+  return context;
 }
+
+// export function useDiscountContext() {
+//   return useContext(DiscountContext);
+// }
