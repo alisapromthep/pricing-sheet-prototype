@@ -170,10 +170,10 @@ const DiscountForm: React.FC = () => {
                     })}
                   </div>
                 )}
-                {isChecked && (
+                {isChecked && checkboxConditions && (
                   <div>
                     {/* Checkbox Condition Errors */}
-                    {selectedDiscount.checkboxConditions?.map((cond) =>
+                    {selectedDiscount?.checkboxConditions?.map((cond) =>
                       cond.errorMessage ? (
                         <p key={cond.id} className="text-red-500">
                           {cond.errorMessage}
@@ -182,7 +182,7 @@ const DiscountForm: React.FC = () => {
                     )}
 
                     {/* Internal Condition Errors */}
-                    {selectedDiscount.internalConditions?.map((cond) =>
+                    {selectedDiscount?.internalConditions?.map((cond) =>
                       cond.errorMessage ? (
                         <p key={cond.id} className="text-red-500">
                           {cond.errorMessage}
