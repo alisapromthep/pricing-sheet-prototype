@@ -278,5 +278,13 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
 };
 
 export function usePricingContext() {
-  return useContext(PricingContext);
+  const context = useContext(PricingContext);
+  if (context === undefined) {
+    throw new Error("usePricingContext must be used within a PricingProvider");
+  }
+  return context;
 }
+
+// export function usePricingContext() {
+//   return useContext(PricingContext);
+// }
