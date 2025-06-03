@@ -184,7 +184,7 @@ const DiscountForm: React.FC = () => {
                     {/* Internal Condition Errors */}
                     {selectedDiscount?.internalConditions?.map((cond) =>
                       cond.errorMessage ? (
-                        <p key={cond.id} className="text-red-500">
+                        <p key={cond.condition} className="text-red-500">
                           {cond.errorMessage}
                         </p>
                       ) : null
