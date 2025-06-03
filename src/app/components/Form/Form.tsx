@@ -32,8 +32,8 @@ const Form: React.FC<FormProps> = ({ index, formID }) => {
   const { addOn, lensTreatment } = sheetsData;
 
   const handleInputFramePrice = (
-    e: React.KeyboardEvent<HTMLInputElement>,
-    formID
+    e: React.ChangeEvent<HTMLInputElement>,
+    formID: string | number
   ) => {
     const { name, value } = e.target;
     const updatedValue = value === "" ? null : Number(value);
@@ -71,7 +71,7 @@ const Form: React.FC<FormProps> = ({ index, formID }) => {
           <input
             name="framePrice"
             type="number"
-            value={currentForm.framePrice || ""}
+            value={currentForm?.framePrice || ""}
             onChange={(e) => handleInputFramePrice(e, formID)}
             placeholder="Enter frame price"
           />
@@ -97,13 +97,13 @@ const Form: React.FC<FormProps> = ({ index, formID }) => {
         <label className="flex items-center justify-between">
           Lens Subtotal
           <p className="mx-2 px-4 py-2 pr-8">
-            {`$${currentForm.lensSubTotal || "0"}`}
+            {`$${currentForm?.lensSubTotal || "0"}`}
           </p>
         </label>
         <label className="flex items-center justify-between">
           Frame & Lens Subtotal
           <p className="mx-2 px-4 py-2 pr-8">{`$${
-            currentForm.total || "0"
+            currentForm?.total || "0"
           }`}</p>
         </label>
       </div>

@@ -23,7 +23,7 @@ export function getProductListInfo(
   return productsByCategory[selectedType];
 }
 
-export function getProductIndexes(dataHeaders: []) {
+export function getProductIndexes(dataHeaders: string | []) {
   if (!dataHeaders) {
     return;
   }

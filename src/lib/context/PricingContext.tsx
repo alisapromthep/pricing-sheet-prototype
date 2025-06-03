@@ -35,8 +35,8 @@ interface PricingContextType {
   setTotalPrice: React.Dispatch<React.SetStateAction<number>>;
   createProduct: () => void;
   updateProduct: (
-    name: keyof selectedProductType,
-    value: string | number
+    updates: Partial<selectedProductType>,
+    formID: string | number
   ) => void;
   cart: selectedProductType[];
   setCart: React.Dispatch<React.SetStateAction<selectedProductType[]>>;

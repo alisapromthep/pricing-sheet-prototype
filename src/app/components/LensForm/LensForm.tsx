@@ -10,11 +10,34 @@ import {
   getLensBasePrice,
 } from "@/services/organizeData";
 import { useGoogleSheetsContext } from "@/lib/context/GoogleSheetsContext";
-import { PricesType, ProductItemsType } from "@/app/_types/ProductTypes";
+import {
+  ProductItemsType,
+  selectedProductType,
+} from "@/app/_types/ProductTypes";
 import { usePricingContext } from "@/lib/context/PricingContext";
 
 interface LensFormProps {
   formID: string;
+}
+
+interface currentFormType {
+  id: string;
+  addOnPrice: number;
+  category: string;
+  discounted: boolean;
+  familyPlanEligible: boolean;
+  framePrice: number;
+  index: string;
+  lensBasePrice: number;
+  lensSubTotal: number;
+  lensTreatment: [];
+  lensTreatmentPrice: number;
+  model: string;
+  pairNumber: number;
+  productInfo: ProductItemsType;
+  selectedIndex: string;
+  productList: ProductItemsType[];
+  total: number;
 }
 
 //TODO: optimize, currently it re-render 20+ times to populated
@@ -25,15 +48,51 @@ const LensForm: React.FC<LensFormProps> = ({ formID }) => {
 
   const { cart, updateProduct, updateLensBasePrice } = pricingTool;
 
-  const currentForm = cart.find((form) => form.id === formID);
+  const defaultProductItem: ProductItemsType = {
+    id: "",
+    category: "",
+    model: "",
+    familyPlanEligible: false,
+    prices: {},
+  };
 
-  const { sheetsData, loading, error } = data || {};
-  const { lens } = sheetsData;
+  const defaultCurrentForm: currentFormType = {
+    id: "",
+    addOnPrice: 0,
+    category: "",
+    discounted: false,
+    familyPlanEligible: false,
+    framePrice: 0,
+    index: "",
+    lensBasePrice: 0,
+    lensSubTotal: 0,
+    lensTreatment: [],
+    lensTreatmentPrice: 0,
+    model: "",
+    pairNumber: 0,
+    productInfo: defaultProductItem,
+    selectedIndex: "",
+    productList: [defaultProductItem],
+    total: 0,
+  };
+
+  const currentForm =
+    cart.find((form) => form.id === formID) || defaultCurrentForm;
+
+  const { sheetsData, loading, error } = data || {
+    sheetsData: {},
+    loading: true,
+    error: null,
+  };
+  const { lens = [] } = sheetsData;
+
+  // const { sheetsData, loading, error } = data || {};
+  // const { lens } = sheetsData;
 
   const [formOptions, setFormOptions] = useState({
     lensCategories: [] as string[],
     productListByCategory: {} as Record<string, ProductItemsType[]>,
-    productIndexes: [] as string[],
+    productIndexes: [] as string[] | undefined,
     productList: [] as ProductItemsType[],
   });
 
@@ -46,7 +105,7 @@ const LensForm: React.FC<LensFormProps> = ({ formID }) => {
       if (lensType && lensType.length > 0) {
         //setLensCategories(lensType);
         const lensCategories = lensType;
-        const selectedCategory = currentForm.category || lensType[0];
+        const selectedCategory = currentForm?.category || lensType[0];
         //setSelectedCategory(selectedCategory);
 
         const productIndexes = getProductIndexes(lens[0]);
@@ -75,24 +134,24 @@ const LensForm: React.FC<LensFormProps> = ({ formID }) => {
     //const initialProductList = productListByCategory[selectedCategory];
 
     const initialProductList =
-      formOptions.productListByCategory[currentForm.category];
+      formOptions.productListByCategory[currentForm?.category];
 
     if (initialProductList) {
       setFormOptions((prev) => ({ ...prev, productList: initialProductList }));
       const initialInfo = {
-        productInfo: currentForm.productInfo || initialProductList[0],
-        model: currentForm.model || initialProductList[0].model,
-        index: currentForm.selectedIndex || formOptions.productIndexes[0],
+        productInfo: currentForm?.productInfo || initialProductList[0],
+        model: currentForm?.model || initialProductList[0].model,
+        index: currentForm?.selectedIndex || formOptions.productIndexes?.[0],
         lensBasePrice:
-          currentForm.lensBasePrice ||
+          currentForm?.lensBasePrice ||
           getLensBasePrice(
             initialProductList[0],
-            formOptions.productIndexes[0]
+            formOptions.productIndexes?.[0] ?? ""
           ),
       };
       updateProduct(initialInfo, formID);
     }
-  }, [currentForm.category, formOptions.productListByCategory]);
+  }, [currentForm?.category, formOptions.productListByCategory]);
 
   const handleSelectChange = (
     e: React.ChangeEvent<HTMLSelectElement>,

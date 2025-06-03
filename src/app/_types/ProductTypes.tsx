@@ -26,4 +26,6 @@ export interface selectedProductType {
   lensSubTotal: number;
   total: number;
   discounted: boolean;
+  productInfo: ProductItemsType;
+  [key: string]: string | number | boolean | {};
 }
