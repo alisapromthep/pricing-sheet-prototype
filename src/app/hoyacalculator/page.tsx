@@ -6,7 +6,7 @@ import SubTotal from "../components/SubTotal/SubTotal";
 import ToolBar from "../components/ToolBar/ToolBar";
 
 function HoyaCalculator() {
-  console.log("PricingSheet", PricingSheet);
+  //console.log("PricingSheet", PricingSheet);
 
   return (
     <div className="">

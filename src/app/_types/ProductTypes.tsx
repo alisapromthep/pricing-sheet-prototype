@@ -27,5 +27,5 @@ export interface selectedProductType {
   total: number;
   discounted: boolean;
   productInfo: ProductItemsType;
-  [key: string]: string | number | boolean | {};
+  [key: string]: any;
 }

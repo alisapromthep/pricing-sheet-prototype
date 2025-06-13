@@ -25,7 +25,10 @@ const OptionsForm: React.FC<FormProps> = ({
   const pricingTool = usePricingContext();
   const { cart, updateOptions } = pricingTool;
   const currentForm = cart.find((form) => form.id === formID);
-  const selectedArr = currentForm[name];
+  let selectedArr: string[];
+  if (currentForm) {
+    selectedArr = currentForm[name];
+  }
 
   const handleSelectOption = (
     optionName: string,

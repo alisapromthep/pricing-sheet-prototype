@@ -1,10 +1,12 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { LuEye, LuEyeClosed } from "react-icons/lu";
 
 export default function Home() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const router = useRouter();
 
@@ -33,16 +35,26 @@ export default function Home() {
           onSubmit={handlePasswordSubmit}
           className="w-full flex flex-col items-center"
         >
-          <input
-            type="password"
-            placeholder="Enter password to access"
-            className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-rv-navy"
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-              setError(""); // Clear error on new input
-            }}
-          />
+          <div className="relative w-full mb-4">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Enter password to access"
+              className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-rv-navy"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setError(""); // Clear error on new input
+              }}
+            />
+            <button
+              type="button" // Important: type="button" to prevent form submission
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/3 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none" // Positioning and styling for the icon button
+              aria-label={showPassword ? "Hide password" : "Show password"} // Accessibility
+            >
+              {showPassword ? <LuEyeClosed size={20} /> : <LuEye size={20} />}
+            </button>
+          </div>
           <button
             type="submit"
             className="bg-rv-navy text-white px-6 py-3 rounded-md hover:bg-rv-red transition-colors duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-rv-navy focus:ring-offset-2"

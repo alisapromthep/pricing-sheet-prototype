@@ -237,7 +237,7 @@ const LensForm: React.FC<LensFormProps> = ({ formID }) => {
           className="mx-2 px-4 py-2 pr-8  border border-rv-navy hover:bg-sky-50  rounded shadow leading-tight focus:outline-none focus:shadow-outline
           "
         >
-          {formOptions.productIndexes.map((type, i) => (
+          {formOptions.productIndexes?.map((type, i) => (
             <option key={i} value={type}>
               {type}
             </option>

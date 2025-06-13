@@ -24,7 +24,7 @@ const DiscountForm: React.FC = () => {
       const parsedSavedDiscount = JSON.parse(savedDiscount);
       setDiscountSelected([...parsedSavedDiscount]);
     }
-  }, [setDiscountSelected]);
+  }, []);
 
   useEffect(() => {
     isDiscountApplicable(cart, discountSelected);

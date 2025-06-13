@@ -32,7 +32,7 @@ interface PricingContextType {
     React.SetStateAction<selectedProductType[]>
   >;
   totalPrice: totalPriceType;
-  setTotalPrice: React.Dispatch<React.SetStateAction<number>>;
+  setTotalPrice: React.Dispatch<React.SetStateAction<totalPriceType>>;
   createProduct: () => void;
   updateProduct: (
     updates: Partial<selectedProductType>,
@@ -52,8 +52,13 @@ interface PricingContextType {
     formID: string
   ) => void;
   updateOptions: (
-    name: keyof selectedProductType,
-    value: string | number
+    optionName: string,
+    updatedInfo: {
+      option: string;
+      price: number | string;
+      familyEligible?: boolean;
+    },
+    formID: string
   ) => void;
 }
 
@@ -98,8 +103,6 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
   const [cart, setCart] = useState<selectedProductType[]>([]);
   const [totalPrice, setTotalPrice] =
     useState<totalPriceType>(initialTotalPrice);
-
-  //TODO: create a cart cap at 3
 
   const createProduct = () => {
     const newProduct = {
@@ -153,7 +156,7 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
 
   const updateOptions = (
     optionName: keyof selectedProductType,
-    updatedInfo: { option: string; price: number; familyEligible: boolean },
+    updatedInfo: { option: string; price: number; familyEligible?: boolean },
     formID: string
   ) => {
     setCart((prevForms) =>
