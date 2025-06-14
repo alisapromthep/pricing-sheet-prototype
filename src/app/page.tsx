@@ -52,7 +52,7 @@ export default function Home() {
               className="absolute right-3 top-1/3 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none" // Positioning and styling for the icon button
               aria-label={showPassword ? "Hide password" : "Show password"} // Accessibility
             >
-              {showPassword ? <LuEyeClosed size={20} /> : <LuEye size={20} />}
+              {showPassword ? <LuEye size={20} /> : <LuEyeClosed size={20} />}
             </button>
           </div>
           <button

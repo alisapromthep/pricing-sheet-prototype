@@ -5,7 +5,7 @@ import { FaCheck, FaChevronDown, FaTimes } from "react-icons/fa";
 import { organizeOptionsData } from "@/services/organizeData";
 import { useState, useEffect } from "react";
 import { usePricingContext } from "@/lib/context/PricingContext";
-
+import { selectedProductType } from "@/app/_types/ProductTypes";
 type FormProps = {
   optionsData: string[][];
   label: string;
@@ -25,10 +25,8 @@ const OptionsForm: React.FC<FormProps> = ({
   const pricingTool = usePricingContext();
   const { cart, updateOptions } = pricingTool;
   const currentForm = cart.find((form) => form.id === formID);
-  let selectedArr: string[];
-  if (currentForm) {
-    selectedArr = currentForm[name];
-  }
+  const selectedArr: selectedProductType[] =
+    (currentForm?.[name] as selectedProductType[]) || [];
 
   const handleSelectOption = (
     optionName: string,
@@ -110,7 +108,13 @@ const OptionsForm: React.FC<FormProps> = ({
       <div className="my-1 flex items-center justify-between">
         <p>Price</p>
         <p className="mx-2 px-4 py-2 pr-8">
-          {error ? "unavailable" : `$${currentForm[`${name}Price`] || "0"}`}
+          {error
+            ? "unavailable"
+            : `$${Number(
+                currentForm?.[
+                  `${String(name)}Price` as keyof typeof currentForm
+                ] || 0
+              )}`}
         </p>
       </div>
     </div>

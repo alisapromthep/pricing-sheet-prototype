@@ -48,7 +48,11 @@ interface DiscountContextType {
     React.SetStateAction<DiscountedProductType[]>
   >;
   updateDiscountedTotal: (
-    total: number,
+    total: {
+      totalFramePrice: number;
+      totalLensPrice: number;
+      orderSubTotal: number;
+    },
     discountedProducts: DiscountedProductType[]
   ) => void;
 }
@@ -227,7 +231,11 @@ export const DiscountProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   const updateDiscountedTotal = (
-    total: number,
+    total: {
+      totalFramePrice: number;
+      totalLensPrice: number;
+      orderSubTotal: number;
+    },
     discountedProducts: DiscountedProductType[]
   ) => {
     let newTotal = total.orderSubTotal;
