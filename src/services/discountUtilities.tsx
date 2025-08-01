@@ -5,27 +5,6 @@ import {
   DISCOUNT_CONDITIONS,
 } from "@/app/_types/DiscountTypes";
 
-type RawDiscountRow = string[];
-interface ParsedCheckboxCondition {
-  id: string;
-  label: string;
-  conditionMet: boolean;
-  errorMessage: string;
-}
-
-interface ParsedInternalCondition {
-  id: string;
-  condition: string;
-  requiredValue: string | boolean | number;
-  conditionMet: boolean;
-  errorMessage?: string;
-}
-
-interface ConditionCheckResult {
-  conditionMet: boolean;
-  errorMessage: string;
-}
-
 function generateConsistentId(baseId: string, prefix: string = "cond") {
   const hash = crypto
     .createHash("md5")
@@ -151,7 +130,7 @@ export function checkCanCombine(
   }
 }
 
-export function verifyCheckBoxConditions(discountSelected) {
+export function verifyCheckBoxConditions(discountSelected: DiscountItemType[]) {
   let allCheckboxChecked = true;
 
   discountSelected.forEach((discount) => {
@@ -167,7 +146,7 @@ export function verifyCheckBoxConditions(discountSelected) {
   return allCheckboxChecked;
 }
 
-export function verifyInternalConditions(discountSelected) {
+export function verifyInternalConditions(discountSelected: DiscountItemType[]) {
   let allInternalConditionsMet = true;
 
   discountSelected.forEach((discount) => {
@@ -178,7 +157,7 @@ export function verifyInternalConditions(discountSelected) {
   return allInternalConditionsMet;
 }
 
-export function getPrice(product, productType) {
+export function getPrice(product: selectedProductType, productType: string) {
   const priceMap = {
     frame: product.framePrice,
     lens: product.lensSubTotal,
@@ -187,7 +166,11 @@ export function getPrice(product, productType) {
 
   return priceMap[productType] ?? 0; // Default to 0 if productType is invalid
 }
-export function getNthSmallestPrices(cart, productType, applyToNth = 1) {
+export function getNthSmallestPrices(
+  cart: selectedProductType[],
+  productType: string,
+  applyToNth: number = 1
+) {
   if (cart.length === 0) return [];
 
   const sortedProducts = cart
@@ -198,16 +181,29 @@ export function getNthSmallestPrices(cart, productType, applyToNth = 1) {
     }))
     .sort((a, b) => a.price - b.price); // Sort by price (ascending)
 
-  const smallestProducts = [];
+  const smallestProducts: selectedProductType[] = [];
   let applyToNthNumber = applyToNth;
   if (applyToNth >= 2 && cart.length < 3) {
     applyToNthNumber = 1;
   }
+
+  //Ensure we don't try to access an index that doesn't exist
+  applyToNthNumber = Math.min(applyToNthNumber, sortedProducts.length);
+
   for (let i = 0; i < applyToNthNumber; i++) {
-    const smallestProduct = cart.find(
-      (product) => product.id === sortedProducts[i].productID
-    );
-    smallestProducts.push(smallestProduct);
+    const sortedProductInfo = sortedProducts[i];
+
+    // Add a check for undefined before pushing
+    if (sortedProductInfo) {
+      const smallestProduct = cart.find(
+        (product) => product.id === sortedProductInfo.productID
+      );
+
+      // Check if a product was actually found before pushing
+      if (smallestProduct) {
+        smallestProducts.push(smallestProduct);
+      }
+    }
   }
   return smallestProducts;
 }
@@ -216,9 +212,8 @@ export function calculateDiscountedPrice(
   product: selectedProductType,
   applyToProduct: string,
   discountType: string,
-  discountValue: string
+  discountValue: number
 ) {
-  console.log("calculating", product);
   const { id, pairNumber } = product;
   //determine discountType: free item, percentage, amount off
   //get the corresponding price as per applyToProduct
@@ -237,14 +232,29 @@ export function calculateDiscountedPrice(
       break;
     default:
       console.warn("Invalid applyToProduct value:", applyToProduct);
-      return { discountedPrice: 0, discountAmount: 0 };
+      return {
+        id,
+        pairNumber,
+        applyToProduct: "none",
+        discountedPrice: product.total,
+        discountAmount: 0,
+      };
   }
 
   let discountAmount = 0;
   let discountedPrice = originalPrice;
 
-  if (!originalPrice || isNaN(originalPrice))
-    return { discountedPrice, discountAmount };
+  // Check for invalid prices before applying discount
+  if (isNaN(originalPrice) || originalPrice === null) {
+    console.warn("Original price is not a valid number.");
+    return {
+      id,
+      pairNumber,
+      applyToProduct,
+      discountedPrice: discountedPrice,
+      discountAmount: 0,
+    };
+  }
 
   // Apply discount based on discountType
   switch (discountType) {
@@ -265,7 +275,10 @@ export function calculateDiscountedPrice(
 
     default:
       console.warn("Invalid discount type:", discountType);
+      //Invalid discountType then give default values
+      discountedPrice = originalPrice;
+      discountAmount = 0;
   }
-
+  console.log(discountedPrice, discountAmount, applyToProduct, pairNumber, id);
   return { discountedPrice, discountAmount, applyToProduct, pairNumber, id };
 }

@@ -187,6 +187,7 @@ export const DiscountProvider: React.FC<{ children: ReactNode }> = ({
     const checkboxResult = verifyCheckBoxConditions(discountSelected);
     const internalResult = verifyInternalConditions(discountSelected);
 
+    console.log("discountSelected", discountSelected);
     //check that all conditions are met
     //if not met return error
     //all conditions met
@@ -212,12 +213,14 @@ export const DiscountProvider: React.FC<{ children: ReactNode }> = ({
         const calculatedDiscountedProducts = smallestPriceProducts.map(
           (form) => {
             updateProduct({ discounted: true }, form.id);
+
             const calculatedDiscount = calculateDiscountedPrice(
               form,
               applyToProduct,
               discountType,
               discountValue
             );
+
             return calculatedDiscount;
           }
         );

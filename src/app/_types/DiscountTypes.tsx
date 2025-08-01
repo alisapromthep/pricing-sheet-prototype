@@ -10,7 +10,7 @@ export interface DiscountItemType {
   discountValue: number;
   applyToProduct: string;
   applyOn: string;
-  applyToNth: string[];
+  applyToNth: number;
   canCombine: string;
   checkboxConditions: {
     id: string;
@@ -24,6 +24,7 @@ export interface DiscountItemType {
     conditionMet: boolean;
     errorMessage?: string;
   }[];
+  allInternalConditionsMet?: boolean;
 }
 
 export const DISCOUNT_CONDITIONS = {
