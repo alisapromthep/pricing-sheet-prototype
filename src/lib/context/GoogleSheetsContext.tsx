@@ -8,13 +8,10 @@ import React, {
   ReactNode,
 } from "react";
 import { getGoogleSheetData } from "@/services/getGoogleData";
-
-interface SheetData {
-  [key: string]: string[];
-}
+import { SheetDataType } from "@/app/_types/DataTypes";
 
 interface GoogleSheetsContextType {
-  sheetsData: SheetData;
+  sheetsData: SheetDataType;
   loading: boolean;
   error: string | null;
 }
@@ -27,16 +24,25 @@ const GoogleSheetsContext = createContext<GoogleSheetsContextType | undefined>(
 export const GoogleSheetsProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [sheetsData, setSheetsData] = useState<SheetData>({});
+  const [sheetsData, setSheetsData] = useState<SheetDataType>({
+    addOn: [],
+    discounts: [],
+    lens: [],
+    lensTreatment: [],
+    mcssAddon: [],
+    packages: [],
+    superflexAddon: [],
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchSheetsData = async () => {
       try {
-        const data = await getGoogleSheetData();
-        //console.log(data);
-        setSheetsData(data);
+        const data: Record<string, any[][]> = await getGoogleSheetData();
+        const transformedData = transformToSheetData(data);
+        console.log("transformedData", transformedData);
+        setSheetsData(transformedData);
       } catch (err: unknown) {
         // Now you MUST check the type of 'err' before using its properties
         let errorMessage = "An unknown error occurred";
@@ -63,6 +69,17 @@ export const GoogleSheetsProvider: React.FC<{ children: ReactNode }> = ({
     fetchSheetsData();
   }, []);
 
+  function transformToSheetData(rawData: Record<string, any[][]>): SheetData {
+    return {
+      lens: rawData.lens || [],
+      discounts: rawData.discounts || [],
+      packages: rawData.packages || [],
+      lensTreatment: rawData.lensTreatment || [],
+      addOn: rawData.addon || [],
+      superflexAddon: rawData.superflexAddon || [],
+      mcssAddon: rawData.mcssAddon || [],
+    };
+  }
   // const addSheetData = (sheetName: string, data: any[]) => {
   //   setSheetsData((prev) => ({ ...prev, [sheetName]: data }));
   // };

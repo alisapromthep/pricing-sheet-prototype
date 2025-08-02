@@ -279,6 +279,6 @@ export function calculateDiscountedPrice(
       discountedPrice = originalPrice;
       discountAmount = 0;
   }
-  console.log(discountedPrice, discountAmount, applyToProduct, pairNumber, id);
+
   return { discountedPrice, discountAmount, applyToProduct, pairNumber, id };
 }

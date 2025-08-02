@@ -1,6 +1,9 @@
-import { ProductItemsType } from "@/app/_types/ProductTypes";
+import {
+  ProductItemsType,
+  selectedProductType,
+} from "@/app/_types/ProductTypes";
 import { ProductItem } from "@/lib/ProductItem";
-
+import { SheetDataType, SheetContentType } from "@/app/_types/DataTypes";
 export function getProductTypes(data: string[]) {
   if (!data) {
     return;
@@ -42,14 +45,17 @@ export function getSelectedProductInfo(productList, selectedModel: string) {
   return productInfo;
 }
 
-export function getLensBasePrice(productInfo, selectedIndex: string) {
+export function getLensBasePrice(
+  productInfo: selectedProductType,
+  selectedIndex: string
+) {
   if (!productInfo || !selectedIndex) {
     return;
   }
   return productInfo?.prices[selectedIndex];
 }
 
-export function organizeOptionsData(data: string[][]) {
+export function organizeOptionsData(data: SheetContentType) {
   if (!data) {
     return;
   }
@@ -60,14 +66,18 @@ export function organizeOptionsData(data: string[][]) {
   }));
 }
 
-export function getLabels(sheetData) {
-  if (!sheetData) {
+export function getLabels(sheetData: SheetContentType) {
+  if (!sheetData || sheetData.length === 0) {
+    return;
+  }
+
+  if (!sheetData[0] || sheetData[0].length === 0) {
     return;
   }
   return sheetData[0][0];
 }
 
-export function getOptions(sheetData) {
+export function getOptions(sheetData: SheetContentType) {
   if (!sheetData) {
     return;
   }
@@ -75,7 +85,7 @@ export function getOptions(sheetData) {
 }
 
 //function that goes through the array of lens and pick out a list of lens categories
-export function getCategoriesList(data) {
+export function getCategoriesList(data: any[]) {
   if (!data) {
     return;
   }
@@ -95,7 +105,11 @@ export function getCategoriesList(data) {
 
 //fill in the categories with products
 
-export function fillInProductCategories(data, list, indexes) {
+export function fillInProductCategories(
+  data: SheetContentType,
+  list: [],
+  indexes: number
+) {
   if (!data) {
     return;
   }

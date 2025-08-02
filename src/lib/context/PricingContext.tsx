@@ -91,12 +91,6 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
     orderSubTotal: 0,
   };
 
-  const initialDiscountedPrice: DiscountedPriceType = {
-    discountNames: "",
-    discountAppliedTo: [],
-    discountAmount: 0,
-  };
-
   const uid = new ShortUniqueId();
   const [currentProduct, setCurrentProduct] =
     useState<selectedProductType>(initialForm);

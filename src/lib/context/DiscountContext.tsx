@@ -91,7 +91,7 @@ export const DiscountProvider: React.FC<{ children: ReactNode }> = ({
   //get discount Information
 
   useEffect(() => {
-    if (sheetsData && sheetsData.discounts) {
+    if (sheetsData && sheetsData.discounts.length > 0) {
       const discountItems = organizeDiscountInfo(sheetsData.discounts);
       if (typeof discountItems === "string") {
         // Handle the error returned by organizeDiscountInfo
@@ -187,7 +187,6 @@ export const DiscountProvider: React.FC<{ children: ReactNode }> = ({
     const checkboxResult = verifyCheckBoxConditions(discountSelected);
     const internalResult = verifyInternalConditions(discountSelected);
 
-    console.log("discountSelected", discountSelected);
     //check that all conditions are met
     //if not met return error
     //all conditions met
