@@ -1,10 +1,7 @@
-import {
-  ProductItemsType,
-  selectedProductType,
-} from "@/app/_types/ProductTypes";
+import { ProductItemsType } from "@/app/_types/ProductTypes";
 import { ProductItem } from "@/lib/ProductItem";
 import { SheetDataType, SheetContentType } from "@/app/_types/DataTypes";
-export function getProductTypes(data: string[]) {
+export function getProductTypes(data: SheetContentType) {
   if (!data) {
     return;
   }
@@ -26,11 +23,11 @@ export function getProductListInfo(
   return productsByCategory[selectedType];
 }
 
-export function getProductIndexes(dataHeaders: string | []) {
+export function getProductIndexes(dataHeaders: any[]) {
   if (!dataHeaders) {
     return;
   }
-  const productIndexes = [];
+  const productIndexes: string[] = [];
   for (let i = 4; i < dataHeaders.length; i++) {
     productIndexes.push(dataHeaders[i]);
   }
@@ -46,7 +43,7 @@ export function getSelectedProductInfo(productList, selectedModel: string) {
 }
 
 export function getLensBasePrice(
-  productInfo: selectedProductType,
+  productInfo: ProductItemsType,
   selectedIndex: string
 ) {
   if (!productInfo || !selectedIndex) {
@@ -79,7 +76,7 @@ export function getLabels(sheetData: SheetContentType) {
 
 export function getOptions(sheetData: SheetContentType) {
   if (!sheetData) {
-    return;
+    return [];
   }
   return sheetData.slice(1);
 }
@@ -107,8 +104,8 @@ export function getCategoriesList(data: any[]) {
 
 export function fillInProductCategories(
   data: SheetContentType,
-  list: [],
-  indexes: number
+  list: Record<string, ProductItemsType[]>,
+  indexes: string[]
 ) {
   if (!data) {
     return;

@@ -27,10 +27,6 @@ interface totalPriceType {
 interface PricingContextType {
   currentProduct: selectedProductType;
   setCurrentProduct: React.Dispatch<React.SetStateAction<selectedProductType>>;
-  selectedProductsArray: selectedProductType[];
-  setSelectedProductsArray: React.Dispatch<
-    React.SetStateAction<selectedProductType[]>
-  >;
   totalPrice: totalPriceType;
   setTotalPrice: React.Dispatch<React.SetStateAction<totalPriceType>>;
   createProduct: () => void;
@@ -83,6 +79,13 @@ export const PricingProvider: React.FC<{ children: ReactNode }> = ({
     lensSubTotal: 0,
     total: 0,
     discounted: false,
+    productInfo: {
+      id: "",
+      category: "",
+      model: "",
+      familyPlanEligible: false,
+      prices: {},
+    },
   };
 
   const initialTotalPrice: totalPriceType = {

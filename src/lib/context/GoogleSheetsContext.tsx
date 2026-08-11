@@ -69,7 +69,9 @@ export const GoogleSheetsProvider: React.FC<{ children: ReactNode }> = ({
     fetchSheetsData();
   }, []);
 
-  function transformToSheetData(rawData: Record<string, any[][]>): SheetData {
+  function transformToSheetData(
+    rawData: Record<string, any[][]>
+  ): SheetDataType {
     return {
       lens: rawData.lens || [],
       discounts: rawData.discounts || [],

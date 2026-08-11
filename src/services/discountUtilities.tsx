@@ -4,6 +4,7 @@ import {
   DiscountItemType,
   DISCOUNT_CONDITIONS,
 } from "@/app/_types/DiscountTypes";
+import { SheetContentType } from "@/app/_types/DataTypes";
 
 function generateConsistentId(baseId: string, prefix: string = "cond") {
   const hash = crypto
@@ -16,7 +17,7 @@ function generateConsistentId(baseId: string, prefix: string = "cond") {
 
 //isolate and organize discount information into object
 export function organizeDiscountInfo(
-  data: string[]
+  data: SheetContentType
 ): DiscountItemType[] | string {
   if (!Array.isArray(data) || data.length === 0) {
     return "Invalid input: Data must be a non-empty array.";

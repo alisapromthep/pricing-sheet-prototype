@@ -43,3 +43,6 @@ secrets.json
 next-env.d.ts
 
 .codegpt
+
+AGENTS.md
+CLAUDE.md

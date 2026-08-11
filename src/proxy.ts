@@ -6,7 +6,7 @@ import type { NextRequest } from 'next/server';
 // Use environment variables (e.g., process.env.HOYA_CALCULATOR_PASSWORD).
 const SECRET_PASSWORD = process.env.CALCULATOR_PASSWORD
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const url = request.nextUrl;
 
   // 1. Check if the request is for the /hoyacalculator page
@@ -43,7 +43,7 @@ export function middleware(request: NextRequest) {
   return NextResponse.next();
 }
 
-// 5. Configure the middleware to run only for specific paths
+// 5. Configure the proxy to run only for specific paths
 export const config = {
-  matcher: ['/', '/hoyacalculator'], // Apply middleware only to these paths
+  matcher: ['/', '/hoyacalculator'], // Apply proxy only to these paths
 };

@@ -1,5 +1,5 @@
 export interface PricesType {
-  [key: string]: number | string;
+  [key: string]: number;
 }
 
 export interface ProductItemsType {

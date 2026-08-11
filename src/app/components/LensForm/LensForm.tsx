@@ -115,7 +115,11 @@ const LensForm: React.FC<LensFormProps> = ({ formID }) => {
         const productListByCategory = getCategoriesList(lens);
 
         //fill each categories with the products
-        fillInProductCategories(lens, productListByCategory, productIndexes);
+        fillInProductCategories(
+          lens,
+          productListByCategory ?? {},
+          productIndexes ?? []
+        );
 
         setFormOptions({
           lensCategories,
