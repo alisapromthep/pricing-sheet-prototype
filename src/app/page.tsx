@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { LuEye, LuEyeClosed } from "react-icons/lu";
 
 export default function Home() {
@@ -8,16 +7,17 @@ export default function Home() {
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const router = useRouter();
-
   const handlePasswordSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!password) {
       setError("Please enter a password.");
       return;
     }
-    // The middleware will then handle the validation and redirection.
-    router.push(`/?password=${encodeURIComponent(password)}`);
+    // Use a real browser navigation (not router.push) so the request
+    // actually reaches proxy.ts — a client-side navigation to the same
+    // static route can be served from the router cache, skipping the
+    // server round-trip the password check depends on.
+    window.location.href = `/?password=${encodeURIComponent(password)}`;
   };
 
   return (
