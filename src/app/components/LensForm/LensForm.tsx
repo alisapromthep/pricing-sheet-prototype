@@ -27,7 +27,6 @@ interface currentFormType {
   discounted: boolean;
   familyPlanEligible: boolean;
   framePrice: number;
-  index: string;
   lensBasePrice: number;
   lensSubTotal: number;
   lensTreatment: [];
@@ -63,7 +62,6 @@ const LensForm: React.FC<LensFormProps> = ({ formID }) => {
     discounted: false,
     familyPlanEligible: false,
     framePrice: 0,
-    index: "",
     lensBasePrice: 0,
     lensSubTotal: 0,
     lensTreatment: [],
@@ -145,7 +143,8 @@ const LensForm: React.FC<LensFormProps> = ({ formID }) => {
       const initialInfo = {
         productInfo: currentForm?.productInfo || initialProductList[0],
         model: currentForm?.model || initialProductList[0].model,
-        index: currentForm?.selectedIndex || formOptions.productIndexes?.[0],
+        selectedIndex:
+          currentForm?.selectedIndex || formOptions.productIndexes?.[0],
         lensBasePrice:
           currentForm?.lensBasePrice ||
           getLensBasePrice(
@@ -165,16 +164,27 @@ const LensForm: React.FC<LensFormProps> = ({ formID }) => {
 
     const updates: Record<string, any> = { [field]: value };
 
-    if (field === "index") {
-      updates.lensBasePrice = getLensBasePrice(currentForm.productInfo, value);
+    if (field === "selectedIndex") {
+      updateLensBasePrice(
+        formOptions.productListByCategory,
+        currentForm.category,
+        currentForm.model,
+        value,
+        formID
+      );
     } else if (field === "category") {
-      updates.productList = formOptions.productListByCategory[value];
+      const newProductList = formOptions.productListByCategory[value];
+      const newModel = newProductList?.[0]?.model ?? "";
+
+      updates.productList = newProductList;
+      updates.model = newModel;
+      updates.familyPlanEligible = newProductList?.[0]?.familyPlanEligible;
 
       updateLensBasePrice(
         formOptions.productListByCategory,
         value,
-        currentForm.model,
-        currentForm.index,
+        newModel,
+        currentForm.selectedIndex,
         formID
       );
     } else if (field === "model") {
@@ -188,7 +198,7 @@ const LensForm: React.FC<LensFormProps> = ({ formID }) => {
         formOptions.productListByCategory,
         currentForm.category,
         value,
-        currentForm.index,
+        currentForm.selectedIndex,
         formID
       );
     }
@@ -237,7 +247,7 @@ const LensForm: React.FC<LensFormProps> = ({ formID }) => {
         Select Index
         <select
           value={currentForm.selectedIndex}
-          onChange={(e) => handleSelectChange(e, "index")}
+          onChange={(e) => handleSelectChange(e, "selectedIndex")}
           className="mx-2 px-4 py-2 pr-8  border border-rv-navy hover:bg-sky-50  rounded shadow leading-tight focus:outline-none focus:shadow-outline
           "
         >
